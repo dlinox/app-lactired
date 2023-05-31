@@ -1,0 +1,11 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-color: $app-bg;
+    font-family: inter, sans-serif, -apple-system, blinkmacsystemfont,
+        "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
