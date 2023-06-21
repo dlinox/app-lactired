@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipo_financiacions', function (Blueprint $table) {
-            $table->id();
+        Schema::create('tipo_certificaciones', function (Blueprint $table) {
+            $table->id('tcer_id');
+            $table->string('tcer_nombre')->unique();
             $table->timestamps();
         });
     }
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipo_financiacions');
+        Schema::dropIfExists('tipo_certificaciones');
     }
 };

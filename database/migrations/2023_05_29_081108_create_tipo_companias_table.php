@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tipo_companias', function (Blueprint $table) {
-            $table->id('tcom_id');
-            $table->string('tcom_nombre')->unique();
+            $table->id('tcomp_id');
+            $table->string('tcomp_nombre')->unique();
             $table->timestamps();
         });
     }

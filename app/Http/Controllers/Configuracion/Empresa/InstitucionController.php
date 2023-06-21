@@ -3,64 +3,75 @@
 namespace App\Http\Controllers\Configuracion\Empresa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\InstitucionRequest;
+use App\Models\Institucion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class InstitucionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $institucion;
+    public function __construct()
     {
-        return  Inertia::render('Configuracion/Empresa/Institucion/index');
+        $this->institucion = new Institucion();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('perPage', 10);
+        $query = Institucion::query();
+
+        // Búsqueda por nombre de área
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where('inst_nombre', 'like', '%' . $searchTerm . '%');
+        }
+
+        // Obtener resultados paginados
+        $items = $query->paginate($perPage)->appends($request->query());
+
+
+        return Inertia::render('Configuracion/Empresa/Institucion/index', [
+            'items' => $items,
+            'headers' => $this->institucion->headers,
+            'filters' => [
+                'tipo_estado' => $request->tipo_estado,
+                'search' => $request->search,
+            ],
+            'perPageOptions' => [10, 25, 50, 100], // Opciones de cantidad de elementos por página
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(InstitucionRequest $request)
     {
-        //
+        $data = $request->all();
+        Institucion::create($data);
+        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(InstitucionRequest $request, Institucion $institucione)
     {
-        //
+        $data = $request->all();
+        $institucione->update($data);
+        return redirect()->back()->with('success', 'Elemento actualizado exitosamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(Institucion $institucione)
     {
-        //
+        $institucione->delete();
+        return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function autocomplete(Request $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $results = [];
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $results = Institucion::select('inst_id', 'inst_nombre')
+                ->where('inst_nombre', 'like', '%' . $searchTerm . '%')
+                ->limit(30)
+                ->get();
+        }
+        return response()->json($results);
     }
 }

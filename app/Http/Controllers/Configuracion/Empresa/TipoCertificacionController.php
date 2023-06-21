@@ -3,65 +3,62 @@
 namespace App\Http\Controllers\Configuracion\Empresa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TipoCertificacionRequest;
+use App\Models\TipoCertificacion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TipoCertificacionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $tipoCertificacion;
+    public function __construct()
     {
-        return  Inertia::render('Configuracion/Empresa/TipoCertificacion/index');
-        
+        $this->tipoCertificacion = new TipoCertificacion();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('perPage', 10);
+        $query = TipoCertificacion::query();
+
+        // Búsqueda por nombre de área
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where('tesp_nombre', 'like', '%' . $searchTerm . '%');
+        }
+
+        // Obtener resultados paginados
+        $items = $query->paginate($perPage)->appends($request->query());
+
+
+        return Inertia::render('Configuracion/Empresa/TipoCertificacion/index', [
+            'items' => $items,
+            'headers' => $this->tipoCertificacion->headers,
+            'filters' => [
+                'tipo_estado' => $request->tipo_estado,
+                'search' => $request->search,
+            ],
+            'perPageOptions' => [10, 25, 50, 100], // Opciones de cantidad de elementos por página
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(TipoCertificacionRequest $request)
     {
-        //
+        $data = $request->all();
+        TipoCertificacion::create($data);
+        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(TipoCertificacionRequest $request, TipoCertificacion $tipoCertificacione)
     {
-        //
+        $data = $request->all();
+        $tipoCertificacione->update($data);
+        return redirect()->back()->with('success', 'Elemento actualizado exitosamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(TipoCertificacion $tipoCertificacione)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $tipoCertificacione->delete();
+        return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
     }
 }

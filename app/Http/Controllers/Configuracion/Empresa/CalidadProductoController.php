@@ -45,19 +45,32 @@ class CalidadProductoController extends Controller
     {
         $data = $request->all();
         CalidadProducto::create($data);
-        return redirect()->back()->with('success', 'Nivel de capacitación creada exitosamente.');
+        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
     }
 
     public function update(CalidadProductoRequest $request, CalidadProducto $calidadProducto)
     {
         $data = $request->all();
         $calidadProducto->update($data);
-        return redirect()->back()->with('success', 'Nivel de capacitación actualizada exitosamente.');
+        return redirect()->back()->with('success', 'Elemento actualizado exitosamente.');
     }
 
     public function destroy(CalidadProducto $calidadProducto)
     {
         $calidadProducto->delete();
-        return redirect()->back()->with('success', 'Nivel de capacitación eliminada exitosamente.');
+        return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
+    }
+
+    public function autocomplete(Request $request)
+    {
+        $results = [];
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $results = CalidadProducto::select('cpro_id', 'cpro_nombre')
+                ->where('cpro_nombre', 'like', '%' . $searchTerm . '%')
+                ->limit(30)
+                ->get();
+        }
+        return response()->json($results);
     }
 }

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tipo_transportes', function (Blueprint $table) {
-            $table->id();
+            $table->id('ttra_id');
+            $table->string('ttra_nombre')->unique();
             $table->timestamps();
         });
     }

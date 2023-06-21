@@ -3,65 +3,62 @@
 namespace App\Http\Controllers\Configuracion\Empresa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TipoMaquinariaRequest;
+use App\Models\TipoMaquinaria;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TipoMaquinariaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $tipoMaquinaria;
+    public function __construct()
     {
-        return  Inertia::render('Configuracion/Empresa/TipoMaquinaria/index');
-        //
+        $this->tipoMaquinaria = new TipoMaquinaria();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('perPage', 10);
+        $query = TipoMaquinaria::query();
+
+        // Búsqueda por nombre de área
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where('tmaq_nombre', 'like', '%' . $searchTerm . '%');
+        }
+
+        // Obtener resultados paginados
+        $items = $query->paginate($perPage)->appends($request->query());
+
+
+        return Inertia::render('Configuracion/Empresa/TipoMaquinaria/index', [
+            'items' => $items,
+            'headers' => $this->tipoMaquinaria->headers,
+            'filters' => [
+                'tipo_estado' => $request->tipo_estado,
+                'search' => $request->search,
+            ],
+            'perPageOptions' => [10, 25, 50, 100], // Opciones de cantidad de elementos por página
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(TipoMaquinariaRequest $request)
     {
-        //
+        $data = $request->all();
+        TipoMaquinaria::create($data);
+        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(TipoMaquinariaRequest $request, TipoMaquinaria $tipoMaquinaria)
     {
-        //
+        $data = $request->all();
+        $tipoMaquinaria->update($data);
+        return redirect()->back()->with('success', 'Elemento actualizado exitosamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(TipoMaquinaria $tipoMaquinaria)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $tipoMaquinaria->delete();
+        return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
     }
 }

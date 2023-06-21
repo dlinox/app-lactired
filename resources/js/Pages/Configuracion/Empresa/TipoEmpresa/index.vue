@@ -1,6 +1,9 @@
 <template>
     <AdminLayout>
-        <HeadingPage title="Empresas" subtitle="Tipos de empresas">
+        <HeadingPage
+            title="Especializaciones"
+            subtitle="Tipos de especializaciones"
+        >
             <template #actions>
                 <BtnDialog title="Nuevo" width="500px">
                     <template v-slot:activator="{ dialog }">
@@ -60,7 +63,7 @@
                                         @on-cancel="dialog"
                                         :form-data="item"
                                         :edit="true"
-                                        :url="url + '/' + item.temp_id"
+                                        :url="url + '/' + item[`${primaryKey}`]"
                                     />
                                 </template>
                             </BtnDialog>
@@ -76,7 +79,9 @@
                                     @onConfirm="
                                         () =>
                                             router.delete(
-                                                url + '/' + item.temp_id
+                                                url +
+                                                    '/' +
+                                                    item[`${primaryKey}`]
                                             )
                                     "
                                 />
@@ -109,4 +114,5 @@ const props = defineProps({
 });
 
 const url = "/config/empresa/tipo-empresas";
+const primaryKey = "temp_id";
 </script>

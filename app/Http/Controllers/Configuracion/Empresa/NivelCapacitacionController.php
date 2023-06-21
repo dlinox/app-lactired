@@ -19,8 +19,6 @@ class NivelCapacitacionController extends Controller
 
     public function index(Request $request)
     {
-
-
         $perPage = $request->input('perPage', 10);
         $query = NivelCapacitacion::query();
 
@@ -49,19 +47,32 @@ class NivelCapacitacionController extends Controller
     {
         $data = $request->all();
         NivelCapacitacion::create($data);
-        return redirect()->back()->with('success', 'Nivel de capacitación creada exitosamente.');
+        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
     }
 
     public function update(NivelCapacitacionRequest $request, NivelCapacitacion $nivelCapacitacion)
     {
         $data = $request->all();
         $nivelCapacitacion->update($data);
-        return redirect()->back()->with('success', 'Nivel de capacitación actualizada exitosamente.');
+        return redirect()->back()->with('success', 'Elemento actualizado exitosamente.');
     }
 
     public function destroy(NivelCapacitacion $nivelCapacitacion)
     {
         $nivelCapacitacion->delete();
-        return redirect()->back()->with('success', 'Nivel de capacitación eliminada exitosamente.');
+        return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
+    }
+
+    public function autocomplete(Request $request)
+    {
+        $results = [];
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $results = NivelCapacitacion::select('ncap_id', 'ncap_nombre')
+                ->where('ncap_nombre', 'like', '%' . $searchTerm . '%')
+                ->limit(30)
+                ->get();
+        }
+        return response()->json($results);
     }
 }

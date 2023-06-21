@@ -6,10 +6,6 @@
         @onSumbit="submit"
     >
     </SimpleForm>
-
-    <pre>
-        {{ form }}
-    </pre>
 </template>
 
 <script setup>

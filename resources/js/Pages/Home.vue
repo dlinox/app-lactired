@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <h1>home</h1>
+    <h1>Dasboard</h1>
   </AdminLayout>
 </template>
 <script setup>

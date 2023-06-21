@@ -5,6 +5,7 @@ import { createInertiaApp, router } from "@inertiajs/vue3";
 
 import NProgress from "nprogress";
 
+import "leaflet/dist/leaflet.css";
 import vuetify from "@/plugins/vuetify/vuetify";
 import { loadFonts } from "@/plugins/googlefonts/webfontloader";
 import "vue-advanced-cropper/dist/style.css";

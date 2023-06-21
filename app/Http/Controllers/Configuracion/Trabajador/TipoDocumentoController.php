@@ -3,62 +3,63 @@
 namespace App\Http\Controllers\Configuracion\Trabajador;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TipoDocumentoRequest;
+use App\Models\TipoDocumento;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TipoDocumentoController extends Controller
 {
-    public function index()
+    protected $tipoDocumento;
+    public function __construct()
     {
-
-        return  Inertia::render('Configuracion/Trabajador/TipoDocumento/index');
+        $this->tipoDocumento = new TipoDocumento();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('perPage', 10);
+        $query = TipoDocumento::query();
+
+        // Búsqueda por nombre de área
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where('tdoc_nombre', 'like', '%' . $searchTerm . '%');
+            $query->where('tdoc_nombre', 'like', '%' . $searchTerm . '%');
+        }
+
+        // Obtener resultados paginados
+        $items = $query->paginate($perPage)->appends($request->query());
+
+
+        return Inertia::render('Configuracion/Trabajador/TipoDocumento/index', [
+            'items' => $items,
+            'headers' => $this->tipoDocumento->headers,
+            'filters' => [
+                'tipo_estado' => $request->tipo_estado,
+                'search' => $request->search,
+            ],
+            'perPageOptions' => [10, 25, 50, 100], // Opciones de cantidad de elementos por página
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(TipoDocumentoRequest $request)
     {
-        //
+        $data = $request->all();
+        TipoDocumento::create($data);
+        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(TipoDocumentoRequest $request, TipoDocumento $tipoDocumento)
     {
-        //
+        $data = $request->all();
+        $tipoDocumento->update($data);
+        return redirect()->back()->with('success', 'Elemento actualizado exitosamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(TipoDocumento $tipoDocumento)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $tipoDocumento->delete();
+        return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
     }
 }

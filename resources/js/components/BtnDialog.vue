@@ -1,6 +1,6 @@
 <template>
     <slot name="activator" :dialog="() => (dialog = !dialog)"></slot>
-    <v-dialog v-model="dialog" :width="width">
+    <v-dialog v-model="dialog" :width="width" persistent>
         <v-card>
             <v-toolbar density="compact">
                 <v-toolbar-title>  <small>{{title}} </small> </v-toolbar-title>

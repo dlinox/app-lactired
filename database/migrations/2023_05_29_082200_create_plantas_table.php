@@ -17,25 +17,27 @@ return new class extends Migration
             $table->char('plan_ruc', 11)->unique();
             $table->string('plan_marca', 100)->nullable();
             $table->enum('plan_tipo_planta', ['A', 'B', 'C'])->default('A');
-            $table->enum('plan_registro_sanitario', ['0', '1'])->comment("0=NO 1=SI")->default('1');
-            $table->enum('plan_marca_registrada', ['0', '1'])->comment("0=NO 1=SI")->default('1');
+
             $table->string('plan_barrio_comunidad', 100)->nullable();
             $table->string('plan_sector', 100)->nullable();
-            $table->string('plan_latitud', 100)->nullable();
-            $table->string('plan_longitud', 100)->nullable();
-            $table->smallInteger('plan_tecnificacion')->nullable();
-            $table->enum('plan_parametros_digesa', ['0', '1'])->comment("0=NO 1=SI")->default('1');
-            $table->enum('plan_parametros_produccion', ['0', '1'])->comment("0=NO 1=SI")->default('1');
-            $table->enum('plan_capacitacion_tdd', ['0', '1'])->comment("0=NO 1=SI")->default('1');
+            $table->char('plan_latitud', 30)->nullable();
+            $table->char('plan_longitud', 30)->nullable();
 
-            $table->unsignedBigInteger('plan_tcom_id');
+            $table->boolean('plan_registro_sanitario')->comment("0=NO 1=SI")->default(1);
+            $table->boolean('plan_marca_registrada')->comment("0=NO 1=SI")->default(1);
+            $table->boolean('plan_tecnificacion')->default(0);
+            $table->boolean('plan_parametros_digesa')->comment("0=NO 1=SI")->default(1);
+            $table->boolean('plan_parametros_produccion')->comment("0=NO 1=SI")->default(1);
+            $table->boolean('plan_capacitacion_tdd')->comment("0=NO 1=SI")->default(1);
+
+            $table->unsignedBigInteger('plan_tcomp_id');
             $table->unsignedBigInteger('plan_ubig_id');
             $table->unsignedBigInteger('plan_ncap_id');
             $table->unsignedBigInteger('plan_cpro_id');
             $table->unsignedBigInteger('plan_inst_id');
             $table->timestamps();
 
-            $table->foreign('plan_tcom_id')->references('tcom_id')->on('tipo_companias');
+            $table->foreign('plan_tcomp_id')->references('tcomp_id')->on('tipo_companias');
             $table->foreign('plan_ubig_id')->references('ubig_id')->on('ubigeos');
             $table->foreign('plan_ncap_id')->references('ncap_id')->on('nivel_capacitaciones');
             $table->foreign('plan_cpro_id')->references('cpro_id')->on('calidad_productos');

@@ -10,6 +10,7 @@ class Ubigeo extends Model
     use HasFactory;
 
     protected $table = 'ubigeos';
+    protected $primaryKey = 'ubig_id';
 
     protected $fillable = [
         'ubig_cod',
@@ -17,4 +18,11 @@ class Ubigeo extends Model
         'ubig_provincia',
         'ubig_distrito',
     ];
+
+    protected $appends = ['ubig_completo'];
+
+    public function getUbigCompletoAttribute()
+    {
+        return $this->ubig_departamento . ', ' . $this->ubig_provincia . ', ' . $this->ubig_distrito;
+    }
 }

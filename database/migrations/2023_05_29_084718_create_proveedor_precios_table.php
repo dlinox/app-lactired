@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('proveedor_precios', function (Blueprint $table) {
-            $table->id();
+            $table->id('ppre_id');
+            $table->decimal('ppre_precio', 8, 2);
+            $table->boolean('ppre_estado')->comment('0=anulado  1=activo')->default(1);
+            $table->unsignedBigInteger('ppre_prov_id');
+            $table->foreign('ppre_prov_id')->references('prov_id')->on('proveedores');
             $table->timestamps();
         });
     }

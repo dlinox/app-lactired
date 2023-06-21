@@ -98,16 +98,16 @@ const menuAcopio = [
         title: "Acopio",
         value: "acopio",
         icon: null,
-        to: "/acopio",
+        to: "/acopio/create",
         group: null,
     },
-    {
-        title: "Consultar acopio",
-        value: "acopio.consultar",
-        icon: null,
-        to: "/acopio/consultar",
-        group: null,
-    },
+    // {
+    //     title: "Consultar acopio",
+    //     value: "acopio.consultar",
+    //     icon: null,
+    //     to: "/acopio/consultar",
+    //     group: null,
+    // },
 ];
 
 const menuCompras = [
@@ -115,7 +115,14 @@ const menuCompras = [
         title: "Compras",
         value: "compras",
         icon: null,
-        to: "/compras",
+        to: "/compras/registrar-compra",
+        group: null,
+    },
+    {
+        title: "Proveedores",
+        value: "/compras/proveedores",
+        icon: null,
+        to: "/compras/proveedores",
         group: null,
     },
 ];
@@ -125,7 +132,14 @@ const menuVentas = [
         title: "Ventas",
         value: "ventas",
         icon: null,
-        to: "/ventas",
+        to: "/ventas/registrar-venta",
+        group: null,
+    },
+    {
+        title: "Clientes",
+        value: "ventas/clientes",
+        icon: null,
+        to: "/ventas/clientes",
         group: null,
     },
 ];
@@ -135,14 +149,14 @@ const menuAlmacen = [
         title: "Productos",
         value: "productos",
         icon: null,
-        to: "/ventas",
+        to: "/almacen/productos",
         group: null,
     },
     {
         title: "Insumos",
         value: "insumos",
         icon: null,
-        to: "/insumos",
+        to: "/almacen/insumos",
         group: null,
     },
 ];
@@ -183,6 +197,13 @@ const menuConfiguracionEmpresa = [
         value: "tipo-empresas",
         icon: null,
         to: "/config/empresa/tipo-empresas",
+        group: null,
+    },
+    {
+        title: "T. Comñania",
+        value: "tipo-companias",
+        icon: null,
+        to: "/config/empresa/tipo-companias",
         group: null,
     },
 
@@ -362,7 +383,7 @@ const menuMain = [
         group: menuAlmacen,
     },
     {
-        title: "Congiduracion",
+        title: "Configuracion",
         value: "configuracion",
         icon: "mdi-archive", //mdi-greenhouse
         to: "#",

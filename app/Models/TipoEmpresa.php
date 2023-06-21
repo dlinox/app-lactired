@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class TipoEmpresa extends Model
 {
     use HasFactory;
-
-    use HasFactory;
-    //protected $table = "nivel_capacitaciones";
     protected $primaryKey = "temp_id";
     protected $fillable = ['temp_nombre'];
 
@@ -23,5 +20,4 @@ class TipoEmpresa extends Model
         'created_at',
         'updated_at',
     ];
-
 }

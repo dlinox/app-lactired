@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('origen_aguas', function (Blueprint $table) {
-            $table->id();
+            $table->id('oagu_id');
+            $table->string('oagu_nombre')->unique();
             $table->timestamps();
         });
     }

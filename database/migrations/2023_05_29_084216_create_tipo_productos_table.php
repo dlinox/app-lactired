@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tipo_productos', function (Blueprint $table) {
-            $table->id();
+            $table->id('tpro_id');
+            $table->string('tpro_nombre')->unique();
             $table->timestamps();
         });
     }

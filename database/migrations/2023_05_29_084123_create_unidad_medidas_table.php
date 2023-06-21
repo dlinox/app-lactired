@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('unidad_medidas', function (Blueprint $table) {
-            $table->id();
+            $table->id('umed_id');
+            $table->string('umed_nombre')->unique();
+            $table->string('umed_simbolo', 10)->unique();
             $table->timestamps();
         });
     }
