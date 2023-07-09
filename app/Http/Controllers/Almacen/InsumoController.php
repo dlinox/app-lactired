@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\InsumoRequest;
 use App\Models\Insumo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class InsumoController extends Controller
@@ -44,9 +45,16 @@ class InsumoController extends Controller
 
     public function store(InsumoRequest $request)
     {
-        $data = $request->all();
-        Insumo::create($data);
-        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
+        try {
+            DB::transaction(function () use ($request) {
+                $data = $request->all();
+                $insumo = Insumo::create($data);
+                $this->guardarArchivo($request, $insumo);
+                return redirect()->back()->with('success', 'Elemento creado exitosamente.');
+            });
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors(['error' => 'Se ha producido un error inesperado. Si el problema persiste, te recomendamos que te pongas en contacto con el administrador para obtener ayuda adicional.', 'details' => $th->getMessage()]);
+        }
     }
 
     public function update(InsumoRequest $request, Insumo $insumo)
@@ -72,5 +80,29 @@ class InsumoController extends Controller
                 ->get();
         }
         return response()->json($results);
+    }
+
+    public function guardarArchivo($request, Insumo $insumo)
+    {
+        $this->validate(
+            $request,
+            [
+                'insu_imagen' => 'required|mimes:jpg,jpeg,png|max:4000',
+            ],
+            [
+                'insu_imagen.required' => 'La imagen es obligatoria',
+                'insu_imagen.mimes' => 'Solo se permiten imágenes en formato jpeg, jpg y png',
+                'insu_imagen.max' => 'Tamaño máximo 4MB',
+            ]
+        );
+
+        $imagen = $request->file('insu_imagen');
+
+        $nombreImagen = 'image' . '-' .   str_pad($insumo->insu_id, 10, '0', STR_PAD_LEFT)   . '.' . $imagen->extension();
+
+        $ruta = $imagen->storeAs('imagenes/insumos', $nombreImagen, 'public');
+
+        $insumo->insu_imagen =  $ruta;
+        $insumo->save();
     }
 }

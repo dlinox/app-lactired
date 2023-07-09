@@ -266,44 +266,57 @@ class DatabaseSeeder extends Seeder
                 'plem_responsable' => 0,
                 'plem_plan_id' =>  $faker->numberBetween(1, 7),
                 'plem_empl_id' => $i,
-    
-            ]);
 
+            ]);
         }
 
         //USUARIOS  Y ROLES
 
         Role::create(['name' => 'Super Admin']);
-
         $superADmin = User::create([
             'name' => $faker->firstName,
             'paterno' => $faker->lastName,
             'materno' => $faker->lastName,
+            'user_plan_nombre' => 'Agroindustrias San Francisco Sinty Mayo  EIRL',
+            'rol_name' => 'Super Admin',
             'dni' => $faker->numberBetween(10000000, 99999999),
-            'email' => 'admin@gmail.com',
+            'email' => 'super_admin@gmail.com',
             'password' => 'password',
             'user_plan_id' => 1,
         ]);
 
         $superADmin->assignRole('Super Admin');
 
-        $admin = Role::create(['name' => 'Admin']);
-        Permission::create(['name' => 'menu-de-configuracion']);
-        Permission::create(['name' => 'menu-de-almacen']);
-        Permission::create(['name' => 'menu-de-compras']);
-        Permission::create(['name' => 'menu-de-ventas']);
-        $admin->syncPermissions(['menu-de-configuracion', 'menu-de-almacen', 'menu-de-compras', 'menu-de-ventas']);
+
+        $this->call(RolsSeeder::class);
 
         $user = User::create([
             'name' => $faker->firstName,
             'paterno' => $faker->lastName,
             'materno' => $faker->lastName,
             'dni' => $faker->numberBetween(10000000, 99999999),
-            'email' => 'user@gmail.com',
+            'email' => 'admin@gmail.com',
             'password' => 'password',
-            'user_plan_id' => 1,
+            'user_plan_nombre' => 'Agroindustrias  Chrysef',
+            'rol_name' => 'Admin',
+            'user_plan_id' => 2,
         ]);
 
-        $user->assignRole('Admin');
+        $user->assignRole('Administrador');
+
+
+        $user = User::create([
+            'name' => $faker->firstName,
+            'paterno' => $faker->lastName,
+            'materno' => $faker->lastName,
+            'dni' => $faker->numberBetween(10000000, 99999999),
+            'email' => 'encargado@gmail.com',
+            'password' => 'password',
+            'user_plan_nombre' => 'Agroindustrias  Chrysef',
+            'rol_name' => 'Admin',
+            'user_plan_id' => 2,
+        ]);
+
+        $user->assignRole('Encargado');
     }
 }

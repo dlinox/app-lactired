@@ -1,21 +1,38 @@
 <template>
     <slot name="activator" :dialog="() => (dialog = !dialog)"></slot>
-    <v-dialog v-model="dialog" :width="width" persistent>
+    <v-dialog
+        :fullscreen="!display.smAndUp.value"
+        scrollable
+        v-model="dialog"
+        height="auto"
+        :width="display.smAndUp.value ? width : null"
+    >
         <v-card>
-            <v-toolbar density="compact">
-                <v-toolbar-title>  <small>{{title}} </small> </v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn icon="mdi-close" color="dark" @click="dialog = false" />
-            </v-toolbar>
-            <v-container>
+            <v-card-title class="pa-0">
+                <v-toolbar density="compact">
+                    <v-toolbar-title>
+                        <small>{{ title }} </small>
+                    </v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        icon="mdi-close"
+                        color="dark"
+                        @click="dialog = false"
+                    />
+                </v-toolbar>
+            </v-card-title>
+            <v-card-text>
                 <slot name="content" :dialog="() => (dialog = !dialog)"> </slot>
-            </v-container>
+            </v-card-text>
         </v-card>
     </v-dialog>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useDisplay } from "vuetify/lib/framework.mjs";
+
+const display = useDisplay();
 
 const props = defineProps({
     title: {
@@ -24,7 +41,7 @@ const props = defineProps({
     },
     width: {
         type: String,
-        default: "70vw",
+        default: "80vw",
     },
 });
 

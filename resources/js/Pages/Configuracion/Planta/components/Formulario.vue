@@ -53,7 +53,10 @@ const props = defineProps({
     url: String,
 });
 
-const latlng =  props.formData.plan_latitud && props.formData.plan_longitud ? [ props.formData.plan_latitud, props.formData.plan_longitud] : [-15.284185114076433, -70.04000478753159];
+const latlng =
+    props.formData.plan_latitud && props.formData.plan_longitud
+        ? [props.formData.plan_latitud, props.formData.plan_longitud]
+        : [-15.284185114076433, -70.04000478753159];
 
 onMounted(() => {
     const map = L.map("mapContainer").setView(latlng, 7);
@@ -130,6 +133,7 @@ const formStructure = [
         label: "Latitud",
         type: "text",
         required: false,
+        readonly: true,
         cols: 12,
         colMd: 3,
     },
@@ -138,6 +142,7 @@ const formStructure = [
         label: "Longitud",
         type: "text",
         required: false,
+        readonly: true,
         cols: 12,
         colMd: 3,
     },

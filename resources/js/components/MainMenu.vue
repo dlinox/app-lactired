@@ -2,7 +2,7 @@
     <v-list v-model:opened="menuOpen" nav density="compact">
         <v-list-subheader>Menu</v-list-subheader>
 
-        <template v-for="(menu, index) in menuMain" :key="index">
+        <template v-for="(menu, index) in items" :key="index">
             <template v-if="menu.group == null">
                 <v-list-item
                     :prepend-icon="menu.icon"
@@ -93,6 +93,10 @@
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
+const props = defineProps({
+    items: Array,
+});
+
 const menuAcopio = [
     {
         title: "Acopio",
@@ -101,13 +105,20 @@ const menuAcopio = [
         to: "/acopio/create",
         group: null,
     },
-    // {
-    //     title: "Consultar acopio",
-    //     value: "acopio.consultar",
-    //     icon: null,
-    //     to: "/acopio/consultar",
-    //     group: null,
-    // },
+    {
+        title: "Pagos",
+        value: "acopio.pasgos",
+        icon: null,
+        to: "/acopio/pagos/create",
+        group: null,
+    },
+    {
+        title: "Consultar acopio",
+        value: "acopio.consultas",
+        icon: null,
+        to: "/acopio/consltas",
+        group: null,
+    },
 ];
 
 const menuCompras = [
@@ -300,7 +311,6 @@ const menuConfiguracionTrabajador = [
         group: null,
     },
 ];
-
 
 const menuConfiguracion = [
     {

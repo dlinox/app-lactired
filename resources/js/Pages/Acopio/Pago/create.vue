@@ -1,26 +1,26 @@
 <template>
     <AdminLayout>
-        <HeadingPage title="Pago" subtitle="Registrar pago">
-        </HeadingPage>
-
+        <HeadingPage title="Pago" subtitle="Registrar pago"> </HeadingPage>
         <v-container fluid>
             <v-row>
                 <v-col cols="12" md="8">
-                    <v-card>
-                        <v-toolbar title="Pago" density="compact">
-                        </v-toolbar>
+                    <v-card :loading="pagoDetalleLoading">
+                        <v-toolbar title="Pago" density="compact"> </v-toolbar>
 
                         <v-container>
                             <v-row>
                                 <v-col cols="12">
-                                    <SimpleAutocomplete
-                                        url="/autocomplete/proveedores"
-                                        item-title="proveedor"
+                                    <v-autocomplete
+                                        no-data-text="No tiene pagos pendientes"
+                                        label="Proveedores"
                                         item-value="prov_id"
-                                        label="Buscar Proveedor"
-                                        v-model="form.comp_prov_id"
+                                        item-title="detalle"
+                                        :items="defaults.proveedores"
+                                        v-model="form.pago_prov_id"
+                                        @update:model-value="onSelectProveedor"
                                     />
                                 </v-col>
+
                                 <v-col cols="12">
                                     <v-table
                                         density="compact"
@@ -29,27 +29,38 @@
                                     >
                                         <thead>
                                             <tr>
+                                                <th class="text-left"></th>
+
                                                 <th class="text-left">
                                                     Serie-Numero
                                                 </th>
-                                                <th class="text-left">
-                                                    Fecha
-                                                </th>
+                                                <th class="text-left">Fecha</th>
                                                 <th class="text-left">
                                                     Total S/.
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <!-- <tbody>
+                                        <tbody>
                                             <tr
-                                                v-for="item in form.comp_detalle"
-                                                :key="item.insu_id"
+                                                v-for="item in pagoDetalle"
+                                                :key="item.comp_id"
                                             >
-                                                <td>{{ item.insu_nombre }}</td>
-                                                <td>{{ item.insu_stock }}</td>
-                                                <td>{{ item.umed_nombre }}</td>
+                                                <td>
+                                                    <v-checkbox
+                                                        v-model="
+                                                            form.pago_detalle
+                                                        "
+                                                        :value="item"
+                                                    ></v-checkbox>
+                                                </td>
+                                                <td>
+                                                    {{ item.comp_serie }} -
+                                                    {{ item.comp_numero }}
+                                                </td>
+                                                <td>{{ item.comp_fecha }}</td>
+                                                <td>{{ item.comp_total }}</td>
                                             </tr>
-                                        </tbody> -->
+                                        </tbody>
                                     </v-table>
                                 </v-col>
                             </v-row>
@@ -62,7 +73,6 @@
                         </v-toolbar>
                         <v-container>
                             <v-row>
-               
                                 <v-col cols="12">
                                     <v-text-field
                                         v-model="form.pago_fecha"
@@ -71,8 +81,6 @@
                                     ></v-text-field>
                                 </v-col>
 
-            
-         
                                 <v-col cols="12">
                                     <v-text-field
                                         v-model="form.pago_numero"
@@ -82,16 +90,11 @@
                                 <v-col cols="12">
                                     <v-list-item
                                         v-for="item in form.pago_detalle"
-                                        :key="item.insu_id"
-                                        :title="item.insu_nombre"
+                                        :key="item.comp_id"
+                                        :title="`${item.comp_serie}-${item.comp_numero}`"
                                     >
                                         <template v-slot:append>
-                                            S/.
-                                            {{
-                                                (
-                                                    (item.comp_total ?? 0)
-                                                ).toFixed(2)
-                                            }}
+                                            S/. {{ item.comp_total }}
                                         </template>
                                     </v-list-item>
                                     <v-divider></v-divider>
@@ -106,8 +109,17 @@
                                 </v-col>
 
                                 <v-col>
-                                    <v-btn block @click="guardar">
-                                        Guardar
+                                    <v-btn
+                                        :loading="form.processing"
+                                        :disabled="
+                                            form.pago_detalle.length === 0
+                                                ? true
+                                                : false
+                                        "
+                                        block
+                                        @click="guardar"
+                                    >
+                                        PAGAR
                                     </v-btn>
                                 </v-col>
                             </v-row>
@@ -123,56 +135,55 @@ import { computed, ref } from "vue";
 import { router, useForm } from "@inertiajs/vue3";
 import AdminLayout from "@/layouts/AdminLayout.vue";
 import HeadingPage from "@/components/HeadingPage.vue";
-import SimpleAutocomplete from "../../components/SimpleAutocomplete.vue";
-import CropCompressImage from "../../components/CropCompressImage.vue";
+import axios from "axios";
 
 const props = defineProps({
     defaults: Object,
 });
 
-
+const pagoDetalle = ref([]);
+const pagoDetalleLoading = ref(false);
 const form = useForm({
     pago_numero: props.defaults.numero,
     pago_monto: 0.0,
     pago_fecha: props.defaults.fecha,
-    pago_prov_id: '',
-    pago_plan_id: '1',
+    pago_prov_id: null,
+    pago_plan_id: 1, // back
     pago_detalle: [],
 });
 
-
 const total = computed(() => {
     let res = form?.pago_detalle?.reduce(
-        (accumulator, item) =>
-            accumulator + parseFloat(item.comp_total),
+        (accumulator, item) => accumulator + parseFloat(item.comp_total),
         0
     );
+
+    form.pago_monto = res;
     return res;
 });
 
+const onSelectProveedor = async (val) => {
+    if (val === null) {
+        form.pago_detalle = [];
+        pagoDetalle.value = [];
+        return;
+    }
 
-const changeTipoComporbante = (val) => {
-    router.visit("/acopio/create/?comprobante=" + val, {
-        preserveScroll: true,
-        preserveState: true,
-        only: ["defaults"],
-        onFinish: () => {
-            form.comp_serie = props.defaults.serie;
-            form.comp_numero = props.defaults.numero;
-        },
-        onSuccess: (page) => {
-            form.comp_serie = page.props.defaults.serie;
-            form.comp_numero = page.props.defaults.numero;
-            preview_img.value = null;
-        },
-    });
+    pagoDetalleLoading.value = true;
+    let res = await axios.get("/acopio/pagos/detalle/" + val);
+    pagoDetalle.value = res.data;
+    pagoDetalleLoading.value = false;
 };
 
 const guardar = () => {
-    form.post("/acopio", {
+    form.post("/acopio/pagos", {
         onSuccess: () => {
             form.reset();
-            //changeTipoComporbante(form.comp_tipo_comprobante);
+            form.pago_detalle = [];
+            pagoDetalle.value = [];
+            form.pago_numero = (parseInt(form.pago_numero) + 1)
+                .toString()
+                .padStart(10, "0");
         },
     });
 };

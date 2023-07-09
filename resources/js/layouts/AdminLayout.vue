@@ -8,6 +8,7 @@
             :width="260"
         >
             <MainMenu
+                :items="user.menu"
                 @onSubMenu="
                     ($event) => {
                         subMenu = $event;
@@ -15,24 +16,68 @@
                     }
                 "
             />
+
+            <template v-slot:append>
+                <v-list variant="tonal">
+                    <v-list-item>
+                        <template v-slot:append>
+                            <v-tooltip text="Salir">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        v-bind="props"
+                                        color="red"
+                                        icon
+                                        rounded="lg"
+                                        variant="tonal"
+                                        size="small"
+                                        @click="router.delete('/sign-out')"
+                                    >
+                                        <v-icon>mdi-logout</v-icon>
+                                    </v-btn>
+                                </template>
+                            </v-tooltip>
+                        </template>
+                        <v-list-item-subtitle>
+                            {{ user?.rol_name }}
+                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                            {{ user?.name }}
+                        </v-list-item-title>
+
+                        <v-tooltip :text="user?.user_plan_nombre">
+                            <template v-slot:activator="{ props }">
+                                <v-list-item-subtitle v-bind="props">
+                                    <small>
+                                        {{ user?.user_plan_nombre }}
+                                    </small>
+                                </v-list-item-subtitle>
+                            </template>
+                        </v-tooltip>
+                    </v-list-item>
+                </v-list>
+            </template>
         </v-navigation-drawer>
 
         <v-app-bar absolute elevation="0">
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-toolbar-title> <Logo></Logo> </v-toolbar-title>
+            <v-toolbar-title>
+                <img
+                    :src="
+                        theme.global.name.value == 'light'
+                            ? '/images/logo.svg'
+                            : '/images/logo-white.svg'
+                    "
+                    alt="Logo Lactired"
+                    width="100"
+                />
+            </v-toolbar-title>
             <v-spacer></v-spacer>
             <SwitchTheme />
-            <v-btn
-                color="red"
-                icon
-                size="small"
-                @click="router.delete('/sign-out')"
-            >
-                <v-icon>mdi-logout</v-icon>
-            </v-btn>
+ 
         </v-app-bar>
 
         <v-main>
+  
             <!-- <v-navigation-drawer  v-model="subDrawer">
                 <v-list nav>
                     <v-list-item
@@ -101,9 +146,12 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
-import Logo from "../components/Logo.vue";
+
 import MainMenu from "../components/MainMenu.vue";
 import SwitchTheme from "../components/SwitchTheme.vue";
+import { useTheme } from "vuetify";
+
+const theme = useTheme();
 
 const flash = computed(() => usePage().props?.flash);
 const error = computed(() => usePage().props?.errors);

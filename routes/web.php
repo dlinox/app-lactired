@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\AcopioController;
+use App\Http\Controllers\Acopio\AcopioController;
+use App\Http\Controllers\Acopio\PagoController;
 use App\Http\Controllers\Almacen\InsumoController;
 use App\Http\Controllers\Almacen\ProductoController;
 use App\Http\Controllers\Auth\AuthController;
@@ -29,24 +30,23 @@ use App\Http\Controllers\Configuracion\Trabajador\TipoDocumentoController;
 use App\Http\Controllers\Configuracion\UsuarioController;
 use App\Http\Controllers\Venta\VentaController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\PagoController;
 use App\Http\Controllers\Venta\ClienteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-
-Route::get('/', function () {
-    return Inertia::render('Home');
-})->name('admin');
-
+Route::inertia('/403', 'Errors/Error403')->name('error.403');
 
 Route::name('auth.')->prefix('')->group(function () {
-
     Route::get('/login',  [AuthController::class, 'index'])->name('login')->middleware('guest');
     Route::post('/sign-in',  [AuthController::class, 'signIn'])->name('sign-in');
     Route::delete('/sign-out',  [AuthController::class, 'signOut'])->name('sign-out');
 });
+
+
+Route::get('/', function () {
+    return Inertia::render('Home');
+})->name('admin')->middleware(['auth', 'can:dashboard']);
 
 Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefix('config')->group(function () {
     Route::resource('plantas', PlantaController::class);
@@ -86,12 +86,12 @@ Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefi
     });
 });
 
-Route::name('almacen.')->prefix('almacen')->group(function () {
+Route::middleware(['auth', 'can:menu-de-almacen'])->name('almacen.')->prefix('almacen')->group(function () {
     Route::resource('productos', ProductoController::class);
     Route::resource('insumos', InsumoController::class);
 });
 
-Route::name('autocomplete.')->prefix('autocomplete')->group(function () {
+Route::middleware(['auth'])->name('autocomplete.')->prefix('autocomplete')->group(function () {
     Route::get('tipo-companias', [TipoCompaniaController::class, 'autocomplete'])->name('tipo-companias');
     Route::get('tipo-instituciones', [InstitucionController::class, 'autocomplete'])->name('tipo-instituciones');
     Route::get('nivel-capacitaciones', [NivelCapacitacionController::class, 'autocomplete'])->name('nivel-capacitaciones');
@@ -113,19 +113,21 @@ Route::name('autocomplete.')->prefix('autocomplete')->group(function () {
 });
 
 
-Route::name('ventas.')->prefix('ventas')->group(function () {
+Route::middleware(['auth', 'can:menu-de-ventas'])->name('ventas.')->prefix('ventas')->group(function () {
     Route::post('', [VentaController::class, 'store'])->name('store');
     Route::get('registrar-venta', [VentaController::class, 'create'])->name('create');
     Route::resource('clientes', ClienteController::class);
 });
 
-Route::resource('pagos', PagoController::class);
-
-Route::name('compras.')->prefix('compras')->group(function () {
+Route::middleware(['auth', 'can:menu-de-compras'])->name('compras.')->prefix('compras')->group(function () {
     Route::post('', [CompraController::class, 'store'])->name('store');
     Route::get('registrar-compra', [CompraController::class, 'create'])->name('create');
     Route::resource('proveedores', ProveedorController::class);
 });
 
 
-Route::resource('acopio', AcopioController::class);
+Route::middleware(['auth', 'can:menu-de-acopio'])->name('acopio.')->prefix('acopio')->group(function () {
+    Route::resource('', AcopioController::class);
+    Route::resource('pagos', PagoController::class);
+    Route::get('pagos/detalle/{id}', [PagoController::class, 'getDetallePagoProveedor'])->name('pago.detalle');
+});

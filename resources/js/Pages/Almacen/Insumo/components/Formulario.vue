@@ -5,12 +5,35 @@
         @onCancel="$emit('onCancel')"
         @onSumbit="submit"
     >
+        <template #field.insu_imagen>
+            <v-card variant="tonal">
+                <CropCompressImage
+                    :aspect-ratio="16 / 9"
+                    @onCropper="
+                        (preview_img = $event.blob),
+                            (form.insu_imagen = $event.file)
+                    "
+                />
+
+                <v-img
+                    v-if="preview_img"
+                    class="mx-auto"
+                    :width="300"
+                    aspect-ratio="16/9"
+                    cover
+                    :src="preview_img"
+                ></v-img>
+            </v-card>
+        </template>
     </SimpleForm>
 </template>
 
 <script setup>
-import SimpleForm from "@/components/SimpleForm.vue";
 import { useForm } from "@inertiajs/vue3";
+import SimpleForm from "@/components/SimpleForm.vue";
+import CropCompressImage from "@/components/CropCompressImage.vue";
+import { ref } from "vue";
+
 const emit = defineEmits(["onCancel", "onSubmit"]);
 const props = defineProps({
     formData: {
@@ -21,6 +44,7 @@ const props = defineProps({
             insu_medida: "",
             insu_umed_id: null,
             insu_plan_id: null,
+            insu_imagen: null,
         },
     },
     edit: {
@@ -31,6 +55,8 @@ const props = defineProps({
 });
 
 const form = useForm({ ...props.formData });
+
+const preview_img = ref(null);
 
 const formStructure = [
     {
@@ -72,11 +98,19 @@ const formStructure = [
 
     {
         key: "insu_plan_id",
-        label: "Ubicación geográfica",
+        label: "Planta",
         url: "/autocomplete/plantas",
         type: "autocomplete",
         itemTitle: "plan_razon_social",
         itemValue: "plan_id",
+        required: true,
+        cols: 12,
+    },
+
+    {
+        key: "insu_imagen",
+        label: "Imagen",
+        type: "image",
         required: true,
         cols: 12,
     },

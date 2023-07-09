@@ -24,7 +24,8 @@ return new class extends Migration
             $table->decimal('comp_igv', 8, 2)->nullable();
 
             $table->boolean('comp_estado')->default(1)->comment('0=anulado  1=activo');
-            $table->boolean('comp_tipo_pago')->default(0)->comment('0=al contado  1=al credito');
+            
+            $table->boolean('comp_tipo_pago')->default(1)->comment('0=al contado  1=al credito');
 
             $table->boolean('comp_tipo')->default(1)->comment('0=recoleccion  1=Normal');
             $table->boolean('comp_estado_deuda')->default(0)->comment('0=en deuda  1=pagado');

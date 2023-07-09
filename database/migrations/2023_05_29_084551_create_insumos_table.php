@@ -19,6 +19,8 @@ return new class extends Migration
             $table->boolean('insu_leche')->default(0)->comment('0=No es leche  1=Es leche');
             $table->unsignedBigInteger('insu_umed_id');
             $table->unsignedBigInteger('insu_plan_id');
+            $table->string('insu_imagen')->nullable();
+
             $table->unique(['insu_nombre', 'insu_plan_id']);
             $table->timestamps();
             $table->foreign('insu_umed_id')->references('umed_id')->on('unidad_medidas');

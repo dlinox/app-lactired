@@ -7,11 +7,11 @@ import NProgress from "nprogress";
 
 import "leaflet/dist/leaflet.css";
 import vuetify from "@/plugins/vuetify/vuetify";
-import { loadFonts } from "@/plugins/googlefonts/webfontloader";
+// import { loadFonts } from "@/plugins/googlefonts/webfontloader";
 import "vue-advanced-cropper/dist/style.css";
 router.on("start", () => NProgress.start());
 router.on("finish", () => NProgress.done());
-loadFonts();
+//loadFonts();
 
 createInertiaApp({
     progress: {
