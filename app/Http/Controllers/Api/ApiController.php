@@ -15,8 +15,8 @@ class ApiController extends Controller
         return response()->json($plantas);
     }
 
-    public function getPlanta(Planta $plata) : JsonResponse {
-        
-        return response()->json($plata);
+    public function getPlanta($planta) : JsonResponse {
+        $_planta = Planta::find($planta);
+        return response()->json($_planta);
     }
 }
