@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('plantas', [ApiController::class, 'getPlantas']);
+Route::get('planta/{planta}', [ApiController::class, 'getPlanta']);

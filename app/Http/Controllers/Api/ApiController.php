@@ -11,7 +11,12 @@ class ApiController extends Controller
 {
     public function getPlantas() : JsonResponse {
         
-        $plantas = Planta::all();
+        $plantas = Planta::select('plan_id','plan_razon_social','plan_ruc','plan_tipo_planta')->get();
         return response()->json($plantas);
+    }
+
+    public function getPlanta(Planta $plata) : JsonResponse {
+        
+        return response()->json($plata);
     }
 }
