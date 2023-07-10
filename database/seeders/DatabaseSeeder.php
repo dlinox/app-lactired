@@ -138,32 +138,6 @@ class DatabaseSeeder extends Seeder
             'umed_simbolo' => 'kg',
         ]);
 
-        Producto::create([
-            'prod_nombre' => 'Producto 1',
-            'prod_stock' => 20,
-            'prod_medida' => 15.00,
-            'prod_umed_id' => 1,
-            'prod_tpro_id' => 3,
-            'prod_plan_id' => 1,
-        ]);
-
-        Producto::create([
-            'prod_nombre' => 'Producto 2',
-            'prod_stock' => 20,
-            'prod_medida' => 15.00,
-            'prod_umed_id' => 2,
-            'prod_tpro_id' => 1,
-            'prod_plan_id' => 1,
-        ]);
-
-        Producto::create([
-            'prod_nombre' => 'Producto 3',
-            'prod_stock' => 20,
-            'prod_medida' => 15.00,
-            'prod_umed_id' => 1,
-            'prod_tpro_id' => 2,
-            'prod_plan_id' => 1,
-        ]);
 
         Cliente::create([
             'clie_nombres' => 'Manuel',
@@ -193,6 +167,34 @@ class DatabaseSeeder extends Seeder
 
         foreach (Planta::all() as $value) {
 
+
+            Producto::create([
+                'prod_nombre' => 'Producto 1 P' . $value->plan_id,
+                'prod_stock' => 20,
+                'prod_medida' => 15.00,
+                'prod_umed_id' => 1,
+                'prod_tpro_id' => 3,
+                'prod_plan_id' => $value->plan_id,
+            ]);
+
+            Producto::create([
+                'prod_nombre' => 'Producto 2 P' . $value->plan_id,
+                'prod_stock' => 20,
+                'prod_medida' => 15.00,
+                'prod_umed_id' => 2,
+                'prod_tpro_id' => 1,
+                'prod_plan_id' => $value->plan_id,
+            ]);
+
+            Producto::create([
+                'prod_nombre' => 'Producto 3 P' . $value->plan_id,
+                'prod_stock' => 20,
+                'prod_medida' => 15.00,
+                'prod_umed_id' => 1,
+                'prod_tpro_id' => 2,
+                'prod_plan_id' => $value->plan_id,
+            ]);
+            
 
             Insumo::create([
                 'insu_nombre' => 'LECHE P' . $value->plan_id,

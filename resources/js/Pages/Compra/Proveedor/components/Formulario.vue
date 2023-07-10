@@ -20,6 +20,7 @@ import { useForm } from "@inertiajs/vue3";
 import { onMounted } from "vue";
 const emit = defineEmits(["onCancel", "onSubmit"]);
 const props = defineProps({
+    planta: [String, Number],
     formData: {
         type: Object,
         default: {
@@ -136,16 +137,16 @@ const formStructure = [
         cols: 12,
         colMd: 6,
     },
-    {
-        key: "prov_plan_id",
-        label: "Planta",
-        type: "autocomplete",
-        url: "/autocomplete/plantas",
-        itemTitle: "plan_razon_social",
-        itemValue: "plan_id",
-        required: true,
-        cols: 12,
-    },
+    // {
+    //     key: "prov_plan_id",
+    //     label: "Planta",
+    //     type: "autocomplete",
+    //     url: "/autocomplete/plantas",
+    //     itemTitle: "plan_razon_social",
+    //     itemValue: "plan_id",
+    //     required: true,
+    //     cols: 12,
+    // },
 
     {
         key: "prov_sexo",
@@ -170,6 +171,8 @@ const formStructure = [
 ];
 
 const submit = async () => {
+    form.prov_plan_id = props.planta;
+
     if (props.edit) form.put(props.url, option);
     else form.post(props.url, option);
 };

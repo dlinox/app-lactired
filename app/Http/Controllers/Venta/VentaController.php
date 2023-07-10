@@ -7,11 +7,23 @@ use App\Http\Requests\VentaRequest;
 use App\Models\Venta;
 use App\Models\VentaDetalle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class VentaController extends Controller
 {
+
+  protected $user;
+  protected $planta;
+  public function __construct()
+  {
+    $this->middleware(function ($request, $next) {
+      $this->user = Auth::user();
+      $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+      return $next($request);
+    });
+  }
 
   public function create(Request $request)
   {
@@ -24,7 +36,8 @@ class VentaController extends Controller
         'fecha' => date('Y-m-d'),
         'comprobante' =>  $request->comprobante,
         'serie' => $request->comprobante == 'BOLETA' ? 'B000'  : 'F000',
-        'numero' => $this->getNextNumero($request->comprobante == 'BOLETA' ? 'B000'  : 'F000'),
+        'numero' => $this->getNextNumero($request->comprobante == 'BOLETA' ? 'B000'  : 'F000', $this->planta),
+        'planta' => $this->planta,
       ];
     } else {
 
@@ -32,7 +45,8 @@ class VentaController extends Controller
         'fecha' => date('Y-m-d'),
         'comprobante' => 'BOLETA',
         'serie' => 'B000',
-        'numero' => $this->getNextNumero(),
+        'numero' => $this->getNextNumero('B000', $this->planta),
+        'planta' => $this->planta,
       ];
     }
 
@@ -41,7 +55,7 @@ class VentaController extends Controller
     ]);
   }
 
-  protected function getNextNumero($serie = 'B000', $planta = 1)
+  protected function getNextNumero($serie, $planta)
   {
     $maxVentNumero = Venta::where('vent_serie', $serie)
       ->where('vent_plan_id', $planta)
@@ -67,7 +81,7 @@ class VentaController extends Controller
           ]);
         }
         // return to_route('ventas.create')->with('success', 'Venta registrada con exito.');
-        return back()->with(['success', 'Venta registrada con exito.',]);
+        return back()->with(['success', 'Venta registrada con exito.']);
       });
     } catch (\Throwable $th) {
       return redirect()->back()->withErrors(['error' => 'Se ha producido un error inesperado. Si el problema persiste, te recomendamos que te pongas en contacto con el administrador para obtener ayuda adicional.', 'details' => $th->getMessage()]);

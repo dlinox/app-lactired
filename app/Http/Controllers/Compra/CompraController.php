@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CompraRequest;
 use App\Models\Compra;
 use App\Models\CompraDetalle;
+use App\Models\Insumo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,6 @@ use Inertia\Inertia;
 
 class CompraController extends Controller
 {
-
 
   protected $user;
   protected $planta;
@@ -50,9 +50,7 @@ class CompraController extends Controller
         'planta' => $this->planta,
       ];
     }
-
-
-    return Inertia::render('Compra/create', ['defaults' => $defaults ]);
+    return Inertia::render('Compra/create', ['defaults' => $defaults, 'insumos' => Insumo::where('insu_plan_id', $this->planta)->get()]);
   }
 
   protected function getNextNumero($serie, $planta)

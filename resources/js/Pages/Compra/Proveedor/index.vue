@@ -13,7 +13,11 @@
                         </v-btn>
                     </template>
                     <template v-slot:content="{ dialog }">
-                        <Formulario @on-cancel="dialog" :url="url" />
+                        <Formulario
+                            @on-cancel="dialog"
+                            :url="url"
+                            :planta="planta"
+                        />
                     </template>
                 </BtnDialog>
             </template>
@@ -57,6 +61,7 @@
                                 </template>
                                 <template v-slot:content="{ dialog }">
                                     <Formulario
+                                        :planta="planta"
                                         @on-cancel="dialog"
                                         :form-data="item"
                                         :edit="true"
@@ -108,6 +113,7 @@ const props = defineProps({
     headers: Array,
     filters: Object,
     perPageOptions: Array,
+    planta: [String, Number],
 });
 
 const url = "/compras/proveedores";

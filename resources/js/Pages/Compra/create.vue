@@ -6,7 +6,8 @@
             <v-row>
                 <v-col cols="12" md="8">
                     <v-card>
-                        <v-toolbar title="Compra" density="compact"> </v-toolbar>
+                        <v-toolbar title="Compra" density="compact">
+                        </v-toolbar>
 
                         <v-container>
                             <v-row>
@@ -21,8 +22,8 @@
                                 </v-col>
 
                                 <v-col cols="12">
-                                    <SimpleAutocomplete
-                                        url="/autocomplete/insumos"
+                                    <v-autocomplete
+                                        :items="insumos"
                                         item-title="insu_nombre"
                                         item-value="insu_id"
                                         label="Buscar Insumo"
@@ -33,19 +34,8 @@
                                         closable-chips
                                         return-object
                                         v-model:object="productos"
-                                    >
-                                        <template
-                                            v-slot:custom="{ props, item }"
-                                        >
-                                            <v-list-item
-                                                v-bind="props"
-                                                :title="item?.raw?.insu_nombre"
-                                                :subtitle="
-                                                    item?.raw?.insu_stock
-                                                "
-                                            ></v-list-item>
-                                        </template>
-                                    </SimpleAutocomplete>
+                                    />
+                                  
                                 </v-col>
 
                                 <v-col cols="12">
@@ -160,7 +150,9 @@
                                         v-model="form.comp_tipo_comprobante"
                                         label="Tipo de comporbante"
                                         :items="itemsComprobante"
-                                        @update:model-value="changeTipoComporbante"
+                                        @update:model-value="
+                                            changeTipoComporbante
+                                        "
                                     ></v-select>
                                 </v-col>
                                 <v-col cols="4">
@@ -216,19 +208,6 @@
                                             {{ igv.toFixed(2) }}
                                         </template>
                                     </v-list-item>
-                                    <!-- 
-                                  <v-list-item title="Descuento">
-                                      <template v-slot:append>
-                                          <v-text-field
-                                          style="width: 100px;"
-                                              prefix="S/. "
-                                              variant="underlined"
-                                              :clearable="false"
-                                              type="number"
-                                              density="compact"
-                                          ></v-text-field>
-                                      </template>
-                                  </v-list-item> -->
 
                                     <v-divider></v-divider>
 
@@ -263,27 +242,23 @@ import SimpleAutocomplete from "../../components/SimpleAutocomplete.vue";
 
 const props = defineProps({
     defaults: Object,
+    insumos: Array,
 });
 
 const productos = ref([]);
 const incluyeIgv = ref(false);
 
 const form = useForm({
-  
     comp_serie: props.defaults.serie,
     comp_numero: props.defaults.numero,
     comp_correlativo: "",
     comp_fecha: props.defaults.fecha,
-    comp_subtotal: 0.00,
-    comp_total: 0.00,
-    comp_importe: 0.00,
-    comp_igv: 0.00,
-   //comp_estado: "",
-   comp_tipo_pago: "1",
-   //comp_tipo: "",
-   //comp_estado_deuda: "",
-   //comp_imagen: "",
-    comp_plan_id: props.defaults.planta, //cambiar
+    comp_subtotal: 0.0,
+    comp_total: 0.0,
+    comp_importe: 0.0,
+    comp_igv: 0.0,
+    comp_tipo_pago: "1",
+    comp_plan_id: props.defaults.planta,
     comp_prov_id: null,
     comp_tipo_comprobante: props.defaults.comprobante,
     comp_detalle: [],

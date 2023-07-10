@@ -6,16 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductoRequest;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProductoController extends Controller
 {
+
+    protected $user;
+    protected $planta;
     protected $producto;
     public function __construct()
     {
         $this->producto = new Producto();
+
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+            return $next($request);
+        });
     }
+
 
     public function index(Request $request)
     {
@@ -25,7 +36,11 @@ class ProductoController extends Controller
         // Búsqueda por nombre de área
         if ($request->has('search')) {
             $searchTerm = $request->search;
-            $query->where('tpro_nombre', 'like', '%' . $searchTerm . '%');
+            $query->where('prod_nombre', 'like', '%' . $searchTerm . '%');
+        }
+
+        if ($this->planta != null) {
+            $query->where('prod_plan_id', $this->planta);
         }
 
         // Obtener resultados paginados
@@ -72,13 +87,20 @@ class ProductoController extends Controller
 
     public function autocomplete(Request $request)
     {
+
         $results = [];
         if ($request->has('search')) {
-            $searchTerm = $request->search;
-            $results = Producto::where('prod_nombre', 'like', '%' . $searchTerm . '%')
-                ->limit(30)
-                ->get();
+
+            $query = Producto::query();
+            $query->where('prod_nombre', 'like', '%' . $request->search . '%');
+
+            if ($this->planta != null) {
+                $query->where('prod_plan_id', $this->planta);
+            }
+
+            $results = $query->limit(30)->get();
         }
+
         return response()->json($results);
     }
 

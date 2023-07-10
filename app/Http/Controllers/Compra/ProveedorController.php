@@ -7,16 +7,25 @@ use App\Http\Requests\ProveedorRequest;
 use App\Models\Producto;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProveedorController extends Controller
 {
     protected $proveedor;
+    protected $user;
+    protected $planta;
     public function __construct()
     {
         $this->proveedor = new Proveedor();
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+            return $next($request);
+        });
     }
+
 
     public function index(Request $request)
     {
@@ -29,11 +38,17 @@ class ProveedorController extends Controller
             $query->where('prov_nombre', 'like', '%' . $searchTerm . '%');
         }
 
+        // if ($this->planta != null) {
+        //     $query->where('prov_plan_id', $this->planta);
+        // }
+
+
         // Obtener resultados paginados
         $items = $query->paginate($perPage)->appends($request->query());
 
         return Inertia::render('Compra/Proveedor/index', [
             'items' => $items,
+            'planta' => $this->planta,
             'headers' => $this->proveedor->headers,
             'filters' => [
                 'tipo_estado' => $request->tipo_estado,
@@ -78,5 +93,4 @@ class ProveedorController extends Controller
         }
         return response()->json($results);
     }
-
 }
