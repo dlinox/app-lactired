@@ -58,6 +58,12 @@ const latlng =
         : [-15.284185114076433, -70.04000478753159];
 
 onMounted(() => {
+    var iconoPersonalizado = L.icon({
+        iconUrl: "/marker_red.png",
+        iconSize: [30, 30], // Tamaño del ícono
+        iconAnchor: [15, 15], // Punto de anclaje del ícono
+    });
+
     const map = L.map("mapContainer").setView(latlng, 7);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -65,6 +71,8 @@ onMounted(() => {
     }).addTo(map);
 
     const marker = L.marker(latlng).addTo(map);
+
+    marker.setIcon(iconoPersonalizado);
 
     map.on("click", (event) => {
         const { lat, lng } = event.latlng;
