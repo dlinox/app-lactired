@@ -11,23 +11,35 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    public function getPlantas() : JsonResponse {
-        
-        $plantas = Planta::select('plan_id','plan_razon_social','plan_ruc','plan_tipo_planta', 'plan_latitud','plan_longitud')->get();
+    public function getPlantas(): JsonResponse
+    {
+
+        $plantas = Planta::select('plan_id', 'plan_razon_social', 'plan_ruc', 'plan_tipo_planta', 'plan_latitud', 'plan_longitud')->get();
         return response()->json($plantas);
     }
 
-    public function getPlanta($planta) : JsonResponse {
+    public function getPlanta($planta): JsonResponse
+    {
         $_planta = Planta::find($planta);
         return response()->json($_planta);
     }
 
-    public function getProductos() : JsonResponse {
+    public function getProductos(): JsonResponse
+    {
         $_planta = Producto::all();
         return response()->json($_planta);
     }
 
-    public function getInsumos() : JsonResponse {
+
+    public function getProductosPlanta($planta): JsonResponse
+    {
+        $_planta = Producto::where('prod_plan_id', $planta)->get();
+        return response()->json($_planta);
+    }
+
+
+    public function getInsumos(): JsonResponse
+    {
         $_planta = Insumo::all();
         return response()->json($_planta);
     }

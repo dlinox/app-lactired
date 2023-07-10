@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('plantas', [ApiController::class, 'getPlantas']);
 Route::get('planta/{planta}', [ApiController::class, 'getPlanta']);
 
+Route::get('planta/productos/{planta}', [ApiController::class, 'getProductosPlanta']);
+
 
 Route::get('productos', [ApiController::class, 'getProductos']);
 Route::get('insumos', [ApiController::class, 'getInsumos']);
