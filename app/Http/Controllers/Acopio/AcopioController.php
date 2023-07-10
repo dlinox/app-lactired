@@ -38,7 +38,7 @@ class AcopioController extends Controller
                 'fecha' => date('Y-m-d'),
                 'comprobante' =>  $request->comprobante,
                 'serie' => $request->comprobante == 'BOLETA' ? 'B100'  : 'F100',
-                'numero' => $this->getNextNumero($request->comprobante == 'BOLETA' ? 'B100'  : 'F100'),
+                'numero' => $this->getNextNumero($request->comprobante == 'BOLETA' ? 'B100'  : 'F100', $this->planta),
             ];
         } else {
             $defaults = [
@@ -46,7 +46,7 @@ class AcopioController extends Controller
                 'fecha' => date('Y-m-d'),
                 'comprobante' => 'BOLETA',
                 'serie' => 'B100',
-                'numero' => $this->getNextNumero(),
+                'numero' => $this->getNextNumero('B100', $this->planta),
             ];
         }
         return Inertia::render('Acopio/create', [
@@ -87,7 +87,7 @@ class AcopioController extends Controller
         }
     }
 
-    protected function getNextNumero($serie = 'B100', $planta = 1)
+    protected function getNextNumero($serie, $planta)
     {
         $maxVentNumero = Compra::where('comp_serie', $serie)
             ->where('comp_plan_id', $planta)
