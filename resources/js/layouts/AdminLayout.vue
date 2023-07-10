@@ -73,11 +73,9 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <SwitchTheme />
- 
         </v-app-bar>
 
         <v-main>
-  
             <!-- <v-navigation-drawer  v-model="subDrawer">
                 <v-list nav>
                     <v-list-item

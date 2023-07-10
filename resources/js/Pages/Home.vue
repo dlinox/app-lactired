@@ -5,11 +5,6 @@
                 <div id="mapContainer" style="height: 700px"></div>
             </v-card-item>
         </v-card>
-
-        <pre>
-      {{ plantas }}
-    </pre
-        >
     </AdminLayout>
 </template>
 <script setup>
