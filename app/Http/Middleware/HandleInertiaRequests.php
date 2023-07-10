@@ -82,7 +82,7 @@ class HandleInertiaRequests extends Middleware
             "value" => "acopio.leche",
             "icon" => "mdi-basket-fill",
             "to" => "#",
-            'can' => 'menu-de-acopcio',
+            'can' => 'menu-de-acopio',
             "group" => [
                 [
                     "title" => "Acopio",

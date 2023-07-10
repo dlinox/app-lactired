@@ -6,15 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\InsumoRequest;
 use App\Models\Insumo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class InsumoController extends Controller
 {
+
+    protected $user;
+    protected $planta;
     protected $insumo;
     public function __construct()
     {
         $this->insumo = new Insumo();
+
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+            return $next($request);
+        });
     }
 
     public function index(Request $request)
@@ -28,9 +38,11 @@ class InsumoController extends Controller
             $query->where('insu_nombre', 'like', '%' . $searchTerm . '%');
         }
 
-        // Obtener resultados paginados
-        $items = $query->paginate($perPage)->appends($request->query());
+        if ($this->planta != null) {
+            $query->where('insu_plan_id', $this->planta);
+        }
 
+        $items = $query->paginate($perPage)->appends($request->query());
 
         return Inertia::render('Almacen/Insumo/index', [
             'items' => $items,
@@ -74,11 +86,17 @@ class InsumoController extends Controller
     {
         $results = [];
         if ($request->has('search')) {
-            $searchTerm = $request->search;
-            $results = Insumo::where('insu_nombre', 'like', '%' . $searchTerm . '%')
-                ->limit(30)
-                ->get();
+
+            $query = Insumo::query();
+            $query->where('insu_nombre', 'like', '%' . $request->search . '%');
+
+            if ($this->planta != null) {
+                $query->where('insu_plan_id', $this->planta);
+            }
+
+            $results = $query->limit(30)->get();
         }
+
         return response()->json($results);
     }
 

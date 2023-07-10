@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductoRequest;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProductoController extends Controller
@@ -44,9 +45,16 @@ class ProductoController extends Controller
 
     public function store(ProductoRequest $request)
     {
-        $data = $request->all();
-        Producto::create($data);
-        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
+        try {
+            DB::transaction(function () use ($request) {
+                $data = $request->all();
+                $producto = Producto::create($data);
+                $this->guardarArchivo($request, $producto);
+                return redirect()->back()->with('success', 'Elemento creado exitosamente.');
+            });
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors(['error' => 'Se ha producido un error inesperado. Si el problema persiste, te recomendamos que te pongas en contacto con el administrador para obtener ayuda adicional.', 'details' => $th->getMessage()]);
+        }
     }
 
     public function update(ProductoRequest $request, Producto $producto)
@@ -72,5 +80,29 @@ class ProductoController extends Controller
                 ->get();
         }
         return response()->json($results);
+    }
+
+    public function guardarArchivo($request, $producto)
+    {
+        $this->validate(
+            $request,
+            [
+                'prod_imagen' => 'required|mimes:jpg,jpeg,png|max:4000',
+            ],
+            [
+                'prod_imagen.required' => 'La imagen es obligatoria',
+                'prod_imagen.mimes' => 'Solo se permiten imágenes en formato jpeg, jpg y png',
+                'prod_imagen.max' => 'Tamaño máximo 4MB',
+            ]
+        );
+
+        $imagen = $request->file('prod_imagen');
+
+        $nombreImagen = 'image' . '-' .   str_pad($producto->prod_id, 10, '0', STR_PAD_LEFT)   . '.' . $imagen->extension();
+
+        $ruta = $imagen->storeAs('imagenes/productos', $nombreImagen, 'public');
+
+        $producto->prod_imagen =  $ruta;
+        $producto->save();
     }
 }

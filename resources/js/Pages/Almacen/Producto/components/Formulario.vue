@@ -5,12 +5,35 @@
         @onCancel="$emit('onCancel')"
         @onSumbit="submit"
     >
+        <template #field.prod_imagen>
+            <v-card variant="tonal">
+                <CropCompressImage
+                    :aspect-ratio="16 / 9"
+                    @onCropper="
+                        (preview_img = $event.blob),
+                            (form.prod_imagen = $event.file)
+                    "
+                />
+
+                <v-img
+                    v-if="preview_img"
+                    class="mx-auto"
+                    :width="300"
+                    aspect-ratio="16/9"
+                    cover
+                    :src="preview_img"
+                ></v-img>
+            </v-card>
+        </template>
     </SimpleForm>
 </template>
 
 <script setup>
-import SimpleForm from "@/components/SimpleForm.vue";
+import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
+import SimpleForm from "@/components/SimpleForm.vue";
+import CropCompressImage from "@/components/CropCompressImage.vue";
+
 const emit = defineEmits(["onCancel", "onSubmit"]);
 const props = defineProps({
     formData: {
@@ -23,6 +46,7 @@ const props = defineProps({
             prod_umed_id: null,
             prod_plan_id: null,
             prod_tpro_id: null,
+            prod_imagen: null,
         },
     },
     edit: {
@@ -31,6 +55,10 @@ const props = defineProps({
     },
     url: String,
 });
+
+
+
+const preview_img =  ref(null);
 
 const form = useForm({ ...props.formData });
 
@@ -88,6 +116,14 @@ const formStructure = [
         type: "autocomplete",
         itemTitle: "plan_razon_social",
         itemValue: "plan_id",
+        required: true,
+        cols: 12,
+    },
+
+    {
+        key: "prod_imagen",
+        label: "Imagen Referencial",
+        type: "photo",
         required: true,
         cols: 12,
     },

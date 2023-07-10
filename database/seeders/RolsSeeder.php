@@ -54,11 +54,11 @@ class RolsSeeder extends Seeder
         $admin->syncPermissions(
             [
                 'dashboard',
+                'menu-de-acopio',
                 'menu-de-configuracion',
                 'menu-de-almacen',
                 'menu-de-compras',
                 'menu-de-ventas',
-                'menu-de-acopio'
             ]
         );
 

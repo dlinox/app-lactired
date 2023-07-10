@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->id('prod_id');
             $table->string('prod_nombre');
+            $table->string('prod_imagen')->nullable();
             $table->integer('prod_stock');
             $table->float('prod_medida');
             $table->unsignedBigInteger('prod_umed_id');

@@ -127,6 +127,17 @@
                     </v-card>
                 </v-col>
             </v-row>
+
+            <v-dialog v-model="dialogTicket" width="500px" height="500px">
+                <v-card >
+                    <iframe
+                        :src="pdfTicket"
+                        frameborder="0"
+                        width="500px"
+                        height="500px"
+                    ></iframe>
+                </v-card>
+            </v-dialog>
         </v-container>
     </AdminLayout>
 </template>
@@ -141,6 +152,8 @@ const props = defineProps({
     defaults: Object,
 });
 
+const dialogTicket = ref(false);
+const pdfTicket = ref(null);
 const pagoDetalle = ref([]);
 const pagoDetalleLoading = ref(false);
 const form = useForm({
@@ -177,13 +190,17 @@ const onSelectProveedor = async (val) => {
 
 const guardar = () => {
     form.post("/acopio/pagos", {
-        onSuccess: () => {
+        onSuccess: (data) => {
             form.reset();
             form.pago_detalle = [];
             pagoDetalle.value = [];
             form.pago_numero = (parseInt(form.pago_numero) + 1)
                 .toString()
                 .padStart(10, "0");
+
+            console.log(data.props.flash.data); 
+            pdfTicket.value = data.props.flash.data;
+            dialogTicket.value = true;
         },
     });
 };

@@ -103,7 +103,7 @@ const formStructure = [
         type: "text",
         required: true,
         cols: 12,
-        colMd: 6,
+
     },
 
 ];

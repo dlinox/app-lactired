@@ -279,11 +279,11 @@ const form = useForm({
     comp_importe: 0.00,
     comp_igv: 0.00,
    //comp_estado: "",
-   comp_tipo_pago: "0",
+   comp_tipo_pago: "1",
    //comp_tipo: "",
    //comp_estado_deuda: "",
    //comp_imagen: "",
-    comp_plan_id: 1, //cambiar
+    comp_plan_id: props.defaults.planta, //cambiar
     comp_prov_id: null,
     comp_tipo_comprobante: props.defaults.comprobante,
     comp_detalle: [],

@@ -1,4 +1,10 @@
 <template>
+    <v-card class="mb-4" variant="tonal">
+        <v-card-item style="height: 200px">
+            <div id="mapContainer" style="height: 400px"></div>
+        </v-card-item>
+    </v-card>
+
     <SimpleForm
         :formularioJson="formStructure"
         v-model="form"
@@ -6,12 +12,12 @@
         @onSumbit="submit"
     >
     </SimpleForm>
-
 </template>
 
 <script setup>
 import SimpleForm from "@/components/SimpleForm.vue";
 import { useForm } from "@inertiajs/vue3";
+import { onMounted } from "vue";
 const emit = defineEmits(["onCancel", "onSubmit"]);
 const props = defineProps({
     formData: {
@@ -22,12 +28,12 @@ const props = defineProps({
             prov_materno: "",
             prov_nombres: "",
             prov_sexo: "",
-            prov_precio_alta: 0.00,
-            prov_precio_baja: 0.00,
+            prov_precio_alta: 0.0,
+            prov_precio_baja: 0.0,
             prov_latitud: "",
             prov_longitud: "",
             prov_activo: true,
-            prov_plan_id: "",
+            prov_plan_id: null,
         },
     },
     edit: {
@@ -35,6 +41,28 @@ const props = defineProps({
         default: false,
     },
     url: String,
+});
+
+const latlng =
+    props.formData.prov_latitud && props.formData.prov_longitud
+        ? [props.formData.prov_latitud, props.formData.prov_longitud]
+        : [-15.284185114076433, -70.04000478753159];
+
+onMounted(() => {
+    const map = L.map("mapContainer").setView(latlng, 7);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+    }).addTo(map);
+
+    const marker = L.marker(latlng).addTo(map);
+
+    map.on("click", (event) => {
+        const { lat, lng } = event.latlng;
+        marker.setLatLng([lat, lng]);
+        form.prov_latitud = lat;
+        form.prov_longitud = lng;
+    });
 });
 
 const form = useForm({ ...props.formData });
@@ -46,6 +74,7 @@ const formStructure = [
         type: "text",
         required: true,
         cols: 12,
+        colMd: 4,
     },
     {
         key: "prov_nombres",
@@ -53,6 +82,7 @@ const formStructure = [
         type: "text",
         required: true,
         cols: 12,
+        colMd: 8,
     },
     {
         key: "prov_paterno",
@@ -91,6 +121,8 @@ const formStructure = [
         label: "Latitud",
         type: "text",
         required: true,
+        readonly: true,
+        clearable: false,
         cols: 12,
         colMd: 6,
     },
@@ -99,6 +131,8 @@ const formStructure = [
         label: "Longitud",
         type: "text",
         required: true,
+        readonly: true,
+        clearable: false,
         cols: 12,
         colMd: 6,
     },

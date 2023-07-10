@@ -21,6 +21,7 @@ class Pago extends Model
         'pago_estado',
         'pago_prov_id',
         'pago_plan_id',
+        'pago_ticket',
     ];
 
     protected $casts = [
@@ -31,8 +32,6 @@ class Pago extends Model
 
     public static function getProveedoresPago($planta)
     {
-        $user = Auth::user();
-
         $proveedores = Proveedor::select(
             'prov_id',
             DB::raw("CONCAT(prov_nombres , ' | ', prov_dni ,  ' - S/.' ,  SUM(comp_total) , ' (' , COUNT(comp_id) ,  ')'  )  as detalle ")

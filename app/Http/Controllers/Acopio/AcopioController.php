@@ -3,16 +3,30 @@
 namespace App\Http\Controllers\Acopio;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AcopioRequest;
 use App\Http\Requests\CompraRequest;
 use App\Models\Compra;
 use App\Models\CompraDetalle;
 use App\Models\Insumo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class AcopioController extends Controller
 {
+
+    protected $user;
+    protected $planta;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+            return $next($request);
+        });
+    }
+
     public function create(Request $request)
     {
         if ($request->has('comprobante')) {
@@ -20,29 +34,29 @@ class AcopioController extends Controller
             $request->comprobante  = in_array($request->comprobante, ["BOLETA", "FACTURA"]) ?  $request->comprobante : 'BOLETA';
 
             $defaults = [
+                'planta' => $this->planta,
                 'fecha' => date('Y-m-d'),
                 'comprobante' =>  $request->comprobante,
                 'serie' => $request->comprobante == 'BOLETA' ? 'B100'  : 'F100',
                 'numero' => $this->getNextNumero($request->comprobante == 'BOLETA' ? 'B100'  : 'F100'),
             ];
         } else {
-
             $defaults = [
+                'planta' => $this->planta,
                 'fecha' => date('Y-m-d'),
                 'comprobante' => 'BOLETA',
                 'serie' => 'B100',
                 'numero' => $this->getNextNumero(),
             ];
         }
-
         return Inertia::render('Acopio/create', [
-            'insumo' => Insumo::where('insu_nombre', 'like', 'LECHE%')->first(),
+            'insumo' => Insumo::where('insu_plan_id', $this->planta)->where('insu_nombre', 'like', 'LECHE%')->first(),
             'defaults' => $defaults
         ]);
     }
 
 
-    public function store(CompraRequest $request)
+    public function store(AcopioRequest $request)
     {
         try {
             DB::transaction(function () use ($request) {
@@ -51,13 +65,13 @@ class AcopioController extends Controller
 
                 $this->guardarArchivo($request, $compra);
 
-                foreach ($request->comp_detalle as $key => $value) {
+                foreach ($request->comp_detalle as $value) {
                     CompraDetalle::create([
+                        'cdet_insu_id' =>  $value['insu_id'],
                         'cdet_cantidad' =>  $value['cantidad'],
                         'cdet_precio' =>  $value['precio'],
-                        'cdet_importe' =>  $value['importe'],
+                        'cdet_importe' =>  $value['cantidad'] * $value['precio'],
                         'cdet_comp_id' =>  $compra->comp_id,
-                        'cdet_insu_id' =>  $value['insu_id'],
                     ]);
 
                     $insumo = Insumo::find($value['insu_id']);

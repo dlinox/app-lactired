@@ -7,15 +7,27 @@ use App\Http\Requests\CompraRequest;
 use App\Models\Compra;
 use App\Models\CompraDetalle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class CompraController extends Controller
 {
 
+
+  protected $user;
+  protected $planta;
+  public function __construct()
+  {
+    $this->middleware(function ($request, $next) {
+      $this->user = Auth::user();
+      $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+      return $next($request);
+    });
+  }
+
   public function create(Request $request)
   {
-
 
     if ($request->has('comprobante')) {
 
@@ -25,7 +37,8 @@ class CompraController extends Controller
         'fecha' => date('Y-m-d'),
         'comprobante' =>  $request->comprobante,
         'serie' => $request->comprobante == 'BOLETA' ? 'B100'  : 'F100',
-        'numero' => $this->getNextNumero($request->comprobante == 'BOLETA' ? 'B100'  : 'F100'),
+        'numero' => $this->getNextNumero($request->comprobante == 'BOLETA' ? 'B100'  : 'F100',  $this->planta),
+        'planta' => $this->planta,
       ];
     } else {
 
@@ -33,15 +46,16 @@ class CompraController extends Controller
         'fecha' => date('Y-m-d'),
         'comprobante' => 'BOLETA',
         'serie' => 'B100',
-        'numero' => $this->getNextNumero(),
+        'numero' => $this->getNextNumero('B100', $this->planta),
+        'planta' => $this->planta,
       ];
     }
 
 
-    return Inertia::render('Compra/create', ['defaults' => $defaults]);
+    return Inertia::render('Compra/create', ['defaults' => $defaults ]);
   }
 
-  protected function getNextNumero($serie = 'B100', $planta = 1)
+  protected function getNextNumero($serie, $planta)
   {
     $maxVentNumero = Compra::where('comp_serie', $serie)
       ->where('comp_plan_id', $planta)

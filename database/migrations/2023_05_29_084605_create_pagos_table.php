@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('pagos', function (Blueprint $table) {
             $table->id('pago_id');
             $table->char('pago_numero', 10)->nullable();
-            $table->decimal('pago_monto',8,2);
+            $table->decimal('pago_monto', 8, 2);
             $table->date('pago_fecha');
             $table->boolean('pago_estado')->comment('0=anulado  1=activo')->default(1);
-            
+            $table->string('pago_ticket', 50)->nullable();
             $table->unsignedBigInteger('pago_prov_id');
             $table->unsignedBigInteger('pago_plan_id');
             $table->timestamps();

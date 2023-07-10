@@ -40,7 +40,7 @@
                         </template>
 
                         <template v-slot:action="{ item }">
-                            <BtnDialog title="Editar" width="500px">
+                            <BtnDialog title="Editar" width="700px">
                                 <template v-slot:activator="{ dialog }">
                                     <v-btn
                                         color="info"
@@ -111,5 +111,5 @@ const props = defineProps({
 });
 
 const url = "/compras/proveedores";
-const primaryKey = "insu_id";
+const primaryKey = "prov_id";
 </script>

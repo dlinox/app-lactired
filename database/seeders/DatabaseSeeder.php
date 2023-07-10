@@ -191,30 +191,36 @@ class DatabaseSeeder extends Seeder
             'clie_password' => NULL,
         ]);
 
-        Insumo::create([
-            'insu_nombre' => 'LECHE',
-            'insu_stock' => 20,
-            'insu_medida' => 15.00,
-            'insu_leche' => 1,
-            'insu_umed_id' => 1,
-            'insu_plan_id' => 1,
-        ]);
+        foreach (Planta::all() as $value) {
 
-        Insumo::create([
-            'insu_nombre' => 'Insumo 2',
-            'insu_stock' => 20,
-            'insu_medida' => 15.00,
-            'insu_umed_id' => 1,
-            'insu_plan_id' => 1,
-        ]);
 
-        Insumo::create([
-            'insu_nombre' => 'Insumo 3',
-            'insu_stock' => 20,
-            'insu_medida' => 15.00,
-            'insu_umed_id' => 1,
-            'insu_plan_id' => 1,
-        ]);
+            Insumo::create([
+                'insu_nombre' => 'LECHE P' . $value->plan_id,
+                'insu_stock' => 20,
+                'insu_medida' => 15.00,
+                'insu_leche' => 1,
+                'insu_umed_id' => 1,
+                'insu_plan_id' => $value->plan_id,
+            ]);
+
+            Insumo::create([
+                'insu_nombre' => 'Insumo 1 P' . $value->plan_id,
+                'insu_stock' => 20,
+                'insu_medida' => 15.00,
+                'insu_umed_id' => 1,
+                'insu_plan_id' => $value->plan_id,
+            ]);
+
+            Insumo::create([
+                'insu_nombre' => 'Insumo 2 P' . $value->plan_id,
+                'insu_stock' => 20,
+                'insu_medida' => 15.00,
+                'insu_umed_id' => 1,
+                'insu_plan_id' => $value->plan_id,
+            ]);
+        }
+
+
 
         Proveedor::create([
 
@@ -313,7 +319,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'encargado@gmail.com',
             'password' => 'password',
             'user_plan_nombre' => 'Agroindustrias  Chrysef',
-            'rol_name' => 'Admin',
+            'rol_name' => 'Encargado',
             'user_plan_id' => 2,
         ]);
 

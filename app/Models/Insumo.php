@@ -12,6 +12,7 @@ class Insumo extends Model
     protected $primaryKey = 'insu_id';
     protected $fillable = [
         'insu_nombre',
+        'insu_imagen',
         'insu_stock',
         'insu_medida',
         'insu_umed_id',

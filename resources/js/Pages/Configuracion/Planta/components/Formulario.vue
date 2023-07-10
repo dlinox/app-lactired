@@ -4,7 +4,6 @@
             <div id="mapContainer" style="height: 400px"></div>
         </v-card-item>
     </v-card>
-
     <SimpleForm
         :formularioJson="formStructure"
         v-model="form"

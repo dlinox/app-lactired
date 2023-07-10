@@ -2,7 +2,6 @@
     <AdminLayout>
         <HeadingPage title="Acopio de Leche" subtitle="Registrar compra">
         </HeadingPage>
-
         <v-container fluid>
             <v-row>
                 <v-col cols="12" md="8">
@@ -19,6 +18,9 @@
                                         item-value="prov_id"
                                         label="Buscar Proveedor"
                                         v-model="form.comp_prov_id"
+                                        :error-messages="
+                                            form.errors.comp_prov_id
+                                        "
                                     />
                                 </v-col>
 
@@ -41,6 +43,10 @@
                                             cover
                                             :src="preview_img"
                                         ></v-img>
+
+                                        <span class="text-red">
+                                            {{ form.errors.comp_imagen }}
+                                        </span>
                                     </v-card>
                                 </v-col>
 
@@ -77,7 +83,9 @@
                                         </thead>
                                         <tbody>
                                             <tr
-                                                v-for="item in form.comp_detalle"
+                                                v-for="(
+                                                    item, index
+                                                ) in form.comp_detalle"
                                                 :key="item.insu_id"
                                             >
                                                 <td>{{ item.insu_nombre }}</td>
@@ -96,6 +104,11 @@
                                                         :clearable="false"
                                                         type="number"
                                                         density="compact"
+                                                        :error-messages="
+                                                            form.errors[
+                                                                `comp_detalle.${index}.cantidad`
+                                                            ]
+                                                        "
                                                     ></v-text-field>
                                                 </td>
                                                 <td>
@@ -104,13 +117,21 @@
                                                         :clearable="false"
                                                         type="number"
                                                         density="compact"
+                                                        :error-messages="
+                                                            form.errors[
+                                                                `comp_detalle.${index}.precio`
+                                                            ]
+                                                        "
                                                     ></v-text-field>
                                                 </td>
                                                 <td>
                                                     <v-text-field
-                                                        v-model="item.importe"
+                                                        :value="
+                                                            item.cantidad *
+                                                            item.precio
+                                                        "
                                                         :clearable="false"
-                                                        type="number"
+                                                        readonly
                                                         density="compact"
                                                     ></v-text-field>
                                                 </td>
@@ -134,13 +155,15 @@
                                         v-model="form.comp_tipo_pago"
                                     >
                                         <v-radio
-                                            label="Al contado"
-                                            value="0"
-                                        ></v-radio>
-                                        <v-radio
                                             label="Al credito"
                                             value="1"
                                         ></v-radio>
+
+                                        <!-- <v-radio
+                                            label="Al contado"
+                                            value="0"
+                                        ></v-radio>
+                                       -->
                                     </v-radio-group>
                                 </v-col>
                                 <v-col cols="12">
@@ -148,6 +171,7 @@
                                         v-model="form.comp_fecha"
                                         label="Fecha"
                                         type="date"
+                                        :error-messages="form.errors.comp_fecha"
                                     ></v-text-field>
                                 </v-col>
 
@@ -159,18 +183,25 @@
                                         @update:model-value="
                                             changeTipoComporbante
                                         "
+                                        :error-messages="
+                                            form.errors.comp_tipo_comprobante
+                                        "
                                     ></v-select>
                                 </v-col>
                                 <v-col cols="4">
                                     <v-text-field
                                         v-model="form.comp_serie"
                                         label="Serie"
+                                        :error-messages="form.errors.comp_serie"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="8">
                                     <v-text-field
                                         v-model="form.comp_numero"
                                         label="Número"
+                                        :error-messages="
+                                            form.errors.comp_numero
+                                        "
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12">
@@ -214,19 +245,6 @@
                                             {{ igv.toFixed(2) }}
                                         </template>
                                     </v-list-item>
-                                    <!-- 
-                                  <v-list-item title="Descuento">
-                                      <template v-slot:append>
-                                          <v-text-field
-                                          style="width: 100px;"
-                                              prefix="S/. "
-                                              variant="underlined"
-                                              :clearable="false"
-                                              type="number"
-                                              density="compact"
-                                          ></v-text-field>
-                                      </template>
-                                  </v-list-item> -->
 
                                     <v-divider></v-divider>
 
@@ -278,12 +296,11 @@ const form = useForm({
     comp_total: 0.0,
     comp_importe: 0.0,
     comp_igv: 0.0,
-    //comp_estado: "",
-    comp_tipo_pago: "0",
+    comp_tipo_pago: "1",
     comp_tipo: 0,
     comp_estado_deuda: 0,
     comp_imagen: null,
-    comp_plan_id: 1, //cambiar
+    comp_plan_id: props.defaults.planta,
     comp_prov_id: null,
     comp_tipo_comprobante: props.defaults.comprobante,
     comp_detalle: [{ ...props.insumo }],
@@ -303,6 +320,7 @@ const igv = computed(() => subtotal.value * 0.18);
 const total = computed(() => {
     let res = parseFloat(subtotal.value) + parseFloat(igv.value);
     form.comp_total = res;
+    form.comp_importe = res;
     return res;
 });
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Compra;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProveedorRequest;
+use App\Models\Producto;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,16 +50,16 @@ class ProveedorController extends Controller
         return redirect()->back()->with('success', 'Elemento creado exitosamente.');
     }
 
-    public function update(ProveedorRequest $request, Proveedor $proveedor)
+    public function update(ProveedorRequest $request, Proveedor $proveedore)
     {
         $data = $request->all();
-        $proveedor->update($data);
+        $proveedore->update($data);
         return redirect()->back()->with('success', 'Elemento actualizado exitosamente.');
     }
 
-    public function destroy(Proveedor $proveedor)
+    public function destroy(Proveedor $proveedore)
     {
-        $proveedor->delete();
+        $proveedore->delete();
         return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
     }
 

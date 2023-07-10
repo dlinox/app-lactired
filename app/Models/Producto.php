@@ -11,13 +11,13 @@ class Producto extends Model
 
     protected $primaryKey = "prod_id";
 
-
     protected $fillable = [
         'prod_nombre',
         'prod_stock',
         'prod_medida',
         'prod_umed_id',
         'prod_tpro_id',
+        'prod_imagen',
         'prod_plan_id',
     ];
 

@@ -131,3 +131,5 @@ Route::middleware(['auth', 'can:menu-de-acopio'])->name('acopio.')->prefix('acop
     Route::resource('pagos', PagoController::class);
     Route::get('pagos/detalle/{id}', [PagoController::class, 'getDetallePagoProveedor'])->name('pago.detalle');
 });
+
+Route::get('demo-pdf', [PagoController::class, 'generarPDF']);
