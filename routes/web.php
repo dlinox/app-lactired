@@ -31,6 +31,7 @@ use App\Http\Controllers\Configuracion\UsuarioController;
 use App\Http\Controllers\Venta\VentaController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Venta\ClienteController;
+use App\Models\Planta;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -45,7 +46,10 @@ Route::name('auth.')->prefix('')->group(function () {
 
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+
+    $plantas = Planta::select('plan_id', 'plan_razon_social', 'plan_latitud', 'plan_longitud')->get();
+
+    return Inertia::render('Home',  ['plantas' => $plantas]);
 })->name('admin')->middleware(['auth', 'can:dashboard']);
 
 Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefix('config')->group(function () {
