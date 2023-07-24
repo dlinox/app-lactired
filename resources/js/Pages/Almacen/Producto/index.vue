@@ -21,7 +21,6 @@
               </BtnDialog>
           </template>
       </HeadingPage>
-
       <v-container fluid class="pt-0">
           <v-card>
               <v-card-item>
@@ -63,7 +62,7 @@
                                       @on-cancel="dialog"
                                       :form-data="item"
                                       :edit="true"
-                                      :url="url + '/' + item[`${primaryKey}`]"
+                                      :url="url"
                                   />
                               </template>
                           </BtnDialog>

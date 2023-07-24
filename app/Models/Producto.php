@@ -21,8 +21,8 @@ class Producto extends Model
         'prod_tpro_id',
         'prod_imagen',
         'prod_plan_id',
-    ];
 
+    ];
     public $headers =  [
         ['text' => "ID", 'value' => "prod_id", 'short' => false, 'order' => 'ASC'],
         ['text' => "Nombre", 'value' => "prod_nombre", 'short' => false, 'order' => 'ASC'],
@@ -36,18 +36,15 @@ class Producto extends Model
     ];
 
     protected $appends = [
+        'prod_imagen_url',
         'umed_nombre',
         'tpro_nombre',
         'plant_nombre',
     ];
 
-
-
-    protected function prodImagen(): Attribute
+    public function getProdImagenUrlAttribute()
     {
-        return Attribute::make(
-            get: fn ($value) =>  $value ?  Storage::url($value) : $value,
-        );
+        return $this->prod_imagen ?   Storage::disk('public')->url($this->prod_imagen) : null;
     }
 
     public function unidadMedida()

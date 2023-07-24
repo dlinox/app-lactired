@@ -23,9 +23,19 @@
                     cover
                     :src="preview_img"
                 ></v-img>
+
+                <v-img
+                    v-if="form.prod_imagen_url && !preview_img"
+                    class="mx-auto"
+                    :width="300"
+                    aspect-ratio="16/9"
+                    cover
+                    :src="form.prod_imagen_url"
+                ></v-img>
             </v-card>
         </template>
     </SimpleForm>
+
 </template>
 
 <script setup>
@@ -47,6 +57,7 @@ const props = defineProps({
             prod_plan_id: null,
             prod_tpro_id: null,
             prod_imagen: null,
+            prod_imagen_url: null,
         },
     },
     edit: {
@@ -56,9 +67,7 @@ const props = defineProps({
     url: String,
 });
 
-
-
-const preview_img =  ref(null);
+const preview_img = ref(null);
 
 const form = useForm({ ...props.formData });
 
@@ -130,8 +139,7 @@ const formStructure = [
 ];
 
 const submit = async () => {
-    if (props.edit) form.put(props.url, option);
-    else form.post(props.url, option);
+    form.post(props.url, option);
 };
 
 const option = {

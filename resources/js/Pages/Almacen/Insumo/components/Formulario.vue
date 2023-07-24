@@ -23,6 +23,15 @@
                     cover
                     :src="preview_img"
                 ></v-img>
+
+                <v-img
+                    v-if="form.insu_imagen_url && !preview_img"
+                    class="mx-auto"
+                    :width="300"
+                    aspect-ratio="16/9"
+                    cover
+                    :src="form.insu_imagen_url"
+                ></v-img>
             </v-card>
         </template>
     </SimpleForm>
@@ -45,6 +54,7 @@ const props = defineProps({
             insu_umed_id: null,
             insu_plan_id: null,
             insu_imagen: null,
+            insu_imagen_url: null,
         },
     },
     edit: {
@@ -117,8 +127,7 @@ const formStructure = [
 ];
 
 const submit = async () => {
-    if (props.edit) form.put(props.url, option);
-    else form.post(props.url, option);
+ form.post(props.url, option);
 };
 
 const option = {

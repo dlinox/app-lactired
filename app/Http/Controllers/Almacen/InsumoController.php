@@ -59,9 +59,20 @@ class InsumoController extends Controller
     {
         try {
             DB::transaction(function () use ($request) {
+
                 $data = $request->all();
-                $insumo = Insumo::create($data);
-                $this->guardarArchivo($request, $insumo);
+
+                if ($request->insu_id) {
+                    $insumo = Insumo::find($request->insu_id);
+                    $insumo->update($data);
+                    if ($request->hasFile('insu_imagen')) {
+                        $this->guardarArchivo($request, $insumo);
+                    }
+                } else {
+                    $insumo = Insumo::create($data);
+                    $this->guardarArchivo($request, $insumo);
+                }
+            
                 return redirect()->back()->with('success', 'Elemento creado exitosamente.');
             });
         } catch (\Throwable $th) {

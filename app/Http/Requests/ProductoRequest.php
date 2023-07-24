@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductoRequest extends FormRequest
 {
@@ -13,10 +14,16 @@ class ProductoRequest extends FormRequest
 
     public function rules()
     {
-        $productId = $this->producto ? $this->producto->prod_id : null;
-
+        $productId = $this->input('prod_id');
+        
         return [
-            'prod_nombre' => 'required|string|unique:productos,prod_nombre,' . $productId . ',prod_id,prod_plan_id,' . $this->input('prod_plan_id'),
+            'prod_nombre' => [
+                'required',
+                'string',
+                Rule::unique('productos', 'prod_nombre')->ignore($productId, 'prod_id')->where(function ($query) {
+                    return $query->where('prod_plan_id', $this->input('prod_plan_id'));
+                }),
+            ],
             'prod_stock' => 'required|integer',
             'prod_medida' => 'required|numeric',
             'prod_umed_id' => 'required|exists:unidad_medidas,umed_id',
@@ -30,7 +37,7 @@ class ProductoRequest extends FormRequest
         return [
             'prod_nombre.required' => 'El nombre es obligatorio.',
             'prod_nombre.string' => 'El nombre debe ser una cadena de texto.',
-            'prod_nombre.unique' => 'El nombre ya está en uso en esta planta.',
+            'prod_nombre.unique' => 'El nombre ya está en uso en esta planta. ' .  $this->input('prod_id'),
             'prod_stock.required' => 'El stock es obligatorio.',
             'prod_stock.integer' => 'El stock debe ser un número entero.',
             'prod_medida.required' => 'La medida es obligatoria.',

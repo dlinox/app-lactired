@@ -60,7 +60,7 @@
                                         @on-cancel="dialog"
                                         :form-data="item"
                                         :edit="true"
-                                        :url="url + '/' + item[`${primaryKey}`]"
+                                        :url="url"
                                     />
                                 </template>
                             </BtnDialog>

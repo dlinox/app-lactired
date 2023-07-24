@@ -63,8 +63,17 @@ class ProductoController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 $data = $request->all();
-                $producto = Producto::create($data);
-                $this->guardarArchivo($request, $producto);
+                if ($request->prod_id) {
+                    $producto = Producto::find($request->prod_id);
+                    $producto->update($data);
+                    if ($request->hasFile('prod_imagen')) {
+                        $this->guardarArchivo($request, $producto);
+                    }
+                } else {
+                    $producto = Producto::create($data);
+                    $this->guardarArchivo($request, $producto);
+                }
+
                 return redirect()->back()->with('success', 'Elemento creado exitosamente.');
             });
         } catch (\Throwable $th) {

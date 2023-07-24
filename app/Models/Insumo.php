@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Insumo extends Model
 {
@@ -24,14 +25,17 @@ class Insumo extends Model
         'insu_medida' => 'float',
     ];
 
-    
+
     protected $appends = [
         'umed_nombre',
         'plant_nombre',
+        'insu_imagen_url'
     ];
 
-
-
+    public function getInsuImagenUrlAttribute()
+    {
+        return $this->insu_imagen ?  Storage::disk('public')->url($this->insu_imagen) : null;
+    }
 
     public $headers =  [
         ['text' => "ID", 'value' => "insu_id", 'short' => false, 'order' => 'ASC'],

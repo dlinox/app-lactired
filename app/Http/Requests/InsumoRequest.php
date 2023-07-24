@@ -13,7 +13,8 @@ class InsumoRequest extends FormRequest
 
     public function rules()
     {
-        $insumoId = $this->insumo ? $this->insumo->insu_id : null;
+
+        $insumoId = $this->input('insu_id');
 
         return [
             'insu_nombre' => 'required|string|unique:insumos,insu_nombre,' . $insumoId . ',insu_id,insu_plan_id,' . $this->input('insu_plan_id'),
