@@ -1,7 +1,7 @@
 <template>
     <AdminLayout>
         <HeadingPage title="Pago" subtitle="Registrar pago"> </HeadingPage>
-        <v-container fluid>
+        <v-container fluid class="pt-0">
             <v-row>
                 <v-col cols="12" md="8">
                     <v-card :loading="pagoDetalleLoading">
@@ -129,7 +129,7 @@
             </v-row>
 
             <v-dialog v-model="dialogTicket" width="500px" height="500px">
-                <v-card >
+                <v-card>
                     <iframe
                         :src="pdfTicket"
                         frameborder="0"
@@ -161,7 +161,7 @@ const form = useForm({
     pago_monto: 0.0,
     pago_fecha: props.defaults.fecha,
     pago_prov_id: null,
-    pago_plan_id: 1, // back
+    pago_plan_id:props.defaults.planta,
     pago_detalle: [],
 });
 
@@ -198,7 +198,7 @@ const guardar = () => {
                 .toString()
                 .padStart(10, "0");
 
-            console.log(data.props.flash.data); 
+            console.log(data.props.flash.data);
             pdfTicket.value = data.props.flash.data;
             dialogTicket.value = true;
         },

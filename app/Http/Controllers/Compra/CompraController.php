@@ -26,6 +26,35 @@ class CompraController extends Controller
     });
   }
 
+  public function index(Request $request)
+  {
+
+    $perPage = $request->input('perPage', 10);
+    $query = Compra::query();
+
+    // Búsqueda por nombre de área
+    if ($request->has('search')) {
+      $searchTerm = $request->search;
+      $query->where('comp_numero', 'like', '%' . $searchTerm . '%');
+    }
+
+    if ($this->planta != null) {
+      $query->where('comp_plan_id', $this->planta);
+    }
+
+    $query->where('comp_tipo', 1);
+    $items = $query->paginate($perPage)->appends($request->query());
+
+    return Inertia::render('Compra/index', [
+      'items' => $items,
+      'headers' => Compra::$headers,
+      'filters' => [
+        'search' => $request->search,
+      ],
+      'perPageOptions' => [10, 25, 50, 100], // Opciones de cantidad de elementos por página
+    ]);
+  }
+
   public function create(Request $request)
   {
 
@@ -52,6 +81,13 @@ class CompraController extends Controller
     }
     return Inertia::render('Compra/create', ['defaults' => $defaults, 'insumos' => Insumo::where('insu_plan_id', $this->planta)->get()]);
   }
+
+  public function destroy(Compra $compra)
+  {
+    $compra->update(['comp_estado' => 0]);
+    return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
+  }
+
 
   protected function getNextNumero($serie, $planta)
   {

@@ -34,6 +34,36 @@ class PagoController extends Controller
     }
 
 
+    public function index(Request $request)
+    {
+
+        $perPage = $request->input('perPage', 10);
+        $query = Pago::query();
+
+        // Búsqueda por nombre de área
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where('pago_numero', 'like', '%' . $searchTerm . '%');
+        }
+
+        if ($this->planta != null) {
+            $query->where('pago_plan_id', $this->planta);
+        }
+
+        $items = $query->paginate($perPage)->appends($request->query());
+
+        return Inertia::render('Acopio/Pago/index', [
+            'items' => $items,
+            'headers' => Pago::$headers,
+            'filters' => [
+                'search' => $request->search,
+            ],
+            'perPageOptions' => [10, 25, 50, 100], // Opciones de cantidad de elementos por página
+        ]);
+    }
+
+
+
     public function create(Request $request)
     {
         $defaults = [
@@ -71,6 +101,13 @@ class PagoController extends Controller
             return redirect()->back()->withErrors(['error' => 'Se ha producido un error inesperado. Si el problema persiste, te recomendamos que te pongas en contacto con el administrador para obtener ayuda adicional.', 'details' => $th->getMessage()]);
         }
     }
+
+    public function destroy(Pago $pago)
+    {
+        $pago->update(['pago_estado' => 0]);
+        return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
+    }
+
 
     public  function getDetallePagoProveedor($id)
     {

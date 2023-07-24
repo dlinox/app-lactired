@@ -17,7 +17,7 @@ class AcopioController extends Controller
 {
     protected $user;
     protected $planta;
-    
+
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
@@ -25,6 +25,37 @@ class AcopioController extends Controller
             $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
             return $next($request);
         });
+    }
+
+
+    public function index(Request $request)
+    {
+
+        $perPage = $request->input('perPage', 10);
+        $query = Compra::query();
+
+        // Búsqueda por nombre de área
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where('comp_numero', 'like', '%' . $searchTerm . '%');
+        }
+
+        if ($this->planta != null) {
+            $query->where('comp_plan_id', $this->planta);
+        }
+
+        $query->where('comp_tipo', 0);
+
+        $items = $query->paginate($perPage)->appends($request->query());
+
+        return Inertia::render('Acopio/index', [
+            'items' => $items,
+            'headers' => Compra::$headers,
+            'filters' => [
+                'search' => $request->search,
+            ],
+            'perPageOptions' => [10, 25, 50, 100], // Opciones de cantidad de elementos por página
+        ]);
     }
 
     public function create(Request $request)
@@ -86,6 +117,13 @@ class AcopioController extends Controller
             return redirect()->back()->withErrors(['error' => 'Se ha producido un error inesperado. Si el problema persiste, te recomendamos que te pongas en contacto con el administrador para obtener ayuda adicional.', 'details' => $th->getMessage()]);
         }
     }
+
+    public function destroy(Compra $compra)
+    {
+        $compra->update(['comp_estado' => 0]);
+        return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
+    }
+
 
     protected function getNextNumero($serie, $planta)
     {

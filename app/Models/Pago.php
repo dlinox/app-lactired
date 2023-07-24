@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Pago extends Model
 {
@@ -29,6 +31,26 @@ class Pago extends Model
         'pago_estado' => 'boolean',
         'pago_monto' => 'decimal:2',
     ];
+
+    protected  function pagoTicket(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Storage::disk('public')->url($value),
+        );
+    }
+
+
+    public static $headers =  [
+        ['text' => "ID", 'value' => "pago_id", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Número", 'value' => "pago_numero", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Monto", 'value' => "pago_monto", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Fecha", 'value' => "pago_fecha", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Esrado", 'value' => "pago_estado", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Ticket", 'value' => "pago_ticket", 'short' => false, 'order' => 'ASC'],
+    ];
+
+
+
 
     public static function getProveedoresPago($planta)
     {

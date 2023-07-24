@@ -12,12 +12,12 @@
             </v-btn>
         </template>
         <v-list nav min-width="130px">
-            <v-list-item value="perfil" density="compact">
+            <!-- <v-list-item value="perfil" density="compact">
                 <template v-slot:prepend class="me-1">
                     <v-icon icon="mdi-account-box"></v-icon>
                 </template>
                 <v-list-item-title> Perfil </v-list-item-title>
-            </v-list-item>
+            </v-list-item> -->
 
             <v-list-item
                 value="planta"

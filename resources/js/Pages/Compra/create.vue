@@ -284,7 +284,7 @@ const total = computed(() => {
 const itemsComprobante = ["FACTURA", "BOLETA"];
 
 const changeTipoComporbante = (val) => {
-    router.visit("/compras/registrar-compra/?comprobante=" + val, {
+    router.visit("/compras/create/?comprobante=" + val, {
         preserveScroll: true,
         preserveState: true,
         only: ["defaults"],

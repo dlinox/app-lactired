@@ -2,7 +2,7 @@
     <AdminLayout>
         <HeadingPage title="Ventas" subtitle="Registrar venta"> </HeadingPage>
 
-        <v-container fluid>
+        <v-container fluid class="pt-0">
             <v-row>
                 <v-col cols="12" md="8">
                     <v-card>
@@ -297,7 +297,6 @@
                 </v-col>
             </v-row>
         </v-container>
-
     </AdminLayout>
 </template>
 <script setup>
@@ -324,13 +323,13 @@ const form = useForm({
     //vent_estado: "",
     vent_tipo_pago: "0",
     vent_clie_id: null,
-    vent_plan_id: 1, //se tiene que cambiar
+    vent_plan_id: props.defaults.planta, //se tiene que cambiar
     vent_tipo_comprobante: props.defaults.comprobante,
     vent_detalle: [],
 });
 
 const changeTipoComporbante = (val) => {
-    router.visit("/ventas/registrar-venta/?comprobante=" + val, {
+    router.visit("/ventas/create/?comprobante=" + val, {
         preserveScroll: true,
         preserveState: true,
         only: ["defaults"],
@@ -345,7 +344,6 @@ const changeTipoComporbante = (val) => {
         },
     });
 };
-
 
 const subtotal = computed(() => {
     let res = form?.vent_detalle?.reduce(
@@ -379,5 +377,4 @@ const guardar = async () => {
         },
     });
 };
-
 </script>

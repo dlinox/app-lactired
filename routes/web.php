@@ -31,6 +31,7 @@ use App\Http\Controllers\Configuracion\Trabajador\TipoDocumentoController;
 
 use App\Http\Controllers\Venta\VentaController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Planta\EmpleadoController;
 use App\Http\Controllers\Planta\PlantaController;
 use App\Http\Controllers\Seguridad\RolController;
@@ -49,26 +50,44 @@ Route::name('auth.')->prefix('')->group(function () {
     Route::delete('/sign-out',  [AuthController::class, 'signOut'])->name('sign-out');
 });
 
+Route::middleware(['auth', 'can:dashboard'])->name('admin.')->group(function () {
+    Route::get('', [DashboardController::class, 'index'])->name('index');
 
-Route::get('/', function () {
-    $plantas = Planta::select('plan_id', 'plan_razon_social', 'plan_latitud', 'plan_longitud')->get();
-    return Inertia::render('Home',  ['plantas' => $plantas]);
-})->name('admin')->middleware(['auth', 'can:dashboard']);
+    Route::name('reportes.')->prefix('reportes')->group(function () {
+        Route::get('ventas', [DashboardController::class, 'reporteVentas'])->name('reporteVentas');
+        Route::get('compras', [DashboardController::class, 'reporteCompras'])->name('reporteCompras');
+        Route::get('acopio', [DashboardController::class, 'reporteAcopio'])->name('reporteAcopio');
+    });
+});
+
 
 Route::middleware(['auth', 'can:menu-de-acopio'])->name('acopio.')->prefix('acopio')->group(function () {
     Route::resource('', AcopioController::class);
+
+    Route::get('', [AcopioController::class, 'index'])->name('index');
+    Route::post('', [AcopioController::class, 'store'])->name('store');
+    Route::delete('{compra}', [AcopioController::class, 'destroy'])->name('destroy');
+    Route::get('create', [AcopioController::class, 'create'])->name('create');
+    // Route::put('{planta}', [AcopioController::class, 'update'])->name('update');
+    // Route::get('show/{planta}', [AcopioController::class, 'show'])->name('show');
+
     Route::resource('pagos', PagoController::class);
     Route::get('pagos/detalle/{id}', [PagoController::class, 'getDetallePagoProveedor'])->name('pago.detalle');
 });
 
 Route::middleware(['auth', 'can:menu-de-compras'])->name('compras.')->prefix('compras')->group(function () {
     Route::post('', [CompraController::class, 'store'])->name('store');
+    Route::get('', [CompraController::class, 'index'])->name('index');
+    Route::delete('{compra}', [CompraController::class, 'destroy'])->name('destroy');
     Route::get('create', [CompraController::class, 'create'])->name('create');
     Route::resource('proveedores', ProveedorController::class);
 });
 
 Route::middleware(['auth', 'can:menu-de-ventas'])->name('ventas.')->prefix('ventas')->group(function () {
     Route::post('', [VentaController::class, 'store'])->name('store');
+    Route::get('', [VentaController::class, 'index'])->name('index');
+    Route::delete('{venta}', [VentaController::class, 'destroy'])->name('destroy');
+
     Route::get('create', [VentaController::class, 'create'])->name('create');
     Route::resource('clientes', ClienteController::class);
 });
@@ -78,10 +97,6 @@ Route::middleware(['auth', 'can:menu-de-almacen'])->name('almacen.')->prefix('al
     Route::resource('insumos', InsumoController::class);
 });
 
-
-
-
-
 Route::middleware(['auth', 'can:menu-de-planta'])->name('plantas.')->prefix('plantas')->group(function () {
     Route::get('', [PlantaController::class, 'index'])->name('index');
     Route::post('', [PlantaController::class, 'store'])->name('store');
@@ -89,7 +104,7 @@ Route::middleware(['auth', 'can:menu-de-planta'])->name('plantas.')->prefix('pla
     Route::delete('{planta}', [PlantaController::class, 'destroy'])->name('destroy');
     Route::get('create', [PlantaController::class, 'create'])->name('create');
     Route::get('show/{planta}', [PlantaController::class, 'show'])->name('show');
-    
+
     Route::resource('empleados', EmpleadoController::class);
 });
 

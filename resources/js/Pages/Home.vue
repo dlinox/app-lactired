@@ -1,47 +1,67 @@
 <template>
     <AdminLayout>
-        <v-card class="mb-4" variant="tonal">
-            <v-card-item style="height: 700px">
-                <div id="mapContainer" style="height: 700px"></div>
-            </v-card-item>
-        </v-card>
+        <v-container>
+            <v-row>
+                <v-col cols="12">
+                    <v-card v-if="reporteAcopio !== null">
+                        <v-toolbar density="compact" title="Acopio">
+                        </v-toolbar>
+                        <BarGraphic :data="reporteAcopio"></BarGraphic>
+                    </v-card>
+                </v-col>
+
+                <v-col cols="12" md="6">
+                    <v-card v-if="reporteVentas !== null">
+                        <v-toolbar density="compact" title="Ventas">
+                        </v-toolbar>
+                        <BarGraphic :data="reporteVentas"></BarGraphic>
+                    </v-card>
+                </v-col>
+
+                <v-col cols="12" md="6">
+                    <v-card v-if="reporteCompras !== null">
+                        <v-toolbar density="compact" title="Compras">
+                        </v-toolbar>
+                        <BarGraphic :data="reporteCompras"></BarGraphic>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
     </AdminLayout>
 </template>
 <script setup>
 import AdminLayout from "@/layouts/AdminLayout.vue";
-import { onMounted } from "vue";
+import BarGraphic from "../components/BarGraphic.vue";
+import axios from "axios";
+import { ref } from "vue";
 
 const props = defineProps({
     plantas: Array,
 });
 
-const latlng = [-15.284185114076433, -70.04000478753159];
+const reporteVentas = ref(null);
+const reporteAcopio = ref(null);
+const reporteCompras = ref(null);
 
-onMounted(() => {
-    var iconoPersonalizado = L.icon({
-        iconUrl: "/marker_red.png",
-        iconSize: [30, 30], // Tamaño del ícono
-        iconAnchor: [15, 15], // Punto de anclaje del ícono
-    });
+const getReporteAcopio = async () => {
+    let res = await axios.get("/reportes/acopio");
+    reporteAcopio.value = res?.data;
+};
 
-    const map = L.map("mapContainer").setView(latlng, 7);
+const getReporteVentas = async () => {
+    let res = await axios.get("/reportes/ventas");
+    reporteVentas.value = res?.data;
+};
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap contributors",
-    }).addTo(map);
+const getReporteCompras = async () => {
+    let res = await axios.get("/reportes/compras");
+    reporteCompras.value = res?.data;
+};
 
-    console.log(props.plantas);
-
-    props.plantas.forEach((element) => {
-        if (element.plan_latitud != null && element.plan_longitud != null) {
-            let marker = L.marker([
-                element.plan_latitud,
-                element.plan_longitud,
-            ]).addTo(map);
-
-            marker.bindPopup(element.plan_razon_social);
-            marker.setIcon(iconoPersonalizado);
-        }
-    });
-});
+const init = async () => {
+    await getReporteAcopio();
+    await getReporteVentas();
+    await getReporteCompras();
+};
+init();
 </script>

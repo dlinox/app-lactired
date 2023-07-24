@@ -42,18 +42,16 @@ class Venta extends Model
     {
         $this->attributes['vent_numero'] = str_pad($value, 10, '0', STR_PAD_LEFT);
     }
+    public static $headers =  [
+        ['text' => "ID", 'value' => "vent_id", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Serie", 'value' => "vent_serie", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Número", 'value' => "vent_numero", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Fecha", 'value' => "vent_fecha", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Total", 'value' => "vent_total", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Tipo", 'value' => "vent_tipo_comprobante", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Estado", 'value' => "vent_estado", 'short' => false, 'order' => 'ASC'],
+    ];
 
-    // public $headers =  [
-    //     ['text' => "ID", 'value' => "prov_id", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Nombre", 'value' => "prov_nombres", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Paterno", 'value' => "prov_paterno", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Materno", 'value' => "prov_materno", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "DNI", 'value' => "prov_dni", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Precio alta", 'value' => "prov_precio_alta", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Precio baja", 'value' => "prov_precio_baja", 'short' => false, 'order' => 'ASC'],
-    // ];
-
-    // Relación con el modelo Cliente
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'vent_clie_id', 'clie_id');

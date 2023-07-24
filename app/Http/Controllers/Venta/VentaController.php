@@ -25,6 +25,36 @@ class VentaController extends Controller
     });
   }
 
+
+  public function index(Request $request)
+  {
+
+    $perPage = $request->input('perPage', 10);
+    $query = Venta::query();
+
+    // Búsqueda por nombre de área
+    if ($request->has('search')) {
+      $searchTerm = $request->search;
+      $query->where('vent_numero', 'like', '%' . $searchTerm . '%');
+    }
+
+    if ($this->planta != null) {
+      $query->where('vent_plan_id', $this->planta);
+    }
+
+    $items = $query->paginate($perPage)->appends($request->query());
+
+    return Inertia::render('Venta/index', [
+      'items' => $items,
+      'headers' => Venta::$headers,
+      'filters' => [
+        'search' => $request->search,
+      ],
+      'perPageOptions' => [10, 25, 50, 100], // Opciones de cantidad de elementos por página
+    ]);
+  }
+
+
   public function create(Request $request)
   {
 
@@ -35,8 +65,8 @@ class VentaController extends Controller
       $defaults = [
         'fecha' => date('Y-m-d'),
         'comprobante' =>  $request->comprobante,
-        'serie' => $request->comprobante == 'BOLETA' ? 'B000'  : 'F000',
-        'numero' => $this->getNextNumero($request->comprobante == 'BOLETA' ? 'B000'  : 'F000', $this->planta),
+        'serie' => $request->comprobante === 'BOLETA' ? 'B000'  : 'F000',
+        'numero' => $this->getNextNumero($request->comprobante === 'BOLETA' ? 'B000'  : 'F000', $this->planta),
         'planta' => $this->planta,
       ];
     } else {
@@ -55,13 +85,21 @@ class VentaController extends Controller
     ]);
   }
 
+
+  public function destroy(Venta $venta)
+  {
+    $venta->update(['vent_estado' => 0]);
+    return redirect()->back()->with('success', 'Elemento anulado exitosamente.');
+  }
+
+
   protected function getNextNumero($serie, $planta)
   {
     $maxVentNumero = Venta::where('vent_serie', $serie)
       ->where('vent_plan_id', $planta)
       ->max('vent_numero');
 
-    $maxVentNumero = $maxVentNumero ? $maxVentNumero + 1 : 1;
+    $maxVentNumero = $maxVentNumero ? (intval($maxVentNumero) + 1) : 1;
 
     return str_pad($maxVentNumero, 10, '0', STR_PAD_LEFT);
   }
@@ -80,7 +118,7 @@ class VentaController extends Controller
             'vdet_prod_id' =>  $value['prod_id'],
           ]);
         }
-        // return to_route('ventas.create')->with('success', 'Venta registrada con exito.');
+
         return back()->with(['success', 'Venta registrada con exito.']);
       });
     } catch (\Throwable $th) {

@@ -87,11 +87,11 @@ class HandleInertiaRequests extends Middleware
                 ],
                 [
                     "title" => "Pagos",
-                    "to" => "/acopio/pagos/create",
+                    "to" => "/acopio/pagos",
                 ],
                 [
                     "title" => "Consultar acopio",
-                    "to" => "/acopio/consltas",
+                    "to" => "/acopio",
                 ]
             ]
         ],
@@ -103,7 +103,7 @@ class HandleInertiaRequests extends Middleware
             "group" => [
                 [
                     "title" => "Compras",
-                    "to" => "/compras/create",
+                    "to" => "/compras",
                 ],
                 [
                     "title" => "Proveedores",
@@ -120,7 +120,7 @@ class HandleInertiaRequests extends Middleware
                 [
                     "title" => "Ventas",
 
-                    "to" => "/ventas/create",
+                    "to" => "/ventas",
                 ],
                 [
                     "title" => "Clientes",

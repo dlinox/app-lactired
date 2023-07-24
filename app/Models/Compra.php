@@ -46,15 +46,16 @@ class Compra extends Model
         $this->attributes['comp_numero'] = str_pad($value, 10, '0', STR_PAD_LEFT);
     }
 
-    // public $headers =  [
-    //     ['text' => "ID", 'value' => "prov_id", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Nombre", 'value' => "prov_nombres", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Paterno", 'value' => "prov_paterno", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Materno", 'value' => "prov_materno", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "DNI", 'value' => "prov_dni", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Precio alta", 'value' => "prov_precio_alta", 'short' => false, 'order' => 'ASC'],
-    //     ['text' => "Precio baja", 'value' => "prov_precio_baja", 'short' => false, 'order' => 'ASC'],
-    // ];
+    public static $headers =  [
+        ['text' => "ID", 'value' => "comp_id", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Serie", 'value' => "comp_serie", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Número", 'value' => "comp_numero", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Fecha", 'value' => "comp_fecha", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Total", 'value' => "comp_total", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Tipo", 'value' => "comp_tipo_comprobante", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Deuda", 'value' => "comp_estado_deuda", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Estado", 'value' => "comp_estado", 'short' => false, 'order' => 'ASC'],
+    ];
 
     // Relación con el modelo Cliente
     public function proveedor()
