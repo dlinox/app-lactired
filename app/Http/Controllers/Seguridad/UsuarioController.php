@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Configuracion;
+namespace App\Http\Controllers\Seguridad;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
@@ -31,7 +31,7 @@ class UsuarioController extends Controller
         $items = $query->paginate($perPage)->appends($request->query());
 
 
-        return Inertia::render('Configuracion/Usuario/index', [
+        return Inertia::render('Seguridad/Usuario/index', [
             'items' => $items,
             'headers' => $this->user->headers,
             'filters' => [

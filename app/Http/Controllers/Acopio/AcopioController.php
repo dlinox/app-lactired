@@ -15,9 +15,9 @@ use Inertia\Inertia;
 
 class AcopioController extends Controller
 {
-
     protected $user;
     protected $planta;
+    
     public function __construct()
     {
         $this->middleware(function ($request, $next) {

@@ -14,41 +14,49 @@ class RolsSeeder extends Seeder
     {
 
 
-        $admin = Role::create(['name' => 'Administrador']);
-        $encargado = Role::create(['name' => 'Encargado']);
+        $admin = Role::create(['name' => 'Administrador', 'route_redirect' => '/']);
+        $encargado = Role::create(['name' => 'Encargado', 'route_redirect' => '/']);
 
         //*Permiso en el dashboard
-        Permission::create(['group' => 'dashboard', 'name' => 'dashboard']);
-        Permission::create(['group' => 'dashboard', 'name' => 'pagos-pendientes']);
-        Permission::create(['group' => 'dashboard', 'name' => 'ultimas-compras']);
-        Permission::create(['group' => 'dashboard', 'name' => 'reporte-de-ingresos']);
+        Permission::create(['group_name' => 'dashboard', 'name' => 'dashboard']);
+        Permission::create(['group_name' => 'dashboard', 'name' => 'pagos-pendientes']);
+        Permission::create(['group_name' => 'dashboard', 'name' => 'ultimas-compras']);
+        Permission::create(['group_name' => 'dashboard', 'name' => 'reporte-de-ingresos']);
 
         //*Permisos de acopio
-        Permission::create(['group' => 'acopio', 'name' => 'menu-de-acopio']);
-        Permission::create(['group' => 'acopio', 'name' => 'ver-acopios']);
-        Permission::create(['group' => 'acopio', 'name' => 'registrar-acopio']);
-        Permission::create(['group' => 'acopio', 'name' => 'editar-acopio']);
-        Permission::create(['group' => 'acopio', 'name' => 'anular-acopio']);
+        Permission::create(['group_name' => 'acopio', 'name' => 'menu-de-acopio']);
+        Permission::create(['group_name' => 'acopio', 'name' => 'ver-acopios']);
+        Permission::create(['group_name' => 'acopio', 'name' => 'registrar-acopio']);
+        Permission::create(['group_name' => 'acopio', 'name' => 'editar-acopio']);
+        Permission::create(['group_name' => 'acopio', 'name' => 'anular-acopio']);
 
         // **Permisos de acopio pagos
-        Permission::create(['group' => 'acopio', 'name' => 'realizar-pago-de-acopio']);
-        Permission::create(['group' => 'acopio', 'name' => 'ver-pagos-de-acopio']);
-        Permission::create(['group' => 'acopio', 'name' => 'aunlar-pagos-de-acopio']);
+        Permission::create(['group_name' => 'acopio', 'name' => 'realizar-pago-de-acopio']);
+        Permission::create(['group_name' => 'acopio', 'name' => 'ver-pagos-de-acopio']);
+        Permission::create(['group_name' => 'acopio', 'name' => 'aunlar-pagos-de-acopio']);
 
         // *Permisos de acopio compras
-        Permission::create(['group' => 'compras', 'name' => 'menu-de-compras']);
+        Permission::create(['group_name' => 'compras', 'name' => 'menu-de-compras']);
         //TODO: crear los permisos nesesarios
 
         // *Permisos de acopio ventas
-        Permission::create(['group' => 'ventas', 'name' => 'menu-de-ventas']);
+        Permission::create(['group_name' => 'ventas', 'name' => 'menu-de-ventas']);
         //TODO: crear los permisos
 
         // *Permisos de acopio almacen
-        Permission::create(['group' => 'almacen', 'name' => 'menu-de-almacen']);
+        Permission::create(['group_name' => 'almacen', 'name' => 'menu-de-almacen']);
+        //TODO: crear los permisos nesesarios
+
+        // *Permisos de planta
+        Permission::create(['group_name' => 'planta', 'name' => 'menu-de-planta']);
         //TODO: crear los permisos nesesarios
 
         // *Permisos de acopio configuracion
-        Permission::create(['group' => 'configuracion', 'name' => 'menu-de-configuracion']);
+        Permission::create(['group_name' => 'configuracion', 'name' => 'menu-de-configuracion']);
+        //TODO: crear los permisos nesesarios
+
+        // *Permisos de seguridad
+        Permission::create(['group_name' => 'seguridad', 'name' => 'menu-de-seguridad']);
         //TODO: crear los permisos nesesarios
 
         $admin->syncPermissions(
@@ -59,6 +67,8 @@ class RolsSeeder extends Seeder
                 'menu-de-almacen',
                 'menu-de-compras',
                 'menu-de-ventas',
+                'menu-de-planta',
+                'menu-de-seguridad',
             ]
         );
 

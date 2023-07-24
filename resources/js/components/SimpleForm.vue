@@ -8,14 +8,16 @@
                 :md="field.colMd"
             >
                 <slot :name="'field.' + field.key">
-                    <template v-if="field.type === 'text'">
+                    <template v-if="field.type === 'text' || field.type === 'date' || field.type === 'email'">
                         <v-text-field
                             v-model="form[`${field.key}`]"
                             :label="field.label"
                             :rules="field.required ? [isRequired] : []"
                             :error-messages="form.errors[`${field.key}`]"
-                            :readonly="field.readonly"
                             :disabled="field.disabled"
+                            :readonly="field.readonly"
+                            :clearable="field.clearable"
+                            :type="field.type"
                         ></v-text-field>
                     </template>
                     <template v-else-if="field.type === 'select'">
@@ -59,6 +61,19 @@
                             :item-value="field.itemValue"
                             :label="field.label"
                             v-model="form[`${field.key}`]"
+                            :rules="field.required ? [isRequired] : []"
+                            :error-messages="form.errors[`${field.key}`]"
+                        />
+                    </template>
+
+                    
+                    <template v-else-if="field.type === 'combobox'">
+                        <v-autocomplete
+                            v-model="form[`${field.key}`]"
+                            :items="field.options"
+                            :label="field.label"
+                            :item-title="field.itemTitle"
+                            :item-value="field.itemValue"
                             :rules="field.required ? [isRequired] : []"
                             :error-messages="form.errors[`${field.key}`]"
                         />

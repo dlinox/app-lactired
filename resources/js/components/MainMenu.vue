@@ -1,7 +1,6 @@
 <template>
     <v-list v-model:opened="menuOpen" nav density="compact">
         <v-list-subheader>Menu</v-list-subheader>
-
         <template v-for="(menu, index) in items" :key="index">
             <template v-if="menu.group == null">
                 <v-list-item
@@ -17,7 +16,7 @@
                 />
             </template>
             <template v-else>
-                <v-list-group :value="menu.value">
+                <v-list-group :value="menu.to">
                     <template v-slot:activator="{ props }">
                         <v-list-item
                             v-bind="props"
@@ -46,7 +45,7 @@
                             </v-list-item>
                         </template>
                         <template v-else>
-                            <v-list-group :value="submenu.value">
+                            <v-list-group :value="submenu.to">
                                 <template v-slot:activator="{ props }">
                                     <v-list-item
                                         v-bind="props"
@@ -97,320 +96,41 @@ const props = defineProps({
     items: Array,
 });
 
-const menuAcopio = [
-    {
-        title: "Acopio",
-        value: "acopio",
-        icon: null,
-        to: "/acopio/create",
-        group: null,
-    },
-    {
-        title: "Pagos",
-        value: "acopio.pasgos",
-        icon: null,
-        to: "/acopio/pagos/create",
-        group: null,
-    },
-    {
-        title: "Consultar acopio",
-        value: "acopio.consultas",
-        icon: null,
-        to: "/acopio/consltas",
-        group: null,
-    },
-];
-
-const menuCompras = [
-    {
-        title: "Compras",
-        value: "compras",
-        icon: null,
-        to: "/compras/registrar-compra",
-        group: null,
-    },
-    {
-        title: "Proveedores",
-        value: "/compras/proveedores",
-        icon: null,
-        to: "/compras/proveedores",
-        group: null,
-    },
-];
-
-const menuVentas = [
-    {
-        title: "Ventas",
-        value: "ventas",
-        icon: null,
-        to: "/ventas/registrar-venta",
-        group: null,
-    },
-    {
-        title: "Clientes",
-        value: "ventas/clientes",
-        icon: null,
-        to: "/ventas/clientes",
-        group: null,
-    },
-];
-
-const menuAlmacen = [
-    {
-        title: "Productos",
-        value: "productos",
-        icon: null,
-        to: "/almacen/productos",
-        group: null,
-    },
-    {
-        title: "Insumos",
-        value: "insumos",
-        icon: null,
-        to: "/almacen/insumos",
-        group: null,
-    },
-];
-
-const menuConfiguracionEmpresa = [
-    {
-        title: "Instituciones",
-        value: "instituciones",
-        icon: null,
-        to: "/config/empresa/instituciones",
-        group: null,
-    },
-
-    {
-        title: "Mercados",
-        value: "mercados",
-        icon: null,
-        to: "/config/empresa/mercados",
-        group: null,
-    },
-
-    {
-        title: "Nivel Capacitación",
-        value: "nivel-capacitaciones",
-        icon: null,
-        to: "/config/empresa/nivel-capacitaciones",
-        group: null,
-    },
-    {
-        title: "Calidad Producto",
-        value: "calidad-productos",
-        icon: null,
-        to: "/config/empresa/calidad-productos",
-        group: null,
-    },
-    {
-        title: "T. Empresa",
-        value: "tipo-empresas",
-        icon: null,
-        to: "/config/empresa/tipo-empresas",
-        group: null,
-    },
-    {
-        title: "T. Comñania",
-        value: "tipo-companias",
-        icon: null,
-        to: "/config/empresa/tipo-companias",
-        group: null,
-    },
-
-    {
-        title: "T. Especializaciones",
-        value: "especializaciones",
-        icon: null,
-        to: "/config/empresa/tipo-especializaciones",
-        group: null,
-    },
-
-    {
-        title: "T. Certificaciones",
-        value: "tipo-certificaciones",
-        icon: null,
-        to: "/config/empresa/tipo-certificaciones",
-        group: null,
-    },
-    {
-        title: "T. Transporte",
-        value: "mercados",
-        icon: null,
-        to: "/config/empresa/tipo-transportes",
-        group: null,
-    },
-    {
-        title: "T. Movilidad",
-        value: "mercados",
-        icon: null,
-        to: "/config/empresa/tipo-movilidades",
-        group: null,
-    },
-
-    {
-        title: "T. Maquinarias",
-        value: "mercados",
-        icon: null,
-        to: "/config/empresa/tipo-maquinarias",
-        group: null,
-    },
-    {
-        title: "T. Financiamiento",
-        value: "mercados",
-        icon: null,
-        to: "/config/empresa/tipo-financiamientos",
-        group: null,
-    },
-    {
-        title: "T. Comprobantes",
-        value: "mercados",
-        icon: null,
-        to: "/config/empresa/tipo-comprobantes",
-        group: null,
-    },
-    {
-        title: "Origen Aguas",
-        value: "mercados",
-        icon: null,
-        to: "/config/empresa/origen-aguas",
-        group: null,
-    },
-];
-
-const menuConfiguracionAlmacen = [
-    {
-        title: "T. Productos",
-        value: "tproductos",
-        icon: null,
-        to: "/config/almacen/tipo-productos",
-        group: null,
-    },
-    {
-        title: "Unidad de Medidas",
-        value: "unidades",
-        icon: null,
-        to: "/config/almacen/unidades-medida",
-        group: null,
-    },
-];
-
-const menuConfiguracionTrabajador = [
-    {
-        title: "Cargos",
-        value: "cargos",
-        icon: null,
-        to: "/config/trabajador/cargos",
-        group: null,
-    },
-    {
-        title: "Tipos de documento",
-        value: "documentos",
-        icon: null,
-        to: "/config/trabajador/tipo-documentos",
-        group: null,
-    },
-];
-
-const menuConfiguracion = [
-    {
-        title: "Plantas",
-        value: "plantas",
-        icon: "mdi-circle-small",
-        to: "/config/plantas",
-        group: null,
-    },
-    {
-        title: "Usuarios",
-        value: "usuarios",
-        icon: "mdi-circle-small",
-        to: "/config/usuarios",
-        group: null,
-    },
-    {
-        title: "Empresa",
-        value: "empresa",
-        icon: "mdi-circle-small",
-        to: "/empresa",
-        group: menuConfiguracionEmpresa,
-    },
-
-    {
-        title: "Almacen",
-        value: "configuracion.almacen",
-        icon: "mdi-circle-small",
-        to: "/almacen",
-        group: menuConfiguracionAlmacen,
-    },
-
-    {
-        title: "Trabajador",
-        value: "configuracion.trabajador",
-        icon: "mdi-circle-small",
-        to: "/trabajador",
-        group: menuConfiguracionTrabajador,
-    },
-];
-
-const menuMain = [
-    {
-        title: "Dashboard",
-        value: "dashboard",
-        icon: "mdi-home",
-        to: "/",
-        group: null,
-    },
-
-    {
-        title: "Acopio de Leche",
-        value: "acopio.leche",
-        icon: "mdi-basket-fill",
-        to: "#",
-        group: menuAcopio,
-    },
-
-    {
-        title: "Compras",
-        value: "compras",
-        icon: "mdi-cart-check",
-        to: "#",
-        group: menuCompras,
-    },
-
-    {
-        title: "Ventas",
-        value: "ventas",
-        icon: "mdi-cash-register",
-        to: "#",
-        group: menuVentas,
-    },
-
-    {
-        title: "Almacen",
-        value: "almacen",
-        icon: "mdi-archive", //mdi-greenhouse
-        to: "#",
-        group: menuAlmacen,
-    },
-    {
-        title: "Configuracion",
-        value: "configuracion",
-        icon: "mdi-archive", //mdi-greenhouse
-        to: "#",
-        group: menuConfiguracion,
-    },
-];
-
-//const currentMenu = computed(() => router.page.url.split('/')[1] );
 const goToPage = (to) => {
     router.get(to);
 };
 
-const menuOpen = ref([router.page.url.split("/")[1]]);
+const menuOpen = ref([]);
+
+const init = () => {
+    let _menuOpen = [];
+    props.items.forEach((item) => {
+        if (item.group) {
+            item.group.forEach((subItem) => {
+                if (subItem.to === router.page.url) {
+                    _menuOpen.push(item.to);
+                }
+                if (subItem.group) {
+                    subItem.group.forEach((subSubItem) => {
+                        if (subSubItem.to === router.page.url) {
+                            _menuOpen.push(subItem.to);
+                            _menuOpen.push(item.to);
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    menuOpen.value = _menuOpen;
+};
+
+init();
+
 </script>
 
 <style scoped>
 .v-list-group__items .v-list-item {
-    padding-inline-start: 25px !important;
+    padding-inline-start: 20px !important;
 }
 </style>

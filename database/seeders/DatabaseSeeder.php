@@ -54,90 +54,11 @@ class DatabaseSeeder extends Seeder
         $this->call(UbigeoSeeder::class);
         //CONFIGURACIONES
         //EMPRESA
-        for ($i = 1; $i < 6; $i++) {
-            Institucion::create([
-                'inst_nombre' => "INSTITUCION $i",
-                'inst_naturaleza' => "PRIVADO",
-                'inst_nivel' => "REGIONAL",
-
-            ]);
-
-            Mercado::create([
-                'merc_nombre' => "MERCADO $i",
-            ]);
-
-
-            NivelCapacitacion::create([
-                'ncap_nombre' => "NIVEL CAPACITACION $i",
-            ]);
-
-
-            CalidadProducto::create([
-                'cpro_nombre' => "CALIDAD PRODUCTO $i",
-            ]);
-
-            TipoCompania::create([
-                'tcomp_nombre' => "TIPO COMPANIA $i",
-            ]);
-
-            TipoEspecializacion::create([
-                'tesp_nombre' => "TIPO Especializacion $i",
-            ]);
-
-            TipoCertificacion::create([
-                'tcer_nombre' => "TIPO Certificacion $i",
-            ]);
-
-            TipoTransporte::create([
-                'ttra_nombre' => "TIPO Transporte $i",
-            ]);
-
-            TipoMovilidad::create([
-                'tmov_nombre' => "TIPO MOVLIDAD $i",
-            ]);
-
-            TipoMaquinaria::create([
-                'tmaq_nombre' => "TIPO MAQUINARIA $i",
-            ]);
-
-            TipoFinanciamiento::create([
-                'tfin_nombre' => "TIPO Financiamiento $i",
-            ]);
-
-            OrigenAgua::create([
-                'oagu_nombre' => "ORIGEN AGUA $i",
-            ]);
-
-            TipoComprobante::create([
-                'tcom_nombre' => "TIPO COMBROVANTE $i",
-            ]);
-        }
+        $this->call(EmpresaSeeder::class);
 
         $this->call(PlantasSeeder::class);
 
-
-        //ALMACEN
-        for ($i = 1; $i < 6; $i++) {
-            TipoProducto::create([
-                'tpro_nombre' => "TIPO PRODUCTO $i",
-            ]);
-        }
-
-        UnidadMedida::create([
-            'umed_nombre' => 'Litros',
-            'umed_simbolo' => 'L',
-        ]);
-
-        UnidadMedida::create([
-            'umed_nombre' => 'Unidad',
-            'umed_simbolo' => 'U',
-        ]);
-
-        UnidadMedida::create([
-            'umed_nombre' => 'Kilogramo',
-            'umed_simbolo' => 'kg',
-        ]);
-
+        $this->call(AlmacenSeeder::class);
 
         Cliente::create([
             'clie_nombres' => 'Manuel',
@@ -165,65 +86,6 @@ class DatabaseSeeder extends Seeder
             'clie_password' => NULL,
         ]);
 
-        foreach (Planta::all() as $value) {
-
-
-            Producto::create([
-                'prod_nombre' => 'Producto 1 P' . $value->plan_id,
-                'prod_stock' => 20,
-                'prod_medida' => 15.00,
-                'prod_umed_id' => 1,
-                'prod_tpro_id' => 3,
-                'prod_plan_id' => $value->plan_id,
-            ]);
-
-            Producto::create([
-                'prod_nombre' => 'Producto 2 P' . $value->plan_id,
-                'prod_stock' => 20,
-                'prod_medida' => 15.00,
-                'prod_umed_id' => 2,
-                'prod_tpro_id' => 1,
-                'prod_plan_id' => $value->plan_id,
-            ]);
-
-            Producto::create([
-                'prod_nombre' => 'Producto 3 P' . $value->plan_id,
-                'prod_stock' => 20,
-                'prod_medida' => 15.00,
-                'prod_umed_id' => 1,
-                'prod_tpro_id' => 2,
-                'prod_plan_id' => $value->plan_id,
-            ]);
-            
-
-            Insumo::create([
-                'insu_nombre' => 'LECHE P' . $value->plan_id,
-                'insu_stock' => 20,
-                'insu_medida' => 15.00,
-                'insu_leche' => 1,
-                'insu_umed_id' => 1,
-                'insu_plan_id' => $value->plan_id,
-            ]);
-
-            Insumo::create([
-                'insu_nombre' => 'Insumo 1 P' . $value->plan_id,
-                'insu_stock' => 20,
-                'insu_medida' => 15.00,
-                'insu_umed_id' => 1,
-                'insu_plan_id' => $value->plan_id,
-            ]);
-
-            Insumo::create([
-                'insu_nombre' => 'Insumo 2 P' . $value->plan_id,
-                'insu_stock' => 20,
-                'insu_medida' => 15.00,
-                'insu_umed_id' => 1,
-                'insu_plan_id' => $value->plan_id,
-            ]);
-        }
-
-
-
         Proveedor::create([
 
             'prov_dni' => '01010101',
@@ -239,13 +101,7 @@ class DatabaseSeeder extends Seeder
             'prov_plan_id' => 1,
         ]);
 
-        //ACOPIO
-        for ($i = 1; $i < 6; $i++) {
-            Posicion::create(['posi_nombre' => "Posicion $i"]);
-            GradoInstruccion::create(['gins_nombre' => "Grado de instruccion $i"]);
-            Profesion::create(['prof_nombre' => "¨Profecion $i"]);
-            RolDesempenio::create(['rdes_nombre' => "Rol desempeñado $i"]);
-        }
+        $this->call(TrabajadoresSeeder::class);
 
         $faker = Faker::create();
 
@@ -262,10 +118,10 @@ class DatabaseSeeder extends Seeder
                 'empl_fecha_nac' => $faker->date('Y-m-d', '-18 years'),
                 'empl_sexo' => $faker->randomElement(['M', 'F']),
                 'empl_fecha_inicio_actividad' => $faker->date('Y-m-d', '-1 years'),
-                'empl_posi_id' => $faker->numberBetween(1, 5),
+                'empl_carg_id' => $faker->numberBetween(1, 5),
                 'empl_gins_id' => $faker->numberBetween(1, 5),
                 'empl_prof_id' => $faker->numberBetween(1, 5),
-                'empl_rdes_id' => $faker->numberBetween(1, 5),
+                // 'empl_rdes_id' => $faker->numberBetween(1, 5),
             ]);
 
             PlantaEmpleado::create([

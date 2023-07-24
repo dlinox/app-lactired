@@ -1,11 +1,8 @@
 <template>
   <AdminLayout>
-      <HeadingPage
-          title="Procuctos"
-          subtitle="Tipos de productos"
-      >
+      <HeadingPage title="Plantas" subtitle="Listado de plantas">
           <template #actions>
-              <BtnDialog title="Nuevo" width="500px">
+              <BtnDialog title="Nuevo" width="80vw">
                   <template v-slot:activator="{ dialog }">
                       <v-btn
                           @click="dialog"
@@ -21,8 +18,7 @@
               </BtnDialog>
           </template>
       </HeadingPage>
-
-      <v-container fluid class="pt-0">
+      <v-container fluid>
           <v-card>
               <v-card-item>
                   <DataTable
@@ -43,7 +39,7 @@
                       </template>
 
                       <template v-slot:action="{ item }">
-                          <BtnDialog title="Editar" width="500px">
+                          <BtnDialog title="Editar" width="80vw">
                               <template v-slot:activator="{ dialog }">
                                   <v-btn
                                       color="info"
@@ -95,6 +91,7 @@
               </v-card-item>
           </v-card>
       </v-container>
+
   </AdminLayout>
 </template>
 <script setup>
@@ -113,6 +110,8 @@ const props = defineProps({
   perPageOptions: Array,
 });
 
-const url = "/almacen/productos";
-const primaryKey = "prod_id";
+const url = "/config/plantas";
+const primaryKey = "plan_id";
+
+
 </script>

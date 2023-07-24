@@ -7,6 +7,7 @@ use App\Http\Controllers\Almacen\ProductoController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Compra\CompraController;
 use App\Http\Controllers\Compra\ProveedorController;
+
 use App\Http\Controllers\Configuracion\Almacen\TipoProductoController;
 use App\Http\Controllers\Configuracion\Almacen\UnidadMedidaController;
 use App\Http\Controllers\Configuracion\Empresa\CalidadProductoController;
@@ -24,12 +25,16 @@ use App\Http\Controllers\Configuracion\Empresa\TipoFinanciamientoController;
 use App\Http\Controllers\Configuracion\Empresa\TipoMaquinariaController;
 use App\Http\Controllers\Configuracion\Empresa\TipoMovilidadController;
 use App\Http\Controllers\Configuracion\Empresa\TipoTransporteController;
-use App\Http\Controllers\Configuracion\PlantaController;
+
 use App\Http\Controllers\Configuracion\Trabajador\CargoController;
 use App\Http\Controllers\Configuracion\Trabajador\TipoDocumentoController;
-use App\Http\Controllers\Configuracion\UsuarioController;
+
 use App\Http\Controllers\Venta\VentaController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Planta\EmpleadoController;
+use App\Http\Controllers\Planta\PlantaController;
+use App\Http\Controllers\Seguridad\RolController;
+use App\Http\Controllers\Seguridad\UsuarioController;
 use App\Http\Controllers\Venta\ClienteController;
 use App\Models\Planta;
 use Illuminate\Support\Facades\Route;
@@ -46,16 +51,43 @@ Route::name('auth.')->prefix('')->group(function () {
 
 
 Route::get('/', function () {
-
     $plantas = Planta::select('plan_id', 'plan_razon_social', 'plan_latitud', 'plan_longitud')->get();
-
     return Inertia::render('Home',  ['plantas' => $plantas]);
 })->name('admin')->middleware(['auth', 'can:dashboard']);
 
-Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefix('config')->group(function () {
-    Route::resource('plantas', PlantaController::class);
-    Route::resource('usuarios', UsuarioController::class);
+Route::middleware(['auth', 'can:menu-de-acopio'])->name('acopio.')->prefix('acopio')->group(function () {
+    Route::resource('', AcopioController::class);
+    Route::resource('pagos', PagoController::class);
+    Route::get('pagos/detalle/{id}', [PagoController::class, 'getDetallePagoProveedor'])->name('pago.detalle');
+});
 
+Route::middleware(['auth', 'can:menu-de-compras'])->name('compras.')->prefix('compras')->group(function () {
+    Route::post('', [CompraController::class, 'store'])->name('store');
+    Route::get('create', [CompraController::class, 'create'])->name('create');
+    Route::resource('proveedores', ProveedorController::class);
+});
+
+Route::middleware(['auth', 'can:menu-de-ventas'])->name('ventas.')->prefix('ventas')->group(function () {
+    Route::post('', [VentaController::class, 'store'])->name('store');
+    Route::get('create', [VentaController::class, 'create'])->name('create');
+    Route::resource('clientes', ClienteController::class);
+});
+
+Route::middleware(['auth', 'can:menu-de-almacen'])->name('almacen.')->prefix('almacen')->group(function () {
+    Route::resource('productos', ProductoController::class);
+    Route::resource('insumos', InsumoController::class);
+});
+
+
+
+
+
+Route::middleware(['auth', 'can:menu-de-planta'])->name('plantas.')->prefix('plantas')->group(function () {
+    Route::resource('', PlantaController::class)->parameters(['' => 'planta']);
+    Route::resource('empleados', EmpleadoController::class);
+});
+
+Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefix('config')->group(function () {
     Route::name('empresa.')->prefix('empresa')->group(function () {
         Route::resource('instituciones', InstitucionController::class);
         Route::resource('mercados', MercadoController::class);
@@ -63,9 +95,10 @@ Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefi
         Route::resource('tipo-companias', TipoCompaniaController::class)->except([
             'show'
         ]);
+
         Route::resource('nivel-capacitaciones', NivelCapacitacionController::class)->parameters([
             'nivel-capacitaciones' => 'nivel_capacitacion',
-        ]);;
+        ]);
 
         Route::resource('calidad-productos', CalidadProductoController::class);
         Route::resource('tipo-especializaciones', TipoEspecializacionController::class);
@@ -90,9 +123,10 @@ Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefi
     });
 });
 
-Route::middleware(['auth', 'can:menu-de-almacen'])->name('almacen.')->prefix('almacen')->group(function () {
-    Route::resource('productos', ProductoController::class);
-    Route::resource('insumos', InsumoController::class);
+Route::middleware(['auth', 'can:menu-de-seguridad'])->name('seguridad.')->prefix('seguridad')->group(function () {
+    Route::resource('usuarios', UsuarioController::class);
+    Route::resource('roles', RolController::class);
+    // Route::resource('backups', Co::class);
 });
 
 Route::middleware(['auth'])->name('autocomplete.')->prefix('autocomplete')->group(function () {
@@ -102,7 +136,9 @@ Route::middleware(['auth'])->name('autocomplete.')->prefix('autocomplete')->grou
     Route::get('calidad-productos', [CalidadProductoController::class, 'autocomplete'])->name('calidad-productos');
 
     Route::get('tipo-productos', [TipoProductoController::class, 'autocomplete'])->name('tipo-productos');
+
     Route::get('plantas', [PlantaController::class, 'autocomplete'])->name('plantas');
+
     Route::get('unidades-medida', [UnidadMedidaController::class, 'autocomplete'])->name('unidades-medida');
 
     //venta
@@ -114,26 +150,6 @@ Route::middleware(['auth'])->name('autocomplete.')->prefix('autocomplete')->grou
     Route::get('insumos', [InsumoController::class, 'autocomplete'])->name('insumos');
 
     Route::get('ubigeos', [Controller::class, 'ubigeoAutocomplete'])->name('ubigeos');
-});
-
-
-Route::middleware(['auth', 'can:menu-de-ventas'])->name('ventas.')->prefix('ventas')->group(function () {
-    Route::post('', [VentaController::class, 'store'])->name('store');
-    Route::get('registrar-venta', [VentaController::class, 'create'])->name('create');
-    Route::resource('clientes', ClienteController::class);
-});
-
-Route::middleware(['auth', 'can:menu-de-compras'])->name('compras.')->prefix('compras')->group(function () {
-    Route::post('', [CompraController::class, 'store'])->name('store');
-    Route::get('registrar-compra', [CompraController::class, 'create'])->name('create');
-    Route::resource('proveedores', ProveedorController::class);
-});
-
-
-Route::middleware(['auth', 'can:menu-de-acopio'])->name('acopio.')->prefix('acopio')->group(function () {
-    Route::resource('', AcopioController::class);
-    Route::resource('pagos', PagoController::class);
-    Route::get('pagos/detalle/{id}', [PagoController::class, 'getDetallePagoProveedor'])->name('pago.detalle');
 });
 
 Route::get('demo-pdf', [PagoController::class, 'generarPDF']);

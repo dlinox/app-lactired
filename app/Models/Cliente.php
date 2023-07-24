@@ -54,4 +54,7 @@ class Cliente extends Model
         ['text' => "Telefono", 'value' => "clie_telefono", 'short' => false, 'order' => 'ASC'],
         ['text' => "Correo", 'value' => "clie_correo", 'short' => false, 'order' => 'ASC'],
     ];
+
+   
+
 }

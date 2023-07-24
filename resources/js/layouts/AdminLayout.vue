@@ -7,6 +7,13 @@
             border="0"
             :width="260"
         >
+            <v-card class="d-flex justify-center py-4" variant="tonal">
+                <img
+                    src="/images/logo-white.svg"
+                    alt="Logo Lactired"
+                    width="100"
+                />
+            </v-card>
             <MainMenu
                 :items="user.menu"
                 @onSubMenu="
@@ -60,19 +67,11 @@
 
         <v-app-bar absolute elevation="0">
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-toolbar-title>
-                <img
-                    :src="
-                        theme.global.name.value == 'light'
-                            ? '/images/logo.svg'
-                            : '/images/logo-white.svg'
-                    "
-                    alt="Logo Lactired"
-                    width="100"
-                />
-            </v-toolbar-title>
+
             <v-spacer></v-spacer>
             <SwitchTheme />
+
+            <MenuProfile />
         </v-app-bar>
 
         <v-main>
@@ -148,6 +147,7 @@ import { router, usePage } from "@inertiajs/vue3";
 import MainMenu from "../components/MainMenu.vue";
 import SwitchTheme from "../components/SwitchTheme.vue";
 import { useTheme } from "vuetify";
+import MenuProfile from "../components/MenuProfile.vue";
 
 const theme = useTheme();
 
@@ -184,6 +184,13 @@ watch(
         }
     }
 );
+
+const items = [
+    { title: "Click Me" },
+    { title: "Click Me" },
+    { title: "Click Me" },
+    { title: "Click Me 2" },
+];
 </script>
 
 <style lang="scss">

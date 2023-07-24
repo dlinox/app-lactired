@@ -71,6 +71,7 @@
                                     label="Mostrar"
                                     density="compact"
                                     placeholder="10"
+                                    :clearable="false"
                                     :items="[1, 5, 10, 50, 100, 500]"
                                 />
                             </div>

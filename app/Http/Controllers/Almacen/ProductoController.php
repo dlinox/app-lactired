@@ -90,7 +90,6 @@ class ProductoController extends Controller
 
         $results = [];
         if ($request->has('search')) {
-
             $query = Producto::query();
             $query->where('prod_nombre', 'like', '%' . $request->search . '%');
 

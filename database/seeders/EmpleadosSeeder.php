@@ -23,15 +23,15 @@ class EmpleadosSeeder extends Seeder
             'empl_materno' => 'Aguilar',
             'empl_nombres' => 'Francisco',
             'empl_dni' => '0270095',
-            'empl_telefono' => '930943797',
+            'empl_telefono' => '930943127',
             'empl_email' => 'geydy_2517_9@hotmail.com',
             'empl_fecha_nac' => $faker->date('Y-m-d', '-18 years'),
             'empl_sexo' => 'M',
             'empl_fecha_inicio_actividad' =>  $faker->date('Y-m-d', '-2 years'),
-            'empl_posi_id' => $faker->numberBetween(1, 5),
+            'empl_carg_id' => $faker->numberBetween(1, 5),
             'empl_gins_id' => $faker->numberBetween(1, 5),
             'empl_prof_id' => $faker->numberBetween(1, 5),
-            'empl_rdes_id' => $faker->numberBetween(1, 5),
+            // 'empl_rdes_id' => $faker->numberBetween(1, 5),
         ]);
 
         PlantaEmpleado::create([
@@ -53,10 +53,10 @@ class EmpleadosSeeder extends Seeder
             'empl_fecha_nac' => $faker->date('Y-m-d', '-40 years'),
             'empl_sexo' => 'M',
             'empl_fecha_inicio_actividad' =>  $faker->date('Y-m-d', '-10 years'),
-            'empl_posi_id' => $faker->numberBetween(1, 5),
+            'empl_carg_id' => $faker->numberBetween(1, 5),
             'empl_gins_id' => $faker->numberBetween(1, 5),
             'empl_prof_id' => $faker->numberBetween(1, 5),
-            'empl_rdes_id' => $faker->numberBetween(1, 5),
+            // 'empl_rdes_id' => $faker->numberBetween(1, 5),
         ]);
 
         PlantaEmpleado::create([
@@ -78,10 +78,10 @@ class EmpleadosSeeder extends Seeder
             'empl_fecha_nac' => $faker->date('Y-m-d', '-18 years'),
             'empl_sexo' => 'M',
             'empl_fecha_inicio_actividad' =>  $faker->date('Y-m-d', '-2 years'),
-            'empl_posi_id' => $faker->numberBetween(1, 5),
+            'empl_carg_id' => $faker->numberBetween(1, 5),
             'empl_gins_id' => $faker->numberBetween(1, 5),
             'empl_prof_id' => $faker->numberBetween(1, 5),
-            'empl_rdes_id' => $faker->numberBetween(1, 5),
+            // 'empl_rdes_id' => $faker->numberBetween(1, 5),
         ]);
 
         PlantaEmpleado::create([
@@ -103,10 +103,10 @@ class EmpleadosSeeder extends Seeder
             'empl_fecha_nac' => $faker->date('Y-m-d', '-18 years'),
             'empl_sexo' => 'F',
             'empl_fecha_inicio_actividad' =>  $faker->date('Y-m-d', '-2 years'),
-            'empl_posi_id' => $faker->numberBetween(1, 5),
+            'empl_carg_id' => $faker->numberBetween(1, 5),
             'empl_gins_id' => $faker->numberBetween(1, 5),
             'empl_prof_id' => $faker->numberBetween(1, 5),
-            'empl_rdes_id' => $faker->numberBetween(1, 5),
+            // 'empl_rdes_id' => $faker->numberBetween(1, 5),
         ]);
 
         PlantaEmpleado::create([
@@ -128,10 +128,10 @@ class EmpleadosSeeder extends Seeder
             'empl_fecha_nac' => $faker->date('Y-m-d', '-18 years'),
             'empl_sexo' => 'M',
             'empl_fecha_inicio_actividad' =>  $faker->date('Y-m-d', '-2 years'),
-            'empl_posi_id' => $faker->numberBetween(1, 5),
+            'empl_carg_id' => $faker->numberBetween(1, 5),
             'empl_gins_id' => $faker->numberBetween(1, 5),
             'empl_prof_id' => $faker->numberBetween(1, 5),
-            'empl_rdes_id' => $faker->numberBetween(1, 5),
+            // 'empl_rdes_id' => $faker->numberBetween(1, 5),
         ]);
 
         PlantaEmpleado::create([
@@ -152,10 +152,10 @@ class EmpleadosSeeder extends Seeder
             'empl_fecha_nac' => $faker->date('Y-m-d', '-28 years'),
             'empl_sexo' => 'M',
             'empl_fecha_inicio_actividad' =>  $faker->date('Y-m-d', '-2 years'),
-            'empl_posi_id' => $faker->numberBetween(1, 5),
+            'empl_carg_id' => $faker->numberBetween(1, 5),
             'empl_gins_id' => $faker->numberBetween(1, 5),
             'empl_prof_id' => $faker->numberBetween(1, 5),
-            'empl_rdes_id' => $faker->numberBetween(1, 5),
+            // 'empl_rdes_id' => $faker->numberBetween(1, 5),
         ]);
 
         PlantaEmpleado::create([
@@ -176,10 +176,10 @@ class EmpleadosSeeder extends Seeder
             'empl_fecha_nac' => $faker->date('Y-m-d', '-60 years'),
             'empl_sexo' => 'M',
             'empl_fecha_inicio_actividad' =>  $faker->date('Y-m-d', '-2 years'),
-            'empl_posi_id' => $faker->numberBetween(1, 5),
+            'empl_carg_id' => $faker->numberBetween(1, 5),
             'empl_gins_id' => $faker->numberBetween(1, 5),
             'empl_prof_id' => $faker->numberBetween(1, 5),
-            'empl_rdes_id' => $faker->numberBetween(1, 5),
+            // 'empl_rdes_id' => $faker->numberBetween(1, 5),
         ]);
 
         PlantaEmpleado::create([
