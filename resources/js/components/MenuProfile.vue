@@ -22,7 +22,7 @@
             <v-list-item
                 value="planta"
                 density="compact"
-                @click="()=> router.get('/plantas/1')"
+                @click="()=> router.get('/plantas/show/1')"
             >
                 <template v-slot:prepend>
                     <v-icon icon="mdi-domain"></v-icon>

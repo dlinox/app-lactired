@@ -110,7 +110,7 @@ const props = defineProps({
   perPageOptions: Array,
 });
 
-const url = "/config/plantas";
+const url = "/plantas";
 const primaryKey = "plan_id";
 
 

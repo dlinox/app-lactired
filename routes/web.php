@@ -83,7 +83,13 @@ Route::middleware(['auth', 'can:menu-de-almacen'])->name('almacen.')->prefix('al
 
 
 Route::middleware(['auth', 'can:menu-de-planta'])->name('plantas.')->prefix('plantas')->group(function () {
-    Route::resource('', PlantaController::class)->parameters(['' => 'planta']);
+    Route::get('', [PlantaController::class, 'index'])->name('index');
+    Route::post('', [PlantaController::class, 'store'])->name('store');
+    Route::put('{planta}', [PlantaController::class, 'update'])->name('update');
+    Route::delete('{planta}', [PlantaController::class, 'destroy'])->name('destroy');
+    Route::get('create', [PlantaController::class, 'create'])->name('create');
+    Route::get('show/{planta}', [PlantaController::class, 'show'])->name('show');
+    
     Route::resource('empleados', EmpleadoController::class);
 });
 
