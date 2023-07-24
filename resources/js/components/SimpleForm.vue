@@ -56,6 +56,7 @@
 
                     <template v-else-if="field.type === 'autocomplete'">
                         <simple-autocomplete
+                            :itemsDefault="field.itemsDefault"
                             :url="field.url"
                             :item-title="field.itemTitle"
                             :item-value="field.itemValue"

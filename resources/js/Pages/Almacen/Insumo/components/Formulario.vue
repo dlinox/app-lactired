@@ -68,7 +68,7 @@ const form = useForm({ ...props.formData });
 
 const preview_img = ref(null);
 
-const formStructure = [
+const formStructure = ref([
     {
         key: "insu_nombre",
         label: "Nombre",
@@ -102,6 +102,7 @@ const formStructure = [
         itemTitle: "umed_nombre",
         itemValue: "umed_id",
         required: true,
+        itemsDefault: form.unidad_medida,
         cols: 12,
         colMd: 6,
     },
@@ -114,6 +115,7 @@ const formStructure = [
         itemTitle: "plan_razon_social",
         itemValue: "plan_id",
         required: true,
+        itemsDefault: form.planta,
         cols: 12,
     },
 
@@ -124,10 +126,10 @@ const formStructure = [
         required: true,
         cols: 12,
     },
-];
+]);
 
 const submit = async () => {
- form.post(props.url, option);
+    form.post(props.url, option);
 };
 
 const option = {
@@ -142,4 +144,5 @@ const option = {
         console.log("onFinish");
     },
 };
+const init = () => {};
 </script>

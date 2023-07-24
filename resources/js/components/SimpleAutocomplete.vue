@@ -14,9 +14,7 @@
         "
     >
         <template v-if="itemCustom" v-slot:item="{ props, item }">
-            <slot name="custom" :props="props" :item="item">
-            </slot>
-
+            <slot name="custom" :props="props" :item="item"> </slot>
         </template>
     </v-autocomplete>
 </template>
@@ -33,10 +31,14 @@ const props = defineProps({
     label: String,
     modelValue: [Number, Array],
     itemCustom: Boolean,
+    itemsDefault: {
+        type: [Array, Object],
+        default: null,
+    },
 });
 
 const loading = ref(false);
-const items = ref([]);
+const items = ref([props.itemsDefault]);
 const search = ref("");
 
 const select = computed({
