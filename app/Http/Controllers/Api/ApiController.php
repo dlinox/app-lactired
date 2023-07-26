@@ -33,7 +33,7 @@ class ApiController extends Controller
 
     public function getProductosPlanta($planta): JsonResponse
     {
-        $_planta = Producto::where('prod_plan_id', $planta)->get();
+        $_planta = Producto::where('prod_plan_id', 2)->get();
         return response()->json($_planta);
     }
 
