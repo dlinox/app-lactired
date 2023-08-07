@@ -22,6 +22,18 @@ return new class extends Migration
             $table->enum('clie_tipo_persona', ['0', '1'])->comment("0=Persona Natural  1=Persona Juridica");
             $table->string('clie_direccion', 100);
             $table->char('clie_telefono', 9)->unique();
+            // $table->char('clie_latitud', 9)->unique();
+            // $table->char('clie_longitud', 9)->unique();
+            // $table->char('clie_direccion_entrega', 9)->unique();
+            // $table->char('clie_ubigeo', 9)->unique();
+            // $table->char('clie_tipo', 9)->unique(); //final  - intermediario
+            // $table->char('clie_longitud', 9)->unique();
+            // $table->char('clie_longitud', 9)->unique();
+            // $table->char('clie_gredito_max', 9)->unique(); //maximo de credio
+
+            //planta-producto-cliente //precio de producto
+
+
             $table->string('clie_correo', 100)->unique();
             $table->string('clie_password')->nullable();
             $table->timestamps();

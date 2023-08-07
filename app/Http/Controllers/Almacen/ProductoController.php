@@ -14,7 +14,6 @@ class ProductoController extends Controller
 {
 
     protected $user;
-    protected $planta;
     protected $producto;
     public function __construct()
     {
@@ -22,7 +21,6 @@ class ProductoController extends Controller
 
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
-            $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
             return $next($request);
         });
     }
@@ -38,10 +36,7 @@ class ProductoController extends Controller
             $searchTerm = $request->search;
             $query->where('prod_nombre', 'like', '%' . $searchTerm . '%');
         }
-
-        if ($this->planta != null) {
-            $query->where('prod_plan_id', $this->planta);
-        }
+        $query->where('prod_plan_id', $this->user->user_plan_id);
 
         // Obtener resultados paginados
         $items = $query->paginate($perPage)->appends($request->query());
@@ -63,6 +58,7 @@ class ProductoController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 $data = $request->all();
+                $data['prod_plan_id'] = $this->user->user_plan_id;
                 if ($request->prod_id) {
                     $producto = Producto::find($request->prod_id);
                     $producto->update($data);
@@ -101,10 +97,8 @@ class ProductoController extends Controller
         if ($request->has('search')) {
             $query = Producto::query();
             $query->where('prod_nombre', 'like', '%' . $request->search . '%');
+            $query->where('prod_plan_id', $this->user->user_plan_id);
 
-            if ($this->planta != null) {
-                $query->where('prod_plan_id', $this->planta);
-            }
 
             $results = $query->limit(30)->get();
         }

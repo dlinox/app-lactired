@@ -14,7 +14,6 @@ class InsumoController extends Controller
 {
 
     protected $user;
-    protected $planta;
     protected $insumo;
     public function __construct()
     {
@@ -22,7 +21,6 @@ class InsumoController extends Controller
 
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
-            $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
             return $next($request);
         });
     }
@@ -38,9 +36,9 @@ class InsumoController extends Controller
             $query->where('insu_nombre', 'like', '%' . $searchTerm . '%');
         }
 
-        if ($this->planta != null) {
-            $query->where('insu_plan_id', $this->planta);
-        }
+
+        $query->where('insu_plan_id', $this->user->user_plan_id);
+
 
         $items = $query->paginate($perPage)->appends($request->query());
 
@@ -61,6 +59,7 @@ class InsumoController extends Controller
             DB::transaction(function () use ($request) {
 
                 $data = $request->all();
+                $data['insu_plan_id'] = $this->user->user_plan_id;
 
                 if ($request->insu_id) {
                     $insumo = Insumo::find($request->insu_id);
@@ -72,7 +71,7 @@ class InsumoController extends Controller
                     $insumo = Insumo::create($data);
                     $this->guardarArchivo($request, $insumo);
                 }
-            
+
                 return redirect()->back()->with('success', 'Elemento creado exitosamente.');
             });
         } catch (\Throwable $th) {

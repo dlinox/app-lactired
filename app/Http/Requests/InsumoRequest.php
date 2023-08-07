@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class InsumoRequest extends FormRequest
 {
@@ -17,11 +18,10 @@ class InsumoRequest extends FormRequest
         $insumoId = $this->input('insu_id');
 
         return [
-            'insu_nombre' => 'required|string|unique:insumos,insu_nombre,' . $insumoId . ',insu_id,insu_plan_id,' . $this->input('insu_plan_id'),
+            'insu_nombre' => 'required|string|unique:insumos,insu_nombre,' . $insumoId . ',insu_id,insu_plan_id,' . Auth::user()->user_plan_id,
             'insu_stock' => 'required|integer',
             'insu_medida' => 'required|numeric',
             'insu_umed_id' => 'required|exists:unidad_medidas,umed_id',
-            'insu_plan_id' => 'required|exists:plantas,plan_id',
         ];
     }
 
@@ -36,8 +36,6 @@ class InsumoRequest extends FormRequest
             'insu_medida.numeric' => 'La medida del insumo debe ser un número.',
             'insu_umed_id.required' => 'El ID de unidad de medida es obligatorio.',
             'insu_umed_id.exists' => 'El ID de unidad de medida no existe en la tabla unidad_medidas.',
-            'insu_plan_id.required' => 'El ID de planta es obligatorio.',
-            'insu_plan_id.exists' => 'El ID de planta no existe en la tabla plantas.',
             'insu_nombre.unique' => 'El nombre del insumo ya está en uso para esta planta.',
         ];
     }

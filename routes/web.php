@@ -27,6 +27,8 @@ use App\Http\Controllers\Configuracion\Empresa\TipoMovilidadController;
 use App\Http\Controllers\Configuracion\Empresa\TipoTransporteController;
 
 use App\Http\Controllers\Configuracion\Trabajador\CargoController;
+use App\Http\Controllers\Configuracion\Trabajador\GradoInstruccionController;
+use App\Http\Controllers\Configuracion\Trabajador\ProfesionController;
 use App\Http\Controllers\Configuracion\Trabajador\TipoDocumentoController;
 
 use App\Http\Controllers\Venta\VentaController;
@@ -37,9 +39,8 @@ use App\Http\Controllers\Planta\PlantaController;
 use App\Http\Controllers\Seguridad\RolController;
 use App\Http\Controllers\Seguridad\UsuarioController;
 use App\Http\Controllers\Venta\ClienteController;
-use App\Models\Planta;
+
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 
 Route::inertia('/403', 'Errors/Error403')->name('error.403');
@@ -100,6 +101,9 @@ Route::middleware(['auth', 'can:menu-de-almacen'])->name('almacen.')->prefix('al
 Route::middleware(['auth', 'can:menu-de-planta'])->name('plantas.')->prefix('plantas')->group(function () {
     Route::get('', [PlantaController::class, 'index'])->name('index');
     Route::post('', [PlantaController::class, 'store'])->name('store');
+    Route::get('all', [PlantaController::class, 'getAll'])->name('all');
+    Route::post('change', [PlantaController::class, 'changePlant'])->name('change');
+
     Route::put('{planta}', [PlantaController::class, 'update'])->name('update');
     Route::delete('{planta}', [PlantaController::class, 'destroy'])->name('destroy');
     Route::get('create', [PlantaController::class, 'create'])->name('create');
@@ -140,7 +144,8 @@ Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefi
 
     Route::name('trabajador.')->prefix('trabajador')->group(function () {
         Route::resource('cargos', CargoController::class);
-        Route::resource('tipo-documentos', TipoDocumentoController::class);
+        Route::resource('grado-instrucciones', GradoInstruccionController::class);
+        Route::resource('profesiones', ProfesionController::class);
     });
 });
 

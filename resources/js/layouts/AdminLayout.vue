@@ -68,31 +68,13 @@
         <v-app-bar absolute elevation="0">
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
+            <PlantUser :user="user" />
             <v-spacer></v-spacer>
             <SwitchTheme />
-
             <MenuProfile />
         </v-app-bar>
 
         <v-main>
-            <!-- <v-navigation-drawer  v-model="subDrawer">
-                <v-list nav>
-                    <v-list-item
-                        density="compact"
-                        v-for="item in subMenu"
-                        :title="item.title"
-                        color="primary"
-                        prepend-icon="mdi-circle-medium"
-                        :value="item.value"
-                        :class="
-                            router.page.url == item.to
-                                ? 'v-list-item--active text-primary'
-                                : ''
-                        "
-                        @click="router.get(item.to)"
-                    />
-                </v-list>
-            </v-navigation-drawer> -->
             <slot />
         </v-main>
 
@@ -148,6 +130,7 @@ import MainMenu from "../components/MainMenu.vue";
 import SwitchTheme from "../components/SwitchTheme.vue";
 import { useTheme } from "vuetify";
 import MenuProfile from "../components/MenuProfile.vue";
+import PlantUser from "../components/PlantUser.vue";
 
 const theme = useTheme();
 

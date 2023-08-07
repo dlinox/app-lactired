@@ -23,6 +23,8 @@ return new class extends Migration
             $table->decimal('prov_precio_baja', 8, 2);
             $table->decimal('prov_latitud', 10, 8)->nullable();
             $table->decimal('prov_longitud', 10, 8)->nullable();
+            // $table->decimal('prov_rating', 10, 8)->nullable();
+            // $table->decimal('prov_credito_max', 10, 8)->nullable(); //!Alerta si supera
             $table->boolean('prov_activo')->default(1)->comment('0=No 1=SI');
             $table->unsignedBigInteger('prov_plan_id');
             $table->timestamps();

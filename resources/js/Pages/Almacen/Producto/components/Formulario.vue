@@ -35,7 +35,6 @@
             </v-card>
         </template>
     </SimpleForm>
-
 </template>
 
 <script setup>
@@ -53,8 +52,6 @@ const props = defineProps({
             prod_stock: "",
             prod_medida: "",
             prod_umed_id: null,
-            prod_umed_id: null,
-            prod_plan_id: null,
             prod_tpro_id: null,
             prod_imagen: null,
             prod_imagen_url: null,
@@ -98,15 +95,6 @@ const formStructure = [
     },
 
     {
-        key: "prod_medida",
-        label: "Unidad medida",
-        type: "text",
-        required: true,
-        cols: 12,
-        colMd: 6,
-    },
-
-    {
         key: "prod_umed_id",
         label: "Unidad de medida",
         url: "/autocomplete/unidades-medida",
@@ -119,16 +107,13 @@ const formStructure = [
     },
 
     {
-        key: "prod_plan_id",
-        label: "Planta",
-        url: "/autocomplete/plantas",
-        type: "autocomplete",
-        itemTitle: "plan_razon_social",
-        itemValue: "plan_id",
+        key: "prod_medida",
+        label: "Presentacion",
+        type: "text",
         required: true,
         cols: 12,
+        colMd: 6,
     },
-
     {
         key: "prod_imagen",
         label: "Imagen Referencial",

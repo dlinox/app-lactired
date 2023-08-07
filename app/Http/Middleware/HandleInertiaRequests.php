@@ -27,7 +27,7 @@ class HandleInertiaRequests extends Middleware
                         'email' => $request->user()->email,
                         'name' => $request->user()->name . ' ' .  $request->user()->paterno . ' ' .  $request->user()->materno,
                         'photo' =>  $request->user()->profile_photo_path,
-                        'user_plan_id' =>  $request->user()->ofic_id,
+                        'user_plan_id' =>  $request->user()->user_plan_id,
                         'rol_name' =>  $request->user()->rol_name,
                         'user_plan_nombre' =>  $request->user()->user_plan_nombre,
                         'menu' => Auth::check() ?  $this->getUserMenu($request->user()) : null
@@ -256,12 +256,12 @@ class HandleInertiaRequests extends Middleware
 
                         [
                             "title" => "Grados de instrucción",
-                            "to" => "/config/trabajador/grado-instruccion",
+                            "to" => "/config/trabajador/grado-instrucciones",
                         ],
 
                         [
                             "title" => "Profesiones",
-                            "to" => "/config/trabajador/profeciones",
+                            "to" => "/config/trabajador/profesiones",
                         ],
                     ]
                 ]

@@ -9,6 +9,7 @@ use App\Models\Insumo;
 use App\Models\Planta;
 use App\Models\PlantaEmpleado;
 use App\Models\Producto;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -93,6 +94,21 @@ class PlantaController extends Controller
     {
         $planta->delete();
         return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
+    }
+
+    public function getAll()
+    {
+        $plantas =  Planta::select('plan_id as id', 'plan_razon_social as name')->get();
+        return response()->json($plantas);
+    }
+
+    public function changePlant(Request $request)
+    {
+        $user = User::find($this->user->id);
+        $user->user_plan_nombre = $request->name;
+        $user->user_plan_id = $request->id;
+        $user->save();
+        return redirect()->back()->with('success', 'Se cambio de planta con exito.');
     }
 
     public function autocomplete(Request $request)

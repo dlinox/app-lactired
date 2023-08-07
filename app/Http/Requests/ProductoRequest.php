@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class ProductoRequest extends FormRequest
@@ -15,20 +16,20 @@ class ProductoRequest extends FormRequest
     public function rules()
     {
         $productId = $this->input('prod_id');
-        
+
         return [
             'prod_nombre' => [
                 'required',
-                'string',
+
                 Rule::unique('productos', 'prod_nombre')->ignore($productId, 'prod_id')->where(function ($query) {
-                    return $query->where('prod_plan_id', $this->input('prod_plan_id'));
+                    return $query->where('prod_plan_id',  Auth::user()->user_plan_id);
                 }),
             ],
             'prod_stock' => 'required|integer',
             'prod_medida' => 'required|numeric',
             'prod_umed_id' => 'required|exists:unidad_medidas,umed_id',
             'prod_tpro_id' => 'required|exists:tipo_productos,tpro_id',
-            'prod_plan_id' => 'required|exists:plantas,plan_id',
+            // 'prod_plan_id' => 'required|exists:plantas,plan_id',
         ];
     }
 
@@ -36,7 +37,6 @@ class ProductoRequest extends FormRequest
     {
         return [
             'prod_nombre.required' => 'El nombre es obligatorio.',
-            'prod_nombre.string' => 'El nombre debe ser una cadena de texto.',
             'prod_nombre.unique' => 'El nombre ya está en uso en esta planta. ' .  $this->input('prod_id'),
             'prod_stock.required' => 'El stock es obligatorio.',
             'prod_stock.integer' => 'El stock debe ser un número entero.',

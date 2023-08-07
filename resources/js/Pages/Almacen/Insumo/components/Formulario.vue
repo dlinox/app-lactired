@@ -52,7 +52,6 @@ const props = defineProps({
             insu_stock: "",
             insu_medida: "",
             insu_umed_id: null,
-            insu_plan_id: null,
             insu_imagen: null,
             insu_imagen_url: null,
         },
@@ -105,18 +104,6 @@ const formStructure = ref([
         itemsDefault: form.unidad_medida,
         cols: 12,
         colMd: 6,
-    },
-
-    {
-        key: "insu_plan_id",
-        label: "Planta",
-        url: "/autocomplete/plantas",
-        type: "autocomplete",
-        itemTitle: "plan_razon_social",
-        itemValue: "plan_id",
-        required: true,
-        itemsDefault: form.planta,
-        cols: 12,
     },
 
     {
