@@ -10,6 +10,11 @@
       font-size: 12px;
     }
 
+    h3 {
+      font-size: 18px;
+      text-transform: uppercase;
+    }
+
     .header {
       text-align: center;
       margin-bottom: 20px;
@@ -36,7 +41,11 @@
 
 <body>
   <div class="header">
-    <h2>Ticket de Pago {{$pago['pago_numero']}} </h2>
+    <h3> {{$planta['plan_razon_social']}} </h3>
+
+    <h4> {{$planta['plan_ruc']}} </h4>
+    ____________________________________________
+    <h4>Ticket de Pago {{$pago['pago_numero']}} </h4>
     <p>Fecha: {{ $pago['pago_fecha'] }}</p>
   </div>
 

@@ -48,7 +48,11 @@ class RolsSeeder extends Seeder
         //TODO: crear los permisos nesesarios
 
         // *Permisos de planta
-        Permission::create(['group_name' => 'planta', 'name' => 'menu-de-planta']);
+        Permission::create(['group_name' => 'plantas', 'name' => 'menu-de-planta']);
+        //TODO: crear los permisos nesesarios
+
+        // *Permisos de meunu empleados
+        Permission::create(['group_name' => 'empleados', 'name' => 'menu-de-empleados']);
         //TODO: crear los permisos nesesarios
 
         // *Permisos de acopio configuracion
@@ -69,6 +73,7 @@ class RolsSeeder extends Seeder
                 'menu-de-ventas',
                 'menu-de-planta',
                 'menu-de-seguridad',
+                'menu-de-empleados'
             ]
         );
 

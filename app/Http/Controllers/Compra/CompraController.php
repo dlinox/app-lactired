@@ -21,7 +21,7 @@ class CompraController extends Controller
   {
     $this->middleware(function ($request, $next) {
       $this->user = Auth::user();
-      $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+      $this->planta = $this->user->user_plan_id;
       return $next($request);
     });
   }

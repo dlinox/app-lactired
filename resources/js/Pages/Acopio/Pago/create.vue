@@ -156,6 +156,7 @@ const dialogTicket = ref(false);
 const pdfTicket = ref(null);
 const pagoDetalle = ref([]);
 const pagoDetalleLoading = ref(false);
+
 const form = useForm({
     pago_numero: props.defaults.numero,
     pago_monto: 0.0,

@@ -5,13 +5,13 @@
         @onCancel="$emit('onCancel')"
         @onSumbit="submit"
     >
-        <template #field.user_plan_id>
+        <!-- <template #field.user_plan_id>
             <v-text-field
                 v-model="form.user_plan_id"
                 label="Seleccione una planta"
                 :error-messages="form.errors.user_plan_id"
             ></v-text-field>
-        </template>
+        </template> -->
     </SimpleForm>
 </template>
 
@@ -88,21 +88,15 @@ const formStructure = [
     },
 
     {
-        key: "password",
-        label: "Nombre",
-        type: "text",
-        required: true,
-        cols: 12,
-        colMd: 6,
-    },
-
-    {
         key: "user_plan_id",
         label: "Seleccione una planta",
-        type: "select",
+        url: "/autocomplete/plantas",
+        type: "autocomplete",
+        itemTitle: "plan_razon_social",
+        itemValue: "plan_id",
+        itemsDefault: form.planta,
         required: true,
         cols: 12,
-        options: [""],
     },
 ];
 
@@ -123,5 +117,4 @@ const option = {
         console.log("onFinish");
     },
 };
-
 </script>

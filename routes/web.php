@@ -98,9 +98,10 @@ Route::middleware(['auth', 'can:menu-de-almacen'])->name('almacen.')->prefix('al
     Route::resource('insumos', InsumoController::class);
 });
 
-Route::middleware(['auth', 'can:menu-de-planta'])->name('plantas.')->prefix('plantas')->group(function () {
-    Route::get('', [PlantaController::class, 'index'])->name('index');
+Route::middleware('auth')->name('plantas.')->prefix('plantas')->group(function () {
+    Route::get('', [PlantaController::class, 'index'])->name('index')->middleware(['can:menu-de-planta']);
     Route::post('', [PlantaController::class, 'store'])->name('store');
+    
     Route::get('all', [PlantaController::class, 'getAll'])->name('all');
     Route::post('change', [PlantaController::class, 'changePlant'])->name('change');
 
@@ -108,9 +109,11 @@ Route::middleware(['auth', 'can:menu-de-planta'])->name('plantas.')->prefix('pla
     Route::delete('{planta}', [PlantaController::class, 'destroy'])->name('destroy');
     Route::get('create', [PlantaController::class, 'create'])->name('create');
     Route::get('show/{planta}', [PlantaController::class, 'show'])->name('show');
-
-    Route::resource('empleados', EmpleadoController::class);
 });
+
+
+Route::middleware(['auth', 'can:menu-de-empleados'])->resource('empleados', EmpleadoController::class);
+
 
 Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefix('config')->group(function () {
     Route::name('empresa.')->prefix('empresa')->group(function () {

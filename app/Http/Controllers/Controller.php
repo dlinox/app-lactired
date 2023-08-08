@@ -13,12 +13,12 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected $user2;
+    protected $currentUser;
 
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->user2 = Auth::user();
+            $this->currentUser = Auth::user();
             return $next($request);
         });
     }

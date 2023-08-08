@@ -28,7 +28,7 @@ class UsuarioController extends Controller
         }
 
         // Obtener resultados paginados
-        $items = $query->paginate($perPage)->appends($request->query());
+        $items = $query->with('planta')->paginate($perPage)->appends($request->query());
 
 
         return Inertia::render('Seguridad/Usuario/index', [

@@ -8,7 +8,13 @@
                 :md="field.colMd"
             >
                 <slot :name="'field.' + field.key">
-                    <template v-if="field.type === 'text' || field.type === 'date' || field.type === 'email'">
+                    <template
+                        v-if="
+                            field.type === 'text' ||
+                            field.type === 'date' ||
+                            field.type === 'email'
+                        "
+                    >
                         <v-text-field
                             v-model="form[`${field.key}`]"
                             :label="field.label"
@@ -67,7 +73,6 @@
                         />
                     </template>
 
-                    
                     <template v-else-if="field.type === 'combobox'">
                         <v-autocomplete
                             v-model="form[`${field.key}`]"
@@ -79,6 +84,8 @@
                             :error-messages="form.errors[`${field.key}`]"
                         />
                     </template>
+
+       
                 </slot>
             </v-col>
             <v-col cols="12" class="d-flex flex-row-reverse">
@@ -106,6 +113,7 @@
 import { computed, ref } from "vue";
 import { isRequired } from "@/helpers/validations.js";
 import SimpleAutocomplete from "@/components/SimpleAutocomplete.vue";
+
 const props = defineProps({
     formularioJson: Array,
     modelValue: Object,
@@ -119,6 +127,8 @@ const form = computed({
     get: () => props.modelValue,
     set: (value) => emit("update:modelValue", value),
 });
+
+const preview_img = ref(null);
 
 const submit = async () => {
     const { valid } = await formRef.value.validate();

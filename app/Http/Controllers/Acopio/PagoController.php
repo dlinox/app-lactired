@@ -7,6 +7,7 @@ use App\Http\Requests\PagoRequest;
 use App\Models\Compra;
 use App\Models\Pago;
 use App\Models\PagoDetalle;
+use App\Models\Planta;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,14 +22,14 @@ use Illuminate\Support\Facades\Storage;
 class PagoController extends Controller
 {
 
-    
+
     protected $user;
     protected $planta;
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
-            $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+            $this->planta =  $this->user->user_plan_id;
             return $next($request);
         });
     }
@@ -126,9 +127,11 @@ class PagoController extends Controller
     public function generarPDF($pago, $detalle)
     {
 
-
         $fecha = date('d/m/Y H:i:s');
-        $pdf = SnappyPdf::loadView('pdf.pagos.ticket', compact('fecha', 'detalle', 'pago'));
+
+        $planta = Planta::where('plan_id',$pago->pago_plan_id)->first();
+
+        $pdf = SnappyPdf::loadView('pdf.pagos.ticket', compact('fecha', 'detalle', 'pago', 'planta'))->setOption('page-width', 60)->setOption('page-height', 180);
 
         $pdfContent = $pdf->output();
 

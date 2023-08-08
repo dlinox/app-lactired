@@ -36,6 +36,12 @@ class User extends Authenticatable
         'user_plan_id',
     ];
 
+    public function planta()
+    {
+        return $this->belongsTo(Planta::class, 'user_plan_id', 'plan_id')->select('plan_id', 'plan_razon_social');
+    }
+
+
     public $headers =  [
         ['text' => "ID", 'value' => "id", 'short' => false, 'order' => 'ASC'],
         ['text' => "Nombre", 'value' => "name", 'short' => false, 'order' => 'ASC'],

@@ -10,6 +10,35 @@
         @onCancel="$emit('onCancel')"
         @onSumbit="submit"
     >
+        <template #field.plan_imagen>
+            <v-card variant="tonal">
+                <CropCompressImage
+                    :aspect-ratio="16 / 9"
+                    @onCropper="
+                        (preview_img = $event.blob),
+                            (form.plan_imagen = $event.file)
+                    "
+                />
+
+                <v-img
+                    v-if="preview_img"
+                    class="mx-auto"
+                    :width="350"
+                    aspect-ratio="16/9"
+                    cover
+                    :src="preview_img"
+                ></v-img>
+
+                <v-img
+                    v-if="form.plan_imagen_url && !preview_img"
+                    class="mx-auto"
+                    :width="300"
+                    aspect-ratio="16/9"
+                    cover
+                    :src="form.plan_imagen_url"
+                ></v-img>
+            </v-card>
+        </template>
     </SimpleForm>
 </template>
 
@@ -18,6 +47,7 @@ import { ref, onMounted } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import L from "leaflet";
 import SimpleForm from "@/components/SimpleForm.vue";
+import CropCompressImage from "@/components/CropCompressImage.vue";
 
 const emit = defineEmits(["onCancel", "onSubmit"]);
 const props = defineProps({
@@ -83,6 +113,8 @@ onMounted(() => {
 });
 
 const form = useForm({ ...props.formData });
+
+const preview_img = ref(null);
 
 const formStructure = [
     {
@@ -161,6 +193,8 @@ const formStructure = [
         type: "autocomplete",
         itemTitle: "ubig_completo",
         itemValue: "ubig_id",
+        itemsDefault: form.ubigeo,
+
         required: true,
         cols: 12,
         colMd: 6,
@@ -174,6 +208,8 @@ const formStructure = [
         url: "/autocomplete/tipo-companias",
         itemTitle: "tcomp_nombre",
         itemValue: "tcomp_id",
+        itemsDefault: form.tipo_compania,
+
         cols: 12,
         colMd: 6,
     },
@@ -184,6 +220,7 @@ const formStructure = [
         type: "autocomplete",
         url: "/autocomplete/tipo-instituciones",
         itemTitle: "inst_nombre",
+        itemsDefault: form.institucion,
         itemValue: "inst_id",
         required: true,
         cols: 12,
@@ -196,6 +233,7 @@ const formStructure = [
         url: "/autocomplete/nivel-capacitaciones",
         itemTitle: "ncap_nombre",
         itemValue: "ncap_id",
+        itemsDefault: form.nivel_capacitacion,
         required: true,
         cols: 12,
         colMd: 6,
@@ -208,6 +246,7 @@ const formStructure = [
         itemTitle: "cpro_nombre",
         itemValue: "cpro_id",
         required: true,
+        itemsDefault: form.calidad_producto,
         cols: 12,
         colMd: 6,
     },
@@ -254,12 +293,30 @@ const formStructure = [
         required: false,
         cols: 6,
     },
+
+    {
+        key: "plan_imagen",
+        label: "Imagen",
+        type: "textarea",
+        required: false,
+        cols: 12,
+    },
+
+    {
+        key: "plan_descripcion",
+        label: "Descripción",
+        type: "textarea",
+        required: false,
+        cols: 12,
+    },
 ];
 
+
+
 const submit = async () => {
-    if (props.edit) form.put(props.url, option);
-    else form.post(props.url, option);
+    form.post(props.url, option);
 };
+
 
 const option = {
     onSuccess: (page) => {

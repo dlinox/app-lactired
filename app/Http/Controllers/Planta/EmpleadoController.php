@@ -16,7 +16,7 @@ class EmpleadoController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Planta/Empleado/index', [
-            'data' => Empleado::getRoles($request),
+            'data' => Empleado::getEmpleadosPlanta($request, $this->currentUser->user_plan_id),
             'cargos' => Cargo::select('carg_id', 'carg_nombre')->get(),
             'profesiones' => Profesion::select('prof_id', 'prof_nombre')->get(),
             'gradosInstruccion' => GradoInstruccion::select('gins_id', 'gins_nombre')->get(),

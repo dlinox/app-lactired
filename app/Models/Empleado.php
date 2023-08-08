@@ -60,10 +60,13 @@ class Empleado extends Model
     }
 
 
-    public static function getRoles(Request $request)
+    public static function getEmpleadosPlanta(Request $request, $planta)
     {
         $perPage = $request->input('perPage', 10);
         $query = self::query();
+        $query->join('planta_empleados', 'plem_empl_id', '=', 'empl_id');
+        $query->where('plem_plan_id', $planta);
+
 
         if ($request->has('search')) {
             $searchTerm = $request->search;

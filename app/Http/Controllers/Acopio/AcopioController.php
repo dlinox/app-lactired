@@ -22,7 +22,7 @@ class AcopioController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
-            $this->planta = $this->user->hasRole('Super Admin') ? null : $this->user->user_plan_id;
+            $this->planta = $this->user->user_plan_id;
             return $next($request);
         });
     }
@@ -40,10 +40,7 @@ class AcopioController extends Controller
             $query->where('comp_numero', 'like', '%' . $searchTerm . '%');
         }
 
-        if ($this->planta != null) {
-            $query->where('comp_plan_id', $this->planta);
-        }
-
+        $query->where('comp_plan_id', $this->planta);
         $query->where('comp_tipo', 0);
 
         $items = $query->paginate($perPage)->appends($request->query());

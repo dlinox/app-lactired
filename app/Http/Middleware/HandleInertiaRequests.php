@@ -30,7 +30,7 @@ class HandleInertiaRequests extends Middleware
                         'user_plan_id' =>  $request->user()->user_plan_id,
                         'rol_name' =>  $request->user()->rol_name,
                         'user_plan_nombre' =>  $request->user()->user_plan_nombre,
-                        'menu' => Auth::check() ?  $this->getUserMenu($request->user()) : null
+                        'menu' => Auth::check() ?  $this->getUserMenu($request->user()) : null,
                     ] : null,
                 ];
             },
@@ -144,22 +144,21 @@ class HandleInertiaRequests extends Middleware
                 ]
             ]
         ],
+
         [
             "title" => "Plantas",
             "icon" => "mdi-domain",
             "to" => "/plantas",
             'can' => 'menu-de-planta',
-            "group" => [
-                [
-                    "title" => "Plantas",
-                    "to" => "/plantas",
-                ],
-                [
-                    "title" => "Trabajadores",
-                    "to" => "/plantas/empleados",
-                ]
-            ]
         ],
+
+        [
+            "title" => "Trabajadores",
+            "icon" => "mdi-account-hard-hat",
+            "to" => "/empleados",
+            'can' => 'menu-de-empleados',
+        ],
+
         [
             "title" => "Configuracion",
             "icon" => "mdi-cog",

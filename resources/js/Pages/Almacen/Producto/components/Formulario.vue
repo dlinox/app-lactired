@@ -35,6 +35,7 @@
             </v-card>
         </template>
     </SimpleForm>
+
 </template>
 
 <script setup>
@@ -75,6 +76,7 @@ const formStructure = [
         url: "/autocomplete/tipo-productos",
         type: "autocomplete",
         itemTitle: "tpro_nombre",
+        itemsDefault: form.tipo_producto,
         itemValue: "tpro_id",
         required: true,
         cols: 12,
@@ -102,6 +104,7 @@ const formStructure = [
         itemTitle: "umed_nombre",
         itemValue: "umed_id",
         required: true,
+        itemsDefault: form.unidad_medida,
         cols: 12,
         colMd: 6,
     },
