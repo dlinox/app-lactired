@@ -31,6 +31,12 @@ class ApiController extends Controller
         return response()->json($_planta);
     }
 
+    public function getProducto($producto): JsonResponse
+    {
+        $_producto = Producto::find($producto);
+        return response()->json($_producto);
+    }
+
 
     public function getTipoProductos(): JsonResponse
     {
