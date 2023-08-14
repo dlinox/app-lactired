@@ -14,7 +14,7 @@ class ApiController extends Controller
     public function getPlantas(): JsonResponse
     {
 
-        $plantas = Planta::select('plan_id', 'plan_razon_social', 'plan_ruc', 'plan_tipo_planta', 'plan_latitud', 'plan_longitud')->get();
+        $plantas = Planta::select('plan_id', 'plan_razon_social', 'plan_ruc', 'plan_tipo_planta', 'plan_latitud', 'plan_longitud', 'plan_ubig_id')->get();
         return response()->json($plantas);
     }
 
