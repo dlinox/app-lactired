@@ -27,4 +27,6 @@ Route::get('planta/productos/{planta}', [ApiController::class, 'getProductosPlan
 
 
 Route::get('productos', [ApiController::class, 'getProductos']);
+Route::get('tipo-productos', [ApiController::class, 'getTipoProductos']);
+
 Route::get('insumos', [ApiController::class, 'getInsumos']);

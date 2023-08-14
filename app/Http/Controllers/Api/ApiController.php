@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Insumo;
 use App\Models\Planta;
 use App\Models\Producto;
+use App\Models\TipoProducto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -30,6 +31,12 @@ class ApiController extends Controller
         return response()->json($_planta);
     }
 
+
+    public function getTipoProductos(): JsonResponse
+    {
+        $_planta = TipoProducto::all();
+        return response()->json($_planta);
+    }
 
     public function getProductosPlanta($planta): JsonResponse
     {
