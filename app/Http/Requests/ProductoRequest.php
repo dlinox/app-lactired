@@ -26,6 +26,7 @@ class ProductoRequest extends FormRequest
                 }),
             ],
             'prod_stock' => 'required|integer',
+            'prod_decripcion_tecnica' => 'required',
             'prod_medida' => 'required|numeric',
             'prod_umed_id' => 'required|exists:unidad_medidas,umed_id',
             'prod_tpro_id' => 'required|exists:tipo_productos,tpro_id',
@@ -36,6 +37,7 @@ class ProductoRequest extends FormRequest
     public function messages()
     {
         return [
+            'prod_decripcion_tecnica' => 'La descripcion es obligatorio',
             'prod_nombre.required' => 'El nombre es obligatorio.',
             'prod_nombre.unique' => 'El nombre ya está en uso en esta planta. ' .  $this->input('prod_id'),
             'prod_stock.required' => 'El stock es obligatorio.',

@@ -11,6 +11,7 @@
                     <template
                         v-if="
                             field.type === 'text' ||
+                            field.type === 'password' ||
                             field.type === 'date' ||
                             field.type === 'email'
                         "
@@ -84,8 +85,14 @@
                             :error-messages="form.errors[`${field.key}`]"
                         />
                     </template>
+                    <!-- <template v-else-if="field.type === 'richt-text'">
+                        <QuillEditor
+                            theme="snow"
+                            v-text="form[`${field.key}`]"
+                            v-model:text="form[`${field.key}`]"
+                        />
+                    </template> -->
 
-       
                 </slot>
             </v-col>
             <v-col cols="12" class="d-flex flex-row-reverse">

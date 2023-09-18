@@ -2,7 +2,8 @@
 
 import { createApp, h } from "vue";
 import { createInertiaApp, router } from "@inertiajs/vue3";
-
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import NProgress from "nprogress";
 
 import "leaflet/dist/leaflet.css";
@@ -24,6 +25,7 @@ createInertiaApp({
     },
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
+        .component('QuillEditor', QuillEditor)
             .use(plugin)
             .use(vuetify)
             .mount(el);

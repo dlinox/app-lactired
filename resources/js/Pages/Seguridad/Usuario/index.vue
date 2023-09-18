@@ -13,7 +13,7 @@
                         </v-btn>
                     </template>
                     <template v-slot:content="{ dialog }">
-                        <Formulario @on-cancel="dialog" :url="url" />
+                        <Formulario @on-cancel="dialog" :url="url" :plantas="plantas" />
                     </template>
                 </BtnDialog>
             </template>
@@ -59,6 +59,7 @@
                                     <Formulario
                                         @on-cancel="dialog"
                                         :form-data="item"
+                                        :plantas="plantas"
                                         :edit="true"
                                         :url="url + '/' + item[`${primaryKey}`]"
                                     />
@@ -105,11 +106,12 @@ import Formulario from "./components/Formulario.vue";
 
 const props = defineProps({
     items: Object,
+    plantas: Array,
     headers: Array,
     filters: Object,
     perPageOptions: Array,
 });
 
-const url = "/config/usuarios";
+const url = "/seguridad/usuarios";
 const primaryKey = "id";
 </script>

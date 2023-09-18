@@ -34,8 +34,15 @@
                 ></v-img>
             </v-card>
         </template>
+        <template #field.prod_decripcion_tecnica>
+            <QuillEditor
+                contentType="html"
+                theme="snow"
+                placeholder="Ingrese la descripcion tecnica del producto"
+                v-model:content="form.prod_decripcion_tecnica"
+            />
+        </template>
     </SimpleForm>
-
 </template>
 
 <script setup>
@@ -56,6 +63,7 @@ const props = defineProps({
             prod_tpro_id: null,
             prod_imagen: null,
             prod_imagen_url: null,
+            prod_decripcion_tecnica: "",
         },
     },
     edit: {
@@ -116,6 +124,13 @@ const formStructure = [
         required: true,
         cols: 12,
         colMd: 6,
+    },
+    {
+        key: "prod_decripcion_tecnica",
+        label: "Descripcion tecnica",
+        type: "richt-text",
+        required: true,
+        cols: 12,
     },
     {
         key: "prod_imagen",

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seguridad;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Models\Planta;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,6 +34,7 @@ class UsuarioController extends Controller
 
         return Inertia::render('Seguridad/Usuario/index', [
             'items' => $items,
+            'plantas' =>  Planta::select('plan_id', 'plan_razon_social')->get(),
             'headers' => $this->user->headers,
             'filters' => [
                 'tipo_estado' => $request->tipo_estado,

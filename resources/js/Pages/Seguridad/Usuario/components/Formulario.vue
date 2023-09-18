@@ -32,6 +32,7 @@ const props = defineProps({
             user_plan_id: "",
         },
     },
+    plantas: Array,
     edit: {
         type: Boolean,
         default: false,
@@ -88,16 +89,37 @@ const formStructure = [
     },
 
     {
+        key: "password",
+        label: "Contraseña",
+        type: "password",
+        required: true,
+        cols: 12,
+        colMd: 6,
+    },
+
+    // {
+    //     key: "user_plan_id",
+    //     label: "Seleccione una planta",
+    //     url: "/autocomplete/plantas",
+    //     type: "autocomplete",
+    //     itemTitle: "plan_razon_social",
+    //     itemValue: "plan_id",
+    //     itemsDefault: form.planta,
+    //     required: true,
+    //     cols: 12,
+    // },
+
+    {
         key: "user_plan_id",
         label: "Seleccione una planta",
-        url: "/autocomplete/plantas",
-        type: "autocomplete",
+        type: "combobox",
         itemTitle: "plan_razon_social",
         itemValue: "plan_id",
-        itemsDefault: form.planta,
+        options: props.plantas,
         required: true,
         cols: 12,
     },
+
 ];
 
 const submit = async () => {

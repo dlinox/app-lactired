@@ -126,7 +126,6 @@ const init = () => {
 };
 
 init();
-
 </script>
 
 <style scoped>

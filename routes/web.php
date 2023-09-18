@@ -155,6 +155,9 @@ Route::middleware(['auth', 'can:menu-de-configuracion'])->name('config.')->prefi
 Route::middleware(['auth', 'can:menu-de-seguridad'])->name('seguridad.')->prefix('seguridad')->group(function () {
     Route::resource('usuarios', UsuarioController::class);
     Route::resource('roles', RolController::class);
+    Route::post('permisos', [RolController::class, 'asignarPermisos']);
+
+    
     // Route::resource('backups', Co::class);
 });
 

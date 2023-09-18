@@ -29,7 +29,7 @@ const props = defineProps({
     itemTitle: String,
     itemValue: String,
     label: String,
-    modelValue: [Number, Array],
+    modelValue: [Number, Array, String],
     itemCustom: Boolean,
     itemsDefault: {
         type: [Array, Object],
