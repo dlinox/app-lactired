@@ -5,6 +5,7 @@ use App\Http\Controllers\Acopio\PagoController;
 use App\Http\Controllers\Almacen\InsumoController;
 use App\Http\Controllers\Almacen\ProductoController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\Compra\CompraController;
 use App\Http\Controllers\Compra\ProveedorController;
 
@@ -49,6 +50,10 @@ Route::name('auth.')->prefix('')->group(function () {
     Route::get('/login',  [AuthController::class, 'index'])->name('login')->middleware('guest');
     Route::post('/sign-in',  [AuthController::class, 'signIn'])->name('sign-in');
     Route::delete('/sign-out',  [AuthController::class, 'signOut'])->name('sign-out');
+    
+    Route::get('/registro-cliente',  [ClientController::class, 'index'])->name('registro.cliente')->middleware('guest');
+    Route::post('/registrar-cliente',  [ClientController::class, 'store'])->name('registrar.cliente')->middleware('guest');
+    
 });
 
 Route::middleware(['auth', 'can:dashboard'])->name('admin.')->group(function () {
@@ -101,7 +106,7 @@ Route::middleware(['auth', 'can:menu-de-almacen'])->name('almacen.')->prefix('al
 Route::middleware('auth')->name('plantas.')->prefix('plantas')->group(function () {
     Route::get('', [PlantaController::class, 'index'])->name('index')->middleware(['can:menu-de-planta']);
     Route::post('', [PlantaController::class, 'store'])->name('store');
-    
+
     Route::get('all', [PlantaController::class, 'getAll'])->name('all');
     Route::post('change', [PlantaController::class, 'changePlant'])->name('change');
 
@@ -157,7 +162,7 @@ Route::middleware(['auth', 'can:menu-de-seguridad'])->name('seguridad.')->prefix
     Route::resource('roles', RolController::class);
     Route::post('permisos', [RolController::class, 'asignarPermisos']);
 
-    
+
     // Route::resource('backups', Co::class);
 });
 
