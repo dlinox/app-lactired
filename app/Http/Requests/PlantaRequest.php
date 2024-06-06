@@ -14,8 +14,8 @@ class PlantaRequest extends FormRequest
     public function rules()
     {
 
-        $planId = $this->planta ? $this->planta->plan_id : null;
-
+        // $planId se envia por el metodo post
+        $planId = $this->input('plan_id');
         return [
             'plan_razon_social' => 'required|string',
             'plan_ruc' => 'required|digits:11|unique:plantas,plan_ruc,' . $planId . ',plan_id',

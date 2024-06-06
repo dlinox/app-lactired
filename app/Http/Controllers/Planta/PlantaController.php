@@ -74,8 +74,18 @@ class PlantaController extends Controller
     public function store(PlantaRequest $request)
     {
         $data = $request->all();
-        Planta::create($data);
-        return redirect()->back()->with('success', 'Elemento creado exitosamente.');
+
+        if ($request->has('plan_id')) {
+           
+            $planta = Planta::find($request->plan_id);
+            $planta->update($data);
+            return redirect()->back()->with('success', 'Elemento actualizado exitosamente.');
+        }
+        else{
+
+            Planta::create($data);
+            return redirect()->back()->with('success', 'Elemento creado exitosamente.');
+        }
     }
 
     public function create()

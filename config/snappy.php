@@ -4,7 +4,7 @@ return [
 
     'pdf' => [
         'enabled' => true,
-        'binary' => '"' . env('SNAPPY_PDF_BINARY') . '"',
+        'binary' => '"' . env('SNAPPY_PDF_BINARY', 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe') . '"',
         'timeout' => false,
         'options' => [],
         'env'     => [],

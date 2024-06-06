@@ -33,7 +33,7 @@
     "src": "resources/assets/styles/scss/app.scss"
   },
   "resources/js/app.css": {
-    "file": "assets/app-f688b0fb.css",
+    "file": "assets/app-4aeb9c88.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -47,9 +47,9 @@
       "assets/materialdesignicons-webfont-a58ecb54.ttf"
     ],
     "css": [
-      "assets/app-f688b0fb.css"
+      "assets/app-4aeb9c88.css"
     ],
-    "file": "assets/app-cf5691ed.js",
+    "file": "assets/app-a5254df9.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

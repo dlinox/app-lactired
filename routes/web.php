@@ -41,7 +41,155 @@ use App\Http\Controllers\Seguridad\RolController;
 use App\Http\Controllers\Seguridad\UsuarioController;
 use App\Http\Controllers\Venta\ClienteController;
 
+
+
+
+
+
+
+
+
+
+
+
 use Illuminate\Support\Facades\Route;
+
+use Barryvdh\Snappy\Facades\SnappyPdf;
+
+
+Route::get('/snappy-pdf', function () {
+
+    $courses = [
+        [
+            'id' => 1,
+            'course' => 'Math to the power of 10 and beyond the universe of the infinite and beyond  forever and ever',
+            'cycle' => 'I',
+            'credits' => 4,
+            'hours' => 64,
+            'teacher' => 'John Doe Jane Doe Jane Doe'
+        ],
+        [
+            'id' => 2,
+            'course' => 'Science',
+            'cycle' => 'II',
+            'credits' => 3,
+            'hours' => 48,
+            'teacher' => 'Jane Doe'
+        ],
+        [
+            'id' => 3,
+            'course' => 'History',
+            'cycle' => 'III',
+            'credits' => 2,
+            'hours' => 32,
+            'teacher' => 'John Smith'
+        ],
+        [
+            'id' => 4,
+            'course' => 'Geography',
+            'cycle' => 'IV',
+            'credits' => 3,
+            'hours' => 48,
+            'teacher' => 'Jane Smith'
+        ],
+        [
+            'id' => 5,
+            'course' => 'English',
+            'cycle' => 'V',
+            'credits' => 4,
+            'hours' => 64,
+            'teacher' => 'John Doe'
+        ],
+        [
+            'id' => 6,
+            'course' => 'Spanish',
+            'cycle' => 'VI',
+            'credits' => 3,
+            'hours' => 48,
+            'teacher' => 'Jane Doe'
+        ],
+        [
+            'id' => 7,
+            'course' => 'Art',
+            'cycle' => 'VII',
+            'credits' => 2,
+            'hours' => 32,
+            'teacher' => 'John Smith'
+        ],
+        [
+            'id' => 8,
+            'course' => 'Music',
+            'cycle' => 'VIII',
+            'credits' => 3,
+            'hours' => 48,
+            'teacher' => 'Jane Smith'
+        ],
+        [
+            'id' => 9,
+            'course' => 'Physical Education',
+            'cycle' => 'IX',
+            'credits' => 4,
+            'hours' => 64,
+            'teacher' => 'John Doe'
+        ],
+
+    ];
+
+    // obtener  la vsita desde la ruta views.pdf.test.snappy
+
+    // incluir cabezera 
+
+    $pdf = SnappyPdf::loadView('pdf.test.snappy', compact('courses'));
+
+    $pdf->setOption('enable-javascript', true);
+    $pdf->setOption('no-stop-slow-scripts', true);
+
+    $pdf->setOptions([
+        
+        'margin-right' => '0.5cm',
+        'margin-top' => '4cm',
+        'margin-bottom' => '0.5cm',
+        'margin-left' => '0.5cm',
+        'encoding' => 'UTF-8',
+        'orientation' => 'landscape',
+        'page-size' => 'a4',
+        //paginacion
+        'footer-right' => '[page] / [toPage]',
+        'header-html' => view('pdf.test._header'),
+    ]);
+
+    // Obtén el contenido del PDF como una cadena de texto
+    $pdfContent = $pdf->output();
+
+    // Devuelve el PDF al navegador con los encabezados adecuados
+    return response($pdfContent, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="test.pdf"');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Route::inertia('/403', 'Errors/Error403')->name('error.403');
@@ -50,10 +198,9 @@ Route::name('auth.')->prefix('')->group(function () {
     Route::get('/login',  [AuthController::class, 'index'])->name('login')->middleware('guest');
     Route::post('/sign-in',  [AuthController::class, 'signIn'])->name('sign-in');
     Route::delete('/sign-out',  [AuthController::class, 'signOut'])->name('sign-out');
-    
+
     Route::get('/registro-cliente',  [ClientController::class, 'index'])->name('registro.cliente')->middleware('guest');
     Route::post('/registrar-cliente',  [ClientController::class, 'store'])->name('registrar.cliente')->middleware('guest');
-    
 });
 
 Route::middleware(['auth', 'can:dashboard'])->name('admin.')->group(function () {
