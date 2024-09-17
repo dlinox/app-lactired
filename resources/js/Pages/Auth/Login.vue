@@ -43,8 +43,10 @@
                 </v-row>
             </v-container>
             <v-card-actions>
-                <small class="px-4 text-center"
-                    >LACTIRED v. 1.1 © 2023 todos los derechos reservados
+                <small class="px-4 text-center">
+                    LACTIRED v. 1.1 ©
+                    {{ new Date().getFullYear() }}
+                    todos los derechos reservados
                 </small>
             </v-card-actions>
         </v-card>

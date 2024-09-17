@@ -1,11 +1,8 @@
 <template>
     <AdminLayout>
-        <HeadingPage
-            title="Empleados"
-            subtitle="Lista de trabajadores "
-        >
+        <HeadingPage title="Colaboradores" subtitle="Lista de trabajadores ">
             <template #actions>
-                <BtnDialog title="Nuevo tipo de capacitación" width="800px">
+                <BtnDialog title="Nuevo" width="800px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
                             @click="dialog"
@@ -71,7 +68,7 @@
                                         @on-cancel="dialog"
                                         :form-data="item"
                                         :edit="true"
-                                        :url="`${url}/${ item[`${primaryKey}`]}`"
+                                        :url="`${url}/${item[`${primaryKey}`]}`"
                                     />
                                 </template>
                             </BtnDialog>
@@ -86,7 +83,11 @@
                                 <DialogConfirm
                                     @onConfirm="
                                         () =>
-                                            router.delete(`${url}/${ item[`${primaryKey}`]}`)
+                                            router.delete(
+                                                `${url}/${
+                                                    item[`${primaryKey}`]
+                                                }`
+                                            )
                                     "
                                 />
                                 <v-icon
@@ -203,8 +204,6 @@ const formStructure = [
         colMd: 6,
         default: "M",
     },
-
- 
 
     {
         key: "empl_gins_id",
