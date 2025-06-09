@@ -53,6 +53,14 @@ import CropCompressImage from "@/components/CropCompressImage.vue";
 
 const emit = defineEmits(["onCancel", "onSubmit"]);
 const props = defineProps({
+    productTypes: {
+        type: Array,
+        default: () => [],
+    },
+    unitMeasurements: {
+        type: Array,
+        default: () => [],
+    },
     formData: {
         type: Object,
         default: {
@@ -81,11 +89,8 @@ const formStructure = [
     {
         key: "prod_tpro_id",
         label: "Tipo de producto",
-        url: "/autocomplete/tipo-productos",
-        type: "autocomplete",
-        itemTitle: "tpro_nombre",
-        itemsDefault: form.tipo_producto,
-        itemValue: "tpro_id",
+        type: "combobox",
+        options: props.productTypes,
         required: true,
         cols: 12,
     },
@@ -107,14 +112,11 @@ const formStructure = [
     {
         key: "prod_umed_id",
         label: "Unidad de medida",
-        url: "/autocomplete/unidades-medida",
-        type: "autocomplete",
-        itemTitle: "umed_nombre",
-        itemValue: "umed_id",
+        type: "combobox",
+        options: props.unitMeasurements,
         required: true,
-        itemsDefault: form.unidad_medida,
         cols: 12,
-        colMd: 6,
+        colMd: 4,
     },
 
     {
@@ -123,7 +125,15 @@ const formStructure = [
         type: "text",
         required: true,
         cols: 12,
-        colMd: 6,
+        colMd: 4,
+    },
+    {
+        key: "prod_precio_venta",
+        label: "Precio de venta",
+        type: "number",
+        required: true,
+        cols: 12,
+        colMd: 4,
     },
     {
         key: "prod_decripcion_tecnica",

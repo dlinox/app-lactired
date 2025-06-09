@@ -74,6 +74,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 1,
+                'prod_precio_venta' => 1.50,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -83,6 +84,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 1,
+                'prod_precio_venta' => 1.75,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -92,6 +94,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 1,
+                'prod_precio_venta' => 1.25,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -101,6 +104,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 2,
+                'prod_precio_venta' => 2.00,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -111,6 +115,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 2,
+                'prod_precio_venta' => 2.50,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -121,6 +126,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 3,
+                'prod_precio_venta' => 1.80,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -131,6 +137,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 3,
+                'prod_precio_venta' => 2.20,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -141,6 +148,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 3,
+                'prod_precio_venta' => 3.00,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -151,6 +159,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 3,
+                'prod_precio_venta' => 1.60,
                 'prod_plan_id' => $value->plan_id,
             ]);
 
@@ -160,6 +169,7 @@ class AlmacenSeeder extends Seeder
                 'prod_medida' => 15.00,
                 'prod_umed_id' => 1,
                 'prod_tpro_id' => 3,
+                'prod_precio_venta' => 2.80,
                 'prod_plan_id' => $value->plan_id,
             ]);
 

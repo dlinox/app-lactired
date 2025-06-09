@@ -74,4 +74,12 @@ class TipoProductoController extends Controller
         }
         return response()->json($results);
     }
+
+    public function forSelect()
+    {
+        $results = TipoProducto::select('tpro_id as value', 'tpro_nombre as title')
+            ->get();
+
+        return response()->json($results);
+    }
 }

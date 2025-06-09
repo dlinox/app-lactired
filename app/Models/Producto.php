@@ -21,6 +21,8 @@ class Producto extends Model
         'prod_tpro_id',
         'prod_imagen',
         'prod_plan_id',
+        'prod_decripcion_tecnica',
+        'prod_precio_venta',
 
     ];
     public $headers =  [
@@ -28,6 +30,7 @@ class Producto extends Model
         ['text' => "Nombre", 'value' => "prod_nombre", 'short' => false, 'order' => 'ASC'],
         ['text' => "Stock", 'value' => "prod_stock", 'short' => false, 'order' => 'ASC'],
         ['text' => "Medida", 'value' => "prod_medida", 'short' => false, 'order' => 'ASC'],
+        ['text' => "Precio de venta", 'value' => "prod_precio_venta", 'short' => false, 'order' => 'ASC'],
     ];
 
     protected $hidden = [

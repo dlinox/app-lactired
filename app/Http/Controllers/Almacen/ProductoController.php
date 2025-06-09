@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Almacen;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductoRequest;
+use App\Models\Insumo;
 use App\Models\Producto;
+use App\Models\ProductoInsumo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -88,6 +90,53 @@ class ProductoController extends Controller
     {
         $producto->delete();
         return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
+    }
+
+    public function saveInsumos(Request $request, $id)
+    {
+        $producto = Producto::findOrFail($id);
+
+        try {
+            $insumos = $request->prod_insumos;
+            if (is_null($insumos) || !is_array($insumos)) {
+                return redirect()->back()->withErrors(['error' => 'No se han proporcionado insumos válidos.']);
+            }
+
+            DB::beginTransaction();
+
+            ProductoInsumo::where('pinsu_prod_id', $producto->prod_id)->delete();
+
+            foreach ($insumos as $insumo) {
+                ProductoInsumo::create([
+                    'pinsu_insu_id' => $insumo['insu_id'],
+                    'pinsu_prod_id' => $producto->prod_id,
+                    'pinsu_umed_id' => $insumo['insu_unit_measurement_id'],
+                    'pinsu_cantidad' => $insumo['insu_quantity'],
+                    'pinsu_precio' => $insumo['insu_price'],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Insumos agregados exitosamente.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'Se ha producido un error inesperado. Si el problema persiste, te recomendamos que te pongas en contacto con el administrador para obtener ayuda adicional.', 'details' => $th->getMessage()]);
+        }
+    }
+
+    public function getInsumosByProductoId($id)
+    {
+        $insumos = Insumo::select(
+            'insumos.insu_id',
+            'insumos.insu_nombre as insu_name',
+            'producto_insumos.pinsu_cantidad as insu_quantity',
+            'producto_insumos.pinsu_precio as insu_price',
+            'producto_insumos.pinsu_umed_id as insu_unit_measurement_id'
+        )
+            ->join('producto_insumos', 'producto_insumos.pinsu_insu_id', '=', 'insumos.insu_id')
+            ->where('producto_insumos.pinsu_prod_id', $id)
+            ->get();
+        return response()->json($insumos);
     }
 
     public function autocomplete(Request $request)

@@ -4,10 +4,11 @@
         :fullscreen="!display.smAndUp.value"
         scrollable
         v-model="dialog"
-        height="auto"
         :width="display.smAndUp.value ? width : null"
+        :class="`btn-dialog ${display.smAndUp.value ? 'w-100 h-100' : ''}`"
+        persistent
     >
-        <v-card>
+        <v-card class="h-100">
             <v-card-title class="pa-0">
                 <v-toolbar density="compact">
                     <v-toolbar-title>

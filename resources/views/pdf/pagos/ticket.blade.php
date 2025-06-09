@@ -6,18 +6,18 @@
   <title>Ticket de Compra</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 10px;
     }
 
     h3 {
-      font-size: 18px;
+      font-size: 14px;
       text-transform: uppercase;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .table {
@@ -34,7 +34,7 @@
 
     .total {
       text-align: right;
-      margin-top: 20px;
+      margin-top: 15px;
     }
   </style>
 </head>

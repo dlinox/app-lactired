@@ -14,8 +14,8 @@
                                 <v-col cols="12">
                                     <SimpleAutocomplete
                                         url="/autocomplete/proveedores"
-                                        item-title="proveedor"
-                                        item-value="prov_id"
+                                        itemTitle="proveedor"
+                                        itemValue="prov_id"
                                         label="Buscar Proveedor"
                                         v-model="form.comp_prov_id"
                                         :error-messages="
@@ -70,14 +70,23 @@
                                                 <th class="text-left">
                                                     Medida
                                                 </th>
-                                                <th class="text-left">
-                                                    Catidad
+                                                <th
+                                                    class="text-left"
+                                                    width="120px"
+                                                >
+                                                    Cantidad
                                                 </th>
-                                                <th class="text-left">
+                                                <th
+                                                    class="text-left"
+                                                    width="150px"
+                                                >
                                                     Precio
                                                 </th>
-                                                <th class="text-left">
-                                                    Imoprte
+                                                <th
+                                                    class="text-left"
+                                                    width="150px"
+                                                >
+                                                    Importe
                                                 </th>
                                             </tr>
                                         </thead>
@@ -251,7 +260,7 @@
                                     <v-list-item title="Total">
                                         <template v-slot:append>
                                             S/.
-                                            {{ total }}
+                                            {{ total.toFixed(2) }}
                                         </template>
                                     </v-list-item>
                                     <v-divider></v-divider>

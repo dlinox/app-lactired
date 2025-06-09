@@ -15,12 +15,14 @@ class InsumoController extends Controller
 
     protected $user;
     protected $insumo;
+    protected $planta;
     public function __construct()
     {
         $this->insumo = new Insumo();
-
+        $this->planta = null;
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
+            $this->planta = $this->user->user_plan_id;
             return $next($request);
         });
     }
@@ -92,23 +94,6 @@ class InsumoController extends Controller
         return redirect()->back()->with('success', 'Elemento eliminado exitosamente.');
     }
 
-    public function autocomplete(Request $request)
-    {
-        $results = [];
-        if ($request->has('search')) {
-
-            $query = Insumo::query();
-            $query->where('insu_nombre', 'like', '%' . $request->search . '%');
-
-            if ($this->planta != null) {
-                $query->where('insu_plan_id', $this->planta);
-            }
-
-            $results = $query->limit(30)->get();
-        }
-
-        return response()->json($results);
-    }
 
     public function guardarArchivo($request, Insumo $insumo)
     {
@@ -133,4 +118,33 @@ class InsumoController extends Controller
         $insumo->insu_imagen =  $ruta;
         $insumo->save();
     }
+
+    public function autocomplete(Request $request)
+    {
+        $results = [];
+        if ($request->has('search')) {
+
+            $query = Insumo::query();
+            $query->where('insu_nombre', 'like', '%' . $request->search . '%');
+
+            if ($this->planta != null) {
+                $query->where('insu_plan_id', $this->planta);
+            }
+
+            $results = $query->limit(30)->get();
+        }
+
+        return response()->json($results);
+    }
+
+    public function forSelect()
+    {
+        $insumos = Insumo::where('insu_plan_id', $this->user->user_plan_id)
+            ->select('insu_id as value', 'insu_nombre as title')
+            ->get();
+
+        return response()->json($insumos);
+    }
+
+   
 }

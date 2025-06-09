@@ -61,6 +61,10 @@ const props = defineProps({
         default: false,
     },
     url: String,
+    unitMeasurements: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const form = useForm({ ...props.formData });
@@ -96,12 +100,9 @@ const formStructure = ref([
     {
         key: "insu_umed_id",
         label: "Unidad de medida",
-        url: "/autocomplete/unidades-medida",
-        type: "autocomplete",
-        itemTitle: "umed_nombre",
-        itemValue: "umed_id",
+        type: "combobox",
+        options: props.unitMeasurements,
         required: true,
-        itemsDefault: form.unidad_medida,
         cols: 12,
         colMd: 6,
     },

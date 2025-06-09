@@ -13,7 +13,8 @@
                             field.type === 'text' ||
                             field.type === 'password' ||
                             field.type === 'date' ||
-                            field.type === 'email'
+                            field.type === 'email' ||
+                            field.type === 'month' 
                         "
                     >
                         <v-text-field
@@ -40,6 +41,10 @@
                             v-model="form[`${field.key}`]"
                             :label="field.label"
                             :rules="field.required ? [isRequired] : []"
+                            :clearable="field.clearable"
+                            :error-messages="form.errors[`${field.key}`]"
+                            :disabled="field.disabled"
+                            :readonly="field.readonly"
                             type="number"
                         ></v-text-field>
                     </template>

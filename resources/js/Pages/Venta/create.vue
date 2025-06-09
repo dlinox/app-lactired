@@ -74,13 +74,13 @@
                                                     Medida
                                                 </th>
                                                 <th class="text-left">
-                                                    Catidad
+                                                    Cantidad
                                                 </th>
                                                 <th class="text-left">
                                                     Precio
                                                 </th>
                                                 <th class="text-left">
-                                                    Imoprte
+                                                    Importe
                                                 </th>
                                             </tr>
                                         </thead>
@@ -133,6 +133,12 @@
                                                         :clearable="false"
                                                         type="number"
                                                         density="compact"
+                                                        @click="
+                                                            item.importe = (
+                                                                item.cantidad *
+                                                                item.precio
+                                                            ).toFixed(2)
+                                                        "
                                                         :error-messages="
                                                             form.errors[
                                                                 `vent_detalle.${index}.importe`
@@ -230,7 +236,7 @@
                                     <v-list-item title="Sub total">
                                         <template v-slot:append>
                                             S/.
-                                            {{ subtotal }}
+                                            {{ subtotal.toFixed(2) }}
                                         </template>
 
                                         <template #subtitle>
@@ -256,26 +262,11 @@
                                             {{ igv.toFixed(2) }}
                                         </template>
                                     </v-list-item>
-                                    <!-- 
-                                    <v-list-item title="Descuento">
-                                        <template v-slot:append>
-                                            <v-text-field
-                                            style="width: 100px;"
-                                                prefix="S/. "
-                                                variant="underlined"
-                                                :clearable="false"
-                                                type="number"
-                                                density="compact"
-                                            ></v-text-field>
-                                        </template>
-                                    </v-list-item> -->
-
                                     <v-divider></v-divider>
-
                                     <v-list-item title="Total">
                                         <template v-slot:append>
                                             S/.
-                                            {{ total }}
+                                            {{ total.toFixed(2) }}
                                         </template>
                                         <template #subtitle>
                                             <small class="text-red">{{

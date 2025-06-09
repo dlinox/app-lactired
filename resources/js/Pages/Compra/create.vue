@@ -8,7 +8,6 @@
                     <v-card>
                         <v-toolbar title="Compra" density="compact">
                         </v-toolbar>
-
                         <v-container>
                             <v-row>
                                 <v-col cols="12">
@@ -35,7 +34,6 @@
                                         return-object
                                         v-model:object="productos"
                                     />
-                                  
                                 </v-col>
 
                                 <v-col cols="12">
@@ -59,13 +57,13 @@
                                                     Medida
                                                 </th>
                                                 <th class="text-left">
-                                                    Catidad
+                                                    Cantidad
                                                 </th>
                                                 <th class="text-left">
                                                     Precio
                                                 </th>
                                                 <th class="text-left">
-                                                    Imoprte
+                                                    Importe
                                                 </th>
                                             </tr>
                                         </thead>
@@ -102,10 +100,17 @@
                                                 </td>
                                                 <td>
                                                     <v-text-field
+                                                        readonly
                                                         v-model="item.importe"
                                                         :clearable="false"
                                                         type="number"
                                                         density="compact"
+                                                        @click="
+                                                            item.importe = (
+                                                                item.cantidad *
+                                                                item.precio
+                                                            ).toFixed(2)
+                                                        "
                                                     ></v-text-field>
                                                 </td>
                                             </tr>
@@ -214,7 +219,7 @@
                                     <v-list-item title="Total">
                                         <template v-slot:append>
                                             S/.
-                                            {{ total }}
+                                            {{ total.toFixed(2) }}
                                         </template>
                                     </v-list-item>
                                     <v-divider></v-divider>
@@ -274,7 +279,9 @@ const subtotal = computed(() => {
     form.comp_subtotal = res;
     return res;
 });
+
 const igv = computed(() => subtotal.value * 0.18);
+
 const total = computed(() => {
     let res = parseFloat(subtotal.value) + parseFloat(igv.value);
     form.comp_total = res;

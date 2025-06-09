@@ -1,6 +1,9 @@
 <template>
     <AdminLayout>
-        <HeadingPage title="Insumos" subtitle="Lista de insumos">
+        <HeadingPage
+            title="Inversiones"
+            subtitle="Inversiones en productos y servicios"
+        >
             <template #actions>
                 <BtnDialog title="Nuevo" width="500px">
                     <template v-slot:activator="{ dialog }">
@@ -8,22 +11,29 @@
                             @click="dialog"
                             prepend-icon="mdi-plus"
                             variant="flat"
+                            :loading="loadingPage"
                         >
                             Nuevo
                         </v-btn>
                     </template>
                     <template v-slot:content="{ dialog }">
                         <Formulario
-                            :unitMeasurements="unitMeasurements"
                             @on-cancel="dialog"
                             :url="url"
+                            :form-data="{
+                                inver_tipo: null,
+                                inver_rubro: '',
+                                inver_cantidad: 0,
+                                inver_valor_unitario: 0,
+                                inver_total: 0,
+                                inver_periodo: null,
+                            }"
                         />
                     </template>
                 </BtnDialog>
             </template>
         </HeadingPage>
-
-        <v-container fluid>
+        <v-container fluid class="pt-0">
             <v-card>
                 <v-card-item>
                     <DataTable
@@ -51,6 +61,7 @@
                                         icon
                                         variant="outlined"
                                         density="comfortable"
+                                        :loading="loadingPage"
                                         @click="dialog"
                                     >
                                         <v-icon
@@ -63,7 +74,6 @@
                                     <Formulario
                                         @on-cancel="dialog"
                                         :form-data="item"
-                                        :unitMeasurements="unitMeasurements"
                                         :edit="true"
                                         :url="url"
                                     />
@@ -101,14 +111,13 @@
 </template>
 <script setup>
 import { router } from "@inertiajs/vue3";
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import AdminLayout from "@/layouts/AdminLayout.vue";
 import HeadingPage from "@/components/HeadingPage.vue";
 import BtnDialog from "@/components/BtnDialog.vue";
-import DataTable from "@/components/DataTable.vue";
 import DialogConfirm from "@/components/DialogConfirm.vue";
+import DataTable from "@/components/DataTable.vue";
 import Formulario from "./components/Formulario.vue";
-import { itemsForSelect as getUnitMeasurements } from "@/Pages/Configuracion/Almacen/UnidadMedida/services/unitMeasurement.services";
 
 const props = defineProps({
     items: Object,
@@ -117,15 +126,13 @@ const props = defineProps({
     perPageOptions: Array,
 });
 
-const url = "/almacen/insumos";
-const primaryKey = "insu_id";
+const url = "/finanzas/inversiones";
+const primaryKey = "inver_id";
 
-const unitMeasurements = ref([]);
 const loadingPage = ref(false);
 
 const initPage = async () => {
     loadingPage.value = true;
-    unitMeasurements.value = await getUnitMeasurements();
     loadingPage.value = false;
 };
 onMounted(() => {

@@ -17,14 +17,13 @@ return new class extends Migration
             $table->string('prod_nombre');
             $table->string('prod_imagen')->nullable();
             $table->integer('prod_stock');
-            $table->float('prod_medida');//presentacion
+            $table->float('prod_medida');
+            $table->decimal('prod_precio_venta', 10, 2)->default(0);
             $table->longText('prod_decripcion_tecnica')->nullable();
-            
-            // $table->date('prod_vencimiento');
             $table->unsignedBigInteger('prod_umed_id');
             $table->unsignedBigInteger('prod_tpro_id');
             $table->unsignedBigInteger('prod_plan_id');
-            $table->unique(['prod_nombre','prod_plan_id']);
+            $table->unique(['prod_nombre', 'prod_plan_id']);
             $table->timestamps();
             $table->foreign('prod_umed_id')->references('umed_id')->on('unidad_medidas');
             $table->foreign('prod_tpro_id')->references('tpro_id')->on('tipo_productos');

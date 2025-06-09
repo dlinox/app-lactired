@@ -36,9 +36,9 @@ class HandleInertiaRequests extends Middleware
             },
 
             'flash' => [
-                'message' => fn () => $request->session()->get('message'),
-                'success' => fn () => $request->session()->get('success'),
-                'data' => fn () => $request->session()->get('data'),
+                'message' => fn() => $request->session()->get('message'),
+                'success' => fn() => $request->session()->get('success'),
+                'data' => fn() => $request->session()->get('data'),
             ],
         ]);
     }
@@ -142,6 +142,22 @@ class HandleInertiaRequests extends Middleware
                     "title" => "Insumos",
                     "to" => "/almacen/insumos",
                 ]
+            ]
+        ],
+        [
+            "title" => "Finanzas",
+            "icon" => "mdi-currency-usd",
+            "to" => "/finanzas",
+            'can' => 'menu-de-finanzas',
+            "group" => [
+                [
+                    "title" => "Inversiones",
+                    "to" => "/finanzas/inversiones",
+                ],
+                [
+                    "title" => "Proyecciones",
+                    "to" => "/finanzas/proyecciones",
+                ],
             ]
         ],
 

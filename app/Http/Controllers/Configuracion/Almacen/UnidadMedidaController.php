@@ -75,4 +75,11 @@ class UnidadMedidaController extends Controller
         return response()->json($results);
     }
 
+    public function forSelect()
+    {
+        $results = UnidadMedida::select('umed_id as value', 'umed_nombre as title')
+            ->get();
+
+        return response()->json($results);
+    }
 }

@@ -82,23 +82,24 @@ class PagoController extends Controller
     public function store(PagoRequest $request)
     {
         try {
-            DB::transaction(function () use ($request) {
-                $pago =  Pago::create($request->all());
-                foreach ($request->pago_detalle as  $value) {
-                    PagoDetalle::create([
-                        'pdet_pago_id' =>  $pago->pago_id,
-                        'pdet_comp_id' =>  $value['comp_id'],
-                    ]);
-                    Compra::where('comp_id', $value['comp_id'])->update(['comp_estado_deuda' => 1]);
-                }
 
+            DB::beginTransaction();
 
-                $pathPDF = $this->generarPDF($pago, $request->pago_detalle);
+            $pago =  Pago::create($request->all());
 
+            foreach ($request->pago_detalle as  $value) {
+                PagoDetalle::create([
+                    'pdet_pago_id' =>  $pago->pago_id,
+                    'pdet_comp_id' =>  $value['comp_id'],
+                ]);
+                Compra::where('comp_id', $value['comp_id'])->update(['comp_estado_deuda' => 1]);
+            }
 
-                return back()->with(['success' => 'Pago registrado con exito.', 'data' => $pathPDF]);
-            });
+            $pathPDF = $this->generarPDF($pago, $request->pago_detalle);
+            DB::commit();
+            return back()->with(['success' => 'Pago registrado con exito.', 'data' => $pathPDF]);
         } catch (\Throwable $th) {
+            DB::rollBack();
             return redirect()->back()->withErrors(['error' => 'Se ha producido un error inesperado. Si el problema persiste, te recomendamos que te pongas en contacto con el administrador para obtener ayuda adicional.', 'details' => $th->getMessage()]);
         }
     }
@@ -129,15 +130,23 @@ class PagoController extends Controller
 
         $fecha = date('d/m/Y H:i:s');
 
-        $planta = Planta::where('plan_id',$pago->pago_plan_id)->first();
+        $planta = Planta::where('plan_id', $pago->pago_plan_id)->first();
 
-        $pdf = SnappyPdf::loadView('pdf.pagos.ticket', compact('fecha', 'detalle', 'pago', 'planta'))->setOption('page-width', 60)->setOption('page-height', 180);
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => [60, 180], // ancho x alto en milímetros
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 5,
+            'margin_bottom' => 5,
+        ]);
 
-        $pdfContent = $pdf->output();
-
+        $html = view('pdf.pagos.ticket', compact('fecha', 'detalle', 'pago', 'planta'))->render();
+        $mpdf->WriteHTML($html);
+        
         $fileName = 'pdf/pagos/ticket-' . $pago->pago_numero . '.pdf';
 
-        Storage::disk('public')->put($fileName, $pdfContent);
+        Storage::disk('public')->put($fileName, $mpdf->Output('', 'S'));
 
         $pago->pago_ticket = $fileName;
         $pago->save();
