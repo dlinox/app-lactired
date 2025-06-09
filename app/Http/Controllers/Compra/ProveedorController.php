@@ -80,7 +80,7 @@ class ProveedorController extends Controller
 
     public function autocomplete(Request $request)
     {
-        $results = [];
+        $results = ['nada'];
         if ($request->has('search')) {
             $searchTerm = $request->search;
             $results = Proveedor::select('prov_id', DB::raw("CONCAT(prov_nombres,' ', prov_paterno,' ',prov_materno, ' | ', prov_dni ) AS proveedor"))
