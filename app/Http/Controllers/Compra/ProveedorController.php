@@ -81,16 +81,16 @@ class ProveedorController extends Controller
     public function autocomplete(Request $request)
     {
         $results = ['nada'];
-        if ($request->has('search') && !empty($request->search)) {
-            $searchTerm = $request->search;
-            $results = Proveedor::select('prov_id', DB::raw("CONCAT(prov_nombres,' ', prov_paterno,' ',prov_materno, ' | ', prov_dni ) AS proveedor"))
-                ->orWhere('prov_nombres', 'like', '%' . $searchTerm . '%')
-                ->orWhere('prov_paterno', 'like', '%' . $searchTerm . '%')
-                ->orWhere('prov_materno', 'like', '%' . $searchTerm . '%')
-                ->orWhere('prov_dni', 'like', '%' . $searchTerm . '%')
-                ->limit(30)
-                ->get();
-        }
+
+        $searchTerm = $request->input('search', '');
+
+        $results = Proveedor::select('prov_id', DB::raw("CONCAT(prov_nombres,' ', prov_paterno,' ',prov_materno, ' | ', prov_dni ) AS proveedor"))
+            ->orWhere('prov_nombres', 'like', '%' . $searchTerm . '%')
+            ->orWhere('prov_paterno', 'like', '%' . $searchTerm . '%')
+            ->orWhere('prov_materno', 'like', '%' . $searchTerm . '%')
+            ->orWhere('prov_dni', 'like', '%' . $searchTerm . '%')
+            ->limit(30)
+            ->get();
         return response()->json($results);
     }
 }
